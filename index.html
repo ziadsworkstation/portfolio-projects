@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ziad Addami — Diseño industrial</title>
-<meta name="description" content="Portfolio de Ziad Addami Ech Chaouy, diseñador industrial y cofundador de R11. Cada proyecto, encuadrado en la proporción áurea.">
+<meta name="description" content="Portfolio de Ziad Addami Ech Chaouy, diseñador industrial. Cada proyecto, encuadrado en la proporción áurea.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
@@ -69,10 +69,10 @@ body.on-img .veil{opacity:1}
 <!-- Contenido accesible / indexable -->
 <main class="sr">
   <h1>Ziad Addami Ech Chaouy — Diseño industrial</h1>
-  <p>Diseñador industrial y cofundador de R11. Estudiante en la UPC · EPSEVG.</p>
+  <p>Diseñador industrial. Estudiante en la UPC · EPSEVG.</p>
   <h2>Rampassist</h2><p>Rediseño de una ayuda motriz para que usuarios en silla de ruedas suban y bajen rampas con autonomía. In: necesidad, usuario y normativa. Proceso: tracción y brazo elevador, materiales con CES EduPack, cálculo FEA. Maqueta 1:2 y cinco cambios de diseño. Out: 150 kg, pendiente del 12 %, 0,15 m/s, instalación sin obra. TAD3, UPC EPSEVG, 2025, proyecto de grupo GT17.</p>
-  <h2>R11</h2><p>Estudio de diseño industrial dirigido con Efrain David Rondon: producto + espacio + experiencia.</p>
   <h2>Contacto</h2><p><a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a></p>
+  <h2>Entidades</h2><p>R11 · CloutNative · Blashgol</p>
 </main>
 
 <script>
@@ -96,7 +96,7 @@ const O = { x: PHI / den, y: 1 / den };
 
 const ITEMS = [
   // Proyectos pendientes de definir: uno por paso, con img (img/<nombre>-l.webp y -p.webp, de tools/golden_crop.py) y note.
-  { t: 'ziad\naddami', d: 'diseño industrial · cofundador de R11', mark: true, fs: 0.3 },
+  { t: 'ziad\naddami', d: 'diseño industrial', mark: true, fs: 0.3 },
   { t: 'Rampassist · in', d: 'Subir una rampa en silla de ruedas sin ayuda: el tren superior no llega y muchas rampas no cumplen la norma. Rediseño de una ayuda motriz existente.', img: 'rampassist-in',
     note: { L: 'Barandilla y mando en el cuadrado 1; el usuario, en el rectángulo que queda.', P: 'El usuario y el mando, en el rectángulo áureo vertical.' } },
   { t: 'proceso', d: 'Tracción y brazo elevador, sin electrónica programable. Acero 4140T, inox 304, PA66 y goma, elegidos con CES EduPack. Cálculo FEA del eje del brazo.', img: 'rampassist-proceso',
@@ -105,10 +105,9 @@ const ITEMS = [
     note: { L: 'La botonera, en el cuadrado 1; el ojo φ, sobre el brazo.', P: 'Botonera y brazo, en la diagonal del rectángulo.' } },
   { t: 'Rampassist · out', d: 'Lleva la silla por rampas de hasta el 12 %. 150 kg · 0,15 m/s · sin obra · compatible con barandillas existentes. TAD3, UPC EPSEVG, 2025, en grupo (GT17).', img: 'rampassist-out',
     note: { L: 'El brazo extensible cruza el cuadrado 1 hasta el rectángulo φ.', P: 'Producto completo, centrado en el rectángulo áureo.' } },
-  { t: 'R11', d: 'Estudio de diseño industrial que dirijo con Efrain David Rondon. Producto + espacio + experiencia.', img: 'r11',
-    note: { L: 'La web de R11 es esta misma construcción, vista desde n = 0.', P: 'La web de R11 es esta misma construcción, vista desde n = 0.' } },
   { t: 'Diseño, dibujo\ny construyo objetos.', d: 'Estudiante en la UPC · EPSEVG. CAD paramétrico, modelado 3D, maquetas y prototipos.', small: true },
   { t: 'contacto@ziadaddami.es', d: 'Proyectos, colaboraciones y prácticas', small: true },
+  { t: 'R11 · CloutNative\nBlashgol', d: 'Entidades en las que participo', small: true },
 ];
 for (const it of ITEMS) if (it.img) {
   it.im = {};

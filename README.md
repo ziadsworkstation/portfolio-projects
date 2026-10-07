@@ -11,9 +11,9 @@ Sin dependencias ni build: abrir `index.html` en el navegador o servir la carpet
 |---|---|
 | 0 | ziad addami |
 | 1–4 | Rampassist en in-out: in · proceso · maqueta 1:2 · out (borrador) |
-| 5 | R11 |
-| 6 | Sobre mí |
-| 7 | Contacto |
+| 5 | Sobre mí |
+| 6 | Contacto |
+| 7 | Entidades: R11 · CloutNative · Blashgol |
 
 - Contenido: array `ITEMS` en `index.html` (y su copia accesible en `<main class="sr">`).
 - Imágenes: `img/<nombre>-l.webp` (escritorio, φ:1) y `img/<nombre>-p.webp` (móvil, 1:φ), recortadas con
