@@ -19,4 +19,4 @@ Sin dependencias ni build: abrir `index.html` en el navegador o servir la carpet
 - Imágenes: `img/<nombre>-l.webp` (escritorio, φ:1) y `img/<nombre>-p.webp` (móvil, 1:φ), recortadas con
   `tools/golden_crop.py` (uso en su cabecera).
 - Archivo único: `python3 tools/build_single.py . ziadaddami` → `dist/ziadaddami.html`.
-- Por confirmar: lista de proyectos, correo `hola@ziadaddami.es` y texto de «Sobre mí».
+- Por confirmar: lista de proyectos y texto de «Sobre mí».
