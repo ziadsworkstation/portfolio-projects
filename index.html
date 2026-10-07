@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ziad Addami — Diseño industrial</title>
+<meta name="description" content="Portfolio de Ziad Addami Ech Chaouy, diseñador industrial y cofundador de R11. Cada proyecto, encuadrado en la proporción áurea.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f2f1ee;
+  --ink:#111;
+  --mute:#8a8884;
+  --red:#e8251b;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--paper);color:var(--ink)}
+body{font-family:"Inter Tight",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;
+  overscroll-behavior:none;touch-action:none;user-select:none;-webkit-user-select:none}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+
+.hud{position:fixed;z-index:2;font-family:var(--mono);font-size:11px;letter-spacing:.04em;line-height:1.6;
+  color:var(--ink);pointer-events:none}
+.hud,.cap,.cap *,.hud *{transition:color .5s,text-shadow .5s,border-color .5s}
+.hud a{pointer-events:auto;color:inherit;text-decoration:none;border-bottom:1px solid currentColor}
+.hud .m{color:var(--mute)}
+.tl{left:20px;top:16px}
+.tr{right:20px;top:16px;text-align:right}
+.bl{left:20px;bottom:16px}
+.br{right:20px;bottom:16px;text-align:right}
+.phi{color:var(--red)}
+.hint{transition:opacity .8s}
+.hint.off{opacity:0}
+
+.cap{position:fixed;z-index:2;pointer-events:none;left:20px;bottom:64px;max-width:min(440px,calc(100vw - 40px))}
+.cap .i{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--mute)}
+.cap .t{font-weight:300;font-size:22px;letter-spacing:-.03em;line-height:1.1;margin-right:.5em}
+.cap .d{font-weight:300;font-size:14px;color:var(--mute)}
+.cap .n{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--red);margin-top:4px}
+@media (max-width:700px){.cap .t{font-size:18px}.cap .d{font-size:13px}}
+/* sobre imagen: texto blanco */
+body.on-img .hud,body.on-img .cap{color:#fff;text-shadow:0 0 8px rgba(0,0,0,.45)}
+body.on-img .hud .m,body.on-img .cap .i,body.on-img .cap .d{color:rgba(255,255,255,.82)}
+body.on-img .cap .n{color:#fff}
+body.on-img .phi{color:#fff}
+
+.veil{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity .6s;
+  background:linear-gradient(180deg,rgba(0,0,0,.32) 0,rgba(0,0,0,0) 120px,rgba(0,0,0,0) 55%,rgba(0,0,0,.5) 100%)}
+body.on-img .veil{opacity:1}
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</head>
+<body>
+
+<canvas id="c" aria-hidden="true"></canvas>
+
+<div class="veil" aria-hidden="true"></div>
+<div class="cap" id="cap" aria-hidden="true"><span class="i"></span><span class="t"></span><span class="d"></span><span class="n"></span></div>
+
+<div class="hud tl"><span>ZIAD ADDAMI</span><br><span class="m">DISEÑO INDUSTRIAL</span></div>
+<div class="hud tr"><span class="phi">φ = 1.6180339887…</span><br><span class="m">(a + b) / a = a / b</span></div>
+<div class="hud bl"><span id="depth">n = 0</span><br><span class="m" id="scale">1 : φ⁰ = 1.000</span></div>
+<div class="hud br"><a href="mailto:hola@ziadaddami.es">hola@ziadaddami.es</a><br><span class="m hint" id="hint">DESPLAZA ↓ PARA ENTRAR</span></div>
+
+<!-- Contenido accesible / indexable -->
+<main class="sr">
+  <h1>Ziad Addami Ech Chaouy — Diseño industrial</h1>
+  <p>Diseñador industrial y cofundador de R11. Estudiante en la UPC · EPSEVG.</p>
+  <!-- Proyectos: añadir un <h2> por cada entrada de ITEMS -->
+  <h2>R11</h2><p>Estudio de diseño industrial dirigido con Efrain David Rondon: producto + espacio + experiencia.</p>
+  <h2>Contacto</h2><p><a href="mailto:hola@ziadaddami.es">hola@ziadaddami.es</a></p>
+</main>
+
+<script>
+(() => {
+/* ------------------------------------------------------------------
+   Rectángulo áureo R = [0,φ]×[0,1] (y hacia abajo).
+   El cuadrado 0 es [0,1]×[0,1]; el resto de R es otro rectángulo áureo,
+   R1 = f(R), con f(z) = a·z + φ, a = i/φ (escala 1/φ, giro 90°).
+   Cada paso de scroll aplica f⁻¹ de forma continua: f^t, t ∈ ℝ.
+   Como la figura es autosemejante, t = n se ve igual que t = 0 → bucle infinito.
+
+   Cada paso n ocupa su rectángulo R_n con una imagen recortada para que la
+   construcción (cuadrados, líneas φ y ojo de la espiral) caiga sobre el objeto
+   (ver tools/golden_crop.py). Hay un recorte horizontal (φ:1) y otro vertical (1:φ).
+------------------------------------------------------------------- */
+const PHI = (1 + Math.sqrt(5)) / 2;
+const LN_PHI = Math.log(PHI);
+// Punto fijo de f (ojo de la espiral): O = φ / (1 − i/φ)
+const den = 1 + 1 / (PHI * PHI);
+const O = { x: PHI / den, y: 1 / den };
+
+const ITEMS = [
+  // Proyectos pendientes de definir: uno por paso, con img (img/<nombre>-l.webp y -p.webp, de tools/golden_crop.py) y note.
+  { t: 'ziad\naddami', d: 'diseño industrial · cofundador de R11', mark: true, fs: 0.3 },
+  { t: 'R11', d: 'Estudio de diseño industrial que dirijo con Efrain David Rondon. Producto + espacio + experiencia.', img: 'r11',
+    note: { L: 'La web de R11 es esta misma construcción, vista desde n = 0.', P: 'La web de R11 es esta misma construcción, vista desde n = 0.' } },
+  { t: 'Diseño, dibujo\ny construyo objetos.', d: 'Estudiante en la UPC · EPSEVG. CAD paramétrico, modelado 3D, maquetas y prototipos.', small: true },
+  { t: 'hola@ziadaddami.es', d: 'Proyectos, colaboraciones y prácticas', small: true },
+];
+for (const it of ITEMS) if (it.img) {
+  it.im = {};
+  for (const o of ['l', 'p']) { const im = new Image(); im.decoding = 'async'; im.onload = () => { dirty = true; }; im.src = `img/${it.img}-${o}.webp`; it.im[o] = im; }
+}
+let dirty = true;
+const mod = n => ((n % ITEMS.length) + ITEMS.length) % ITEMS.length;
+const itemAt = n => ITEMS[mod(n)];
+
+const SUP = { '-': '⁻', 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹' };
+const sup = n => String(n).split('').map(c => SUP[c]).join('');
+const phiPow = n => n === 0 ? '1' : 'φ' + sup(-n);   // lado del cuadrado n = φ⁻ⁿ
+const smooth = (x, a, b) => { const u = Math.min(1, Math.max(0, (x - a) / (b - a))); return u * u * (3 - 2 * u); };
+
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const css = getComputedStyle(document.documentElement);
+const PAPER = css.getPropertyValue('--paper').trim();
+const INK = css.getPropertyValue('--ink').trim();
+const MUTE = css.getPropertyValue('--mute').trim();
+const RED = css.getPropertyValue('--red').trim();
+const MONO = css.getPropertyValue('--mono').trim();
+const SANS = '"Inter Tight", Helvetica, Arial, sans-serif';
+
+const cap = document.getElementById('cap');
+const capI = cap.querySelector('.i'), capT = cap.querySelector('.t'), capD = cap.querySelector('.d'), capN = cap.querySelector('.n');
+const depth = document.getElementById('depth');
+const scale = document.getElementById('scale');
+const hint = document.getElementById('hint');
+
+let W = 0, H = 0, DPR = 1, view = null;
+
+function resize() {
+  DPR = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+  const portrait = H > W;
+  const rho = portrait ? -Math.PI / 2 : 0;              // en vertical giramos el rectángulo
+  // el rectángulo áureo cubre toda la pantalla (como background-size: cover)
+  const k = portrait ? Math.max(W, H / PHI) : Math.max(W / PHI, H);
+  view = { k, rho, portrait, cr: Math.cos(rho), sr: Math.sin(rho), cx: W / 2, cy: H / 2 };
+}
+
+// Mundo → pantalla para la capa m (m = n − t): z ↦ C + k·e^{iρ}·(O + (z−O)·φ^{−m}·e^{iπm/2} − c_R)
+function maker(m) {
+  const s = Math.exp(-m * LN_PHI), th = m * Math.PI / 2;
+  const c = Math.cos(th) * s, sn = Math.sin(th) * s;
+  const { k, cr, sr, cx, cy } = view;
+  return (x, y) => {
+    const dx = x - O.x, dy = y - O.y;
+    const wx = O.x + c * dx - sn * dy - PHI / 2;
+    const wy = O.y + sn * dx + c * dy - 0.5;
+    return [cx + k * (cr * wx - sr * wy), cy + k * (sr * wx + cr * wy)];
+  };
+}
+
+function rectPath(P) {
+  ctx.moveTo(...P(0, 0)); ctx.lineTo(...P(PHI, 0)); ctx.lineTo(...P(PHI, 1)); ctx.lineTo(...P(0, 1)); ctx.closePath();
+}
+
+function wrap(text, maxW) {
+  const out = [];
+  for (const para of text.split('\n')) {
+    let line = '';
+    for (const w of para.split(' ')) {
+      const t = line ? line + ' ' + w : w;
+      if (ctx.measureText(t).width > maxW && line) { out.push(line); line = w; } else line = t;
+    }
+    out.push(line);
+  }
+  return out;
+}
+
+// Imagen (o papel) del paso n llenando su rectángulo R_n; queda recta cuando R_n llena el marco
+function drawStep(j, frac, alpha) {
+  if (alpha <= 0.002) return false;
+  const m = j - frac, item = itemAt(Math.floor(t) + j);
+  const side = view.k * Math.exp(-m * LN_PHI);
+  const [cx, cy] = maker(m)(PHI / 2, 0.5);
+  const w = view.portrait ? side : side * PHI, h = view.portrait ? side * PHI : side;
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.translate(cx, cy); ctx.rotate(m * Math.PI / 2);
+  const im = item.im && item.im[view.portrait ? 'p' : 'l'];
+  if (im && im.complete && im.naturalWidth) ctx.drawImage(im, -w / 2, -h / 2, w, h);
+  else { ctx.fillStyle = PAPER; ctx.fillRect(-w / 2, -h / 2, w, h); }
+  ctx.restore();
+  return !!im;
+}
+
+// Texto grande solo en los pasos sin imagen (marca, fundadores, contacto)
+function drawText(j, frac, al) {
+  const n = Math.floor(t) + j, item = itemAt(n);
+  if (item.img || al <= 0.01) return;
+  const m = j - frac;
+  // en móvil el cuadrado es más ancho que la pantalla: el texto se ajusta a la parte visible
+  const side = view.k * Math.exp(-m * LN_PHI) * Math.min(1, (view.portrait ? W : W / PHI) / view.k);
+  const [cx, cy] = maker(m)(0.5, 0.5);
+  ctx.save();
+  ctx.globalAlpha = al;
+  ctx.translate(cx, cy); ctx.rotate(m * Math.PI / 2);
+  ctx.translate(-side / 2, -side / 2);
+  const pad = side * 0.075;
+  ctx.fillStyle = INK; ctx.textBaseline = 'alphabetic';
+  const fs = side * (item.fs || (item.mark ? 0.46 : item.small ? 0.075 : 0.13));
+  ctx.font = `${item.mark ? 200 : 300} ${fs}px ${SANS}`;
+  if ('letterSpacing' in ctx) ctx.letterSpacing = `${-fs * (item.mark ? 0.07 : 0.045)}px`;
+  const lines = wrap(item.t, side - pad * 2);
+  const lh = fs * (item.mark ? 0.9 : 1.0);
+  let y = side * (item.mark ? 0.66 : 0.6) - (lines.length - 1) * lh;
+  for (const l of lines) { ctx.fillText(l, pad - (item.mark ? fs * 0.04 : 0), y); y += lh; }
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
+  const ds = side * (item.mark ? 0.05 : 0.034);
+  if (ds >= 8) {
+    ctx.font = `300 ${ds}px ${SANS}`;
+    ctx.fillStyle = item.mark ? INK : MUTE;
+    let dy = side * (item.mark ? 0.8 : 0.72);
+    for (const l of wrap(item.d, side * 0.7)) { ctx.fillText(l, pad, dy); dy += ds * 1.35; }
+  }
+  ctx.restore();
+}
+
+function strokeSquares(frac) {
+  for (let j = -2; j < 26; j++) {
+    const m = j - frac, P = maker(m);
+    if (view.k * Math.exp(-m * LN_PHI) < 1.2) break;
+    ctx.moveTo(...P(0, 0)); ctx.lineTo(...P(1, 0)); ctx.lineTo(...P(1, 1)); ctx.lineTo(...P(0, 1)); ctx.closePath();
+  }
+}
+
+let t = 0, target = 0, lastCap = null;
+
+function draw() {
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.fillStyle = PAPER; ctx.fillRect(0, 0, W, H);
+  const base = Math.floor(t), frac = t - base;
+  const hair = DPR >= 2 ? 0.75 : 1;
+
+  // --- imágenes: la actual se va al entrar en R_{n+1}; la siguiente aparece dentro de R_{n+1} ---
+  const a0 = 1 - smooth(frac, 0.55, 1), a1 = smooth(frac, 0.2, 0.85);
+  const img0 = drawStep(0, frac, a0);
+  const img1 = drawStep(1, frac, a1);
+
+  // --- cuadrados: blancos sobre la imagen, tinta sobre el papel ---
+  const onImg = img0 ? a0 : 0;
+  ctx.lineWidth = hair;
+  ctx.save();
+  ctx.beginPath(); ctx.rect(0, 0, W, H); rectPath(maker(-frac)); ctx.clip('evenodd');
+  ctx.beginPath(); strokeSquares(frac); ctx.strokeStyle = INK; ctx.stroke();
+  ctx.restore();
+  ctx.save();
+  ctx.beginPath(); rectPath(maker(-frac)); ctx.clip();
+  ctx.beginPath(); strokeSquares(frac);
+  if (onImg > 0.01 || img1) {
+    ctx.shadowColor = 'rgba(0,0,0,.45)'; ctx.shadowBlur = 3;
+    ctx.strokeStyle = `rgba(255,255,255,${0.9 * Math.max(onImg, img1 ? a1 : 0)})`; ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+  ctx.globalAlpha = 1 - Math.max(onImg, img1 ? a1 : 0);
+  ctx.strokeStyle = INK; ctx.stroke();
+  ctx.restore();
+
+  // --- espiral áurea: un cuarto de circunferencia por cuadrado ---
+  ctx.strokeStyle = RED; ctx.lineWidth = hair * 1.4;
+  ctx.beginPath();
+  let first = true;
+  for (let j = -2; j < 26; j++) {
+    const m = j - frac, P = maker(m);
+    if (view.k * Math.exp(-m * LN_PHI) < 0.6) break;
+    for (let i = 0; i <= 24; i++) {            // arco centrado en (1,1), de (0,1) a (1,0)
+      const a = Math.PI + (i / 24) * Math.PI / 2;
+      const [x, y] = P(1 + Math.cos(a), 1 + Math.sin(a));
+      if (first) { ctx.moveTo(x, y); first = false; } else ctx.lineTo(x, y);
+    }
+  }
+  ctx.stroke();
+
+  // --- texto de los pasos sin imagen ---
+  drawText(0, frac, 1 - smooth(frac, 0, 0.45));
+  drawText(1, frac, smooth(frac, 0.55, 1));
+
+  // --- cotas del rectángulo actual: φ y 1 ---
+  {
+    const P = maker(-frac), al = Math.max(0, 1 - frac * 2.5);
+    if (al > 0) {
+      ctx.globalAlpha = al;
+      ctx.font = `400 11px ${MONO}`; ctx.fillStyle = MUTE; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('φ', ...P(PHI / 2, -0.04));
+      if (!view.portrait) ctx.fillText('1', ...P(-0.04, 0.5));
+      ctx.textAlign = 'left'; ctx.globalAlpha = 1;
+    }
+  }
+
+  // --- ojo de la espiral: marca qué detalle del objeto justifica ---
+  const n = Math.round(t), cur = itemAt(n);
+  const capA = Math.max(0, 1 - Math.abs(t - n) * 2.4);
+  if (cur.eye && capA > 0.01) {
+    const [ex, ey] = maker(0)(O.x, O.y);
+    ctx.save();
+    ctx.globalAlpha = capA;
+    ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 3;
+    ctx.strokeStyle = '#fff'; ctx.fillStyle = '#fff'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(ex, ey, 9, 0, Math.PI * 2); ctx.stroke();
+    const dir = ex + 190 > W ? -1 : 1;           // la etiqueta no se sale de la pantalla
+    ctx.beginPath(); ctx.moveTo(ex + 7 * dir, ey - 7); ctx.lineTo(ex + 34 * dir, ey - 34); ctx.lineTo(ex + 44 * dir, ey - 34); ctx.stroke();
+    ctx.font = `400 11px ${MONO}`; ctx.textBaseline = 'middle'; ctx.textAlign = dir > 0 ? 'left' : 'right';
+    ctx.fillText(`ojo φ · ${cur.eye}`, ex + 50 * dir, ey - 34);
+    ctx.restore();
+  }
+
+  // --- pie de foto (DOM) y HUD ---
+  if (lastCap !== n) {
+    lastCap = n;
+    const i = mod(n);
+    capI.textContent = `${String(i + 1).padStart(2, '0')} / ${String(ITEMS.length).padStart(2, '0')} · R${sub(n)} · lado ${phiPow(n)}`;
+    capT.textContent = cur.img ? cur.t : '';
+    capD.textContent = cur.img ? cur.d : '';
+    capN.textContent = cur.note ? '↳ ' + cur.note[view.portrait ? 'P' : 'L'] : '';
+  }
+  cap.style.opacity = capA;
+  document.body.classList.toggle('on-img', !!cur.img);
+  depth.textContent = `n = ${n}`;
+  scale.textContent = `1 : φ${sup(n)} = ${Math.pow(PHI, t).toPrecision(5)}`;
+}
+
+const SUB = { '-': '₋', 0: '₀', 1: '₁', 2: '₂', 3: '₃', 4: '₄', 5: '₅', 6: '₆', 7: '₇', 8: '₈', 9: '₉' };
+const sub = n => String(n).split('').map(c => SUB[c]).join('');
+
+/* ------------------------------------------------------------------
+   Scroll virtual: rueda, teclado y gesto táctil mueven t.
+   Al soltar, se asienta en el paso más cercano.
+------------------------------------------------------------------- */
+let idle = 0;
+const push = d => { target += d; idle = performance.now(); hint.classList.add('off'); };
+addEventListener('wheel', e => {
+  e.preventDefault();
+  const px = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * H : e.deltaY;
+  push(Math.max(-0.5, Math.min(0.5, px / 900)));
+}, { passive: false });
+let ty = null;
+addEventListener('touchstart', e => { ty = e.touches[0].clientY; }, { passive: true });
+addEventListener('touchmove', e => {
+  if (ty == null) return;
+  const y = e.touches[0].clientY; push((ty - y) / (H * 0.55)); ty = y;
+}, { passive: true });
+addEventListener('touchend', () => { ty = null; }, { passive: true });
+addEventListener('keydown', e => {
+  if (['ArrowDown', 'PageDown', ' ', 'ArrowRight'].includes(e.key)) { e.preventDefault(); target = Math.round(target) + 1; idle = 0; hint.classList.add('off'); }
+  if (['ArrowUp', 'PageUp', 'ArrowLeft'].includes(e.key)) { e.preventDefault(); target = Math.round(target) - 1; idle = 0; }
+  if (e.key === 'Home') { target = 0; idle = 0; }
+});
+
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function loop(now) {
+  if (idle && now - idle > 450) { target = Math.round(target); idle = 0; }
+  const diff = target - t;
+  const moving = Math.abs(diff) >= 1e-4;
+  t = moving ? t + diff * (reduce ? 0.35 : 0.085) : target;
+  if (moving || dirty) { draw(); dirty = false; }   // quieto: no se redibuja
+  requestAnimationFrame(loop);
+}
+
+addEventListener('resize', () => { resize(); lastCap = null; dirty = true; });
+if (document.fonts) document.fonts.ready.then(() => { dirty = true; });
+resize();
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
