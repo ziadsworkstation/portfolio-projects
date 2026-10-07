@@ -64,14 +64,14 @@ body.on-img .veil{opacity:1}
 <div class="hud tl"><span>ZIAD ADDAMI</span><br><span class="m">DISEÑO INDUSTRIAL</span></div>
 <div class="hud tr"><span class="phi">φ = 1.6180339887…</span><br><span class="m">(a + b) / a = a / b</span></div>
 <div class="hud bl"><span id="depth">n = 0</span><br><span class="m" id="scale">1 : φ⁰ = 1.000</span></div>
-<div class="hud br"><a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a><br><span class="m hint" id="hint">DESPLAZA ↓ PARA ENTRAR</span></div>
+<div class="hud br"><a href="https://www.linkedin.com/in/ziad-addami-3972b0280/" target="_blank" rel="noopener">LINKEDIN</a> · <a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a><br><span class="m hint" id="hint">DESPLAZA ↓ PARA ENTRAR</span></div>
 
 <!-- Contenido accesible / indexable -->
 <main class="sr">
   <h1>Ziad Addami Ech Chaouy — Diseño industrial</h1>
   <p>Diseñador industrial. Estudiante en la UPC · EPSEVG.</p>
   <h2>Rampassist</h2><p>Rediseño de una ayuda motriz para que usuarios en silla de ruedas suban y bajen rampas con autonomía. In: necesidad, usuario y normativa. Proceso: tracción y brazo elevador, materiales con CES EduPack, cálculo FEA. Maqueta 1:2 y cinco cambios de diseño. Out: 150 kg, pendiente del 12 %, 0,15 m/s, instalación sin obra. TAD3, UPC EPSEVG, 2025, proyecto de grupo GT17.</p>
-  <h2>Contacto</h2><p><a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a></p>
+  <h2>Contacto</h2><p><a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a> · <a href="https://www.linkedin.com/in/ziad-addami-3972b0280/">LinkedIn</a></p>
   <h2>Entidades</h2><p>R11 · CloutNative · Blashgol</p>
 </main>
 
@@ -107,8 +107,8 @@ const ITEMS = [
   { t: 'Rampassist · out', d: 'Lleva la silla por rampas de hasta el 12 %. 150 kg · 0,15 m/s · sin obra · compatible con barandillas existentes. TAD3, UPC EPSEVG, 2025, en grupo (GT17).', img: 'rampassist-out',
     note: { L: 'El brazo extensible cruza el cuadrado 1 hasta el rectángulo φ.', P: 'Producto completo, centrado en el rectángulo áureo.' } },
   { t: 'Diseño, dibujo\ny construyo objetos.', d: 'Estudiante en la UPC · EPSEVG. CAD paramétrico, modelado 3D, maquetas y prototipos.', small: true },
-  { t: 'contacto@ziadaddami.es', d: 'Proyectos, colaboraciones y prácticas', small: true },
-  { t: 'R11 · CloutNative\nBlashgol', d: 'Entidades en las que participo', small: true },
+  { t: 'contacto@ziadaddami.es', d: 'Proyectos, colaboraciones y prácticas\nlinkedin.com/in/ziad-addami-3972b0280', small: true },
+  { t: 'R11 · CloutNative · Blashgol', d: 'Entidades en las que participo', fs: 0.04, ds: 0.024 },
 ];
 for (const it of ITEMS) if (it.img) {
   it.im = {};
@@ -221,7 +221,7 @@ function drawText(j, frac, al) {
   let y = side * (item.mark ? 0.66 : 0.6) - (lines.length - 1) * lh;
   for (const l of lines) { ctx.fillText(l, pad - (item.mark ? fs * 0.04 : 0), y); y += lh; }
   if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
-  const ds = side * (item.mark ? 0.05 : 0.034);
+  const ds = side * (item.ds || (item.mark ? 0.05 : 0.034));
   if (ds >= 8) {
     ctx.font = `300 ${ds}px ${SANS}`;
     ctx.fillStyle = item.mark ? INK : MUTE;
