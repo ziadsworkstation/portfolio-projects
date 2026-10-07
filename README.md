@@ -22,7 +22,6 @@ Sin dependencias ni build: abrir `index.html` en el navegador o servir la carpet
 - `fuentes/`: originales que recorta `tools/golden_crop.py` según `tools/golden_crops.json`. Las de Rampassist son provisionales y salen de la presentación y del informe de la maqueta de TAD3.
 - Por confirmar: lista de proyectos y texto de «Sobre mí».
 
-## Publicación (GitHub Pages)
+## Publicación (Vercel)
 
-`CNAME` fija el dominio `ziadaddami.es`; `.nojekyll` sirve los archivos tal cual. En GitHub: Settings → Pages → Deploy from a branch → `main` / root.
-En el proveedor del dominio: cuatro registros `A` para `@` (185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153) y un `CNAME` para `www` → `ziadsworkstation.github.io`.
+Sitio estático sin build: en Vercel, Add New → Project → importar `ziadsworkstation/portfolio-projects`, Framework Preset «Other», sin comando de build y con la raíz del repo como directorio de salida. El dominio `ziadaddami.es` se añade en Settings → Domains y Vercel indica los registros DNS. `.vercelignore` deja fuera `tools/` y `fuentes/`.
