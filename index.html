@@ -70,7 +70,7 @@ body.on-img .veil{opacity:1}
 <main class="sr">
   <h1>Ziad Addami Ech Chaouy — Diseño industrial</h1>
   <p>Diseñador industrial y cofundador de R11. Estudiante en la UPC · EPSEVG.</p>
-  <!-- Proyectos: añadir un <h2> por cada entrada de ITEMS -->
+  <h2>Rampassist</h2><p>Rediseño de una ayuda motriz para que usuarios en silla de ruedas suban y bajen rampas con autonomía. In: necesidad, usuario y normativa. Proceso: tracción y brazo elevador, materiales con CES EduPack, cálculo FEA. Maqueta 1:2 y cinco cambios de diseño. Out: 150 kg, pendiente del 12 %, 0,15 m/s, instalación sin obra. TAD3, UPC EPSEVG, 2025, proyecto de grupo GT17.</p>
   <h2>R11</h2><p>Estudio de diseño industrial dirigido con Efrain David Rondon: producto + espacio + experiencia.</p>
   <h2>Contacto</h2><p><a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a></p>
 </main>
@@ -97,6 +97,14 @@ const O = { x: PHI / den, y: 1 / den };
 const ITEMS = [
   // Proyectos pendientes de definir: uno por paso, con img (img/<nombre>-l.webp y -p.webp, de tools/golden_crop.py) y note.
   { t: 'ziad\naddami', d: 'diseño industrial · cofundador de R11', mark: true, fs: 0.3 },
+  { t: 'Rampassist · in', d: 'Subir una rampa en silla de ruedas sin ayuda: el tren superior no llega y muchas rampas no cumplen la norma. Rediseño de una ayuda motriz existente.', img: 'rampassist-in',
+    note: { L: 'Barandilla y mando en el cuadrado 1; el usuario, en el rectángulo que queda.', P: 'El usuario y el mando, en el rectángulo áureo vertical.' } },
+  { t: 'proceso', d: 'Tracción y brazo elevador, sin electrónica programable. Acero 4140T, inox 304, PA66 y goma, elegidos con CES EduPack. Cálculo FEA del eje del brazo.', img: 'rampassist-proceso',
+    note: { L: 'El conjunto en el cuadrado 1; el ojo φ cae en el carro del brazo.', P: 'El boceto del conjunto, en el cuadrado inferior.' } },
+  { t: 'maqueta 1:2', d: 'La maqueta cambió el proyecto: cantos redondeados, carcasa en dos piezas, escuadras en los pies, guía prismática sin rodamientos y tapas de plástico.', img: 'rampassist-iteracion',
+    note: { L: 'La botonera, en el cuadrado 1; el ojo φ, sobre el brazo.', P: 'Botonera y brazo, en la diagonal del rectángulo.' } },
+  { t: 'Rampassist · out', d: 'Lleva la silla por rampas de hasta el 12 %. 150 kg · 0,15 m/s · sin obra · compatible con barandillas existentes. TAD3, UPC EPSEVG, 2025, en grupo (GT17).', img: 'rampassist-out',
+    note: { L: 'El brazo extensible cruza el cuadrado 1 hasta el rectángulo φ.', P: 'Producto completo, centrado en el rectángulo áureo.' } },
   { t: 'R11', d: 'Estudio de diseño industrial que dirijo con Efrain David Rondon. Producto + espacio + experiencia.', img: 'r11',
     note: { L: 'La web de R11 es esta misma construcción, vista desde n = 0.', P: 'La web de R11 es esta misma construcción, vista desde n = 0.' } },
   { t: 'Diseño, dibujo\ny construyo objetos.', d: 'Estudiante en la UPC · EPSEVG. CAD paramétrico, modelado 3D, maquetas y prototipos.', small: true },

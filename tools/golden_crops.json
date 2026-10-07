@@ -1,0 +1,14 @@
+{
+  "rampassist-in":        {"src": "rampassist-in.jpg",        "mode": "edge",
+                           "L": {"tl": [0, 180],  "s": 630},
+                           "P": {"tl": [330, 0],  "s": 633}},
+  "rampassist-proceso":   {"src": "rampassist-proceso.jpg",   "mode": "edge",
+                           "L": {"tl": [140, -10], "s": 1000},
+                           "P": {"tl": [120, -300], "s": 900}},
+  "rampassist-iteracion": {"src": "rampassist-iteracion.jpg", "mode": "reflect",
+                           "L": {"tl": [0, 900],  "s": 949},
+                           "P": {"tl": [200, 0],  "s": 1265}},
+  "rampassist-out":       {"src": "rampassist-out.jpg",       "mode": "edge",
+                           "L": {"tl": [-60, 80], "s": 900},
+                           "P": {"tl": [-251, -1007], "s": 1900}}
+}

@@ -10,13 +10,14 @@ Sin dependencias ni build: abrir `index.html` en el navegador o servir la carpet
 | Paso | Contenido |
 |---|---|
 | 0 | ziad addami |
-| … | proyectos (por definir) |
-| n | R11 |
-| n+1 | Sobre mí |
-| n+2 | Contacto |
+| 1–4 | Rampassist en in-out: in · proceso · maqueta 1:2 · out (borrador) |
+| 5 | R11 |
+| 6 | Sobre mí |
+| 7 | Contacto |
 
 - Contenido: array `ITEMS` en `index.html` (y su copia accesible en `<main class="sr">`).
 - Imágenes: `img/<nombre>-l.webp` (escritorio, φ:1) y `img/<nombre>-p.webp` (móvil, 1:φ), recortadas con
   `tools/golden_crop.py` (uso en su cabecera).
 - Archivo único: `python3 tools/build_single.py . ziadaddami` → `dist/ziadaddami.html`.
+- `fuentes/`: originales que recorta `tools/golden_crop.py` según `tools/golden_crops.json`. Las de Rampassist son provisionales y salen de la presentación y del informe de la maqueta de TAD3.
 - Por confirmar: lista de proyectos y texto de «Sobre mí».
