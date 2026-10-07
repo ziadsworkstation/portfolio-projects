@@ -21,3 +21,8 @@ Sin dependencias ni build: abrir `index.html` en el navegador o servir la carpet
 - Archivo único: `python3 tools/build_single.py . ziadaddami` → `dist/ziadaddami.html`.
 - `fuentes/`: originales que recorta `tools/golden_crop.py` según `tools/golden_crops.json`. Las de Rampassist son provisionales y salen de la presentación y del informe de la maqueta de TAD3.
 - Por confirmar: lista de proyectos y texto de «Sobre mí».
+
+## Publicación (GitHub Pages)
+
+`CNAME` fija el dominio `ziadaddami.es`; `.nojekyll` sirve los archivos tal cual. En GitHub: Settings → Pages → Deploy from a branch → `main` / root.
+En el proveedor del dominio: cuatro registros `A` para `@` (185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153) y un `CNAME` para `www` → `ziadsworkstation.github.io`.
