@@ -20,7 +20,7 @@ Sin dependencias ni build: abrir `index.html` en el navegador o servir la carpet
   `tools/golden_crop.py` (uso en su cabecera).
 - Archivo único: `python3 tools/build_single.py . ziadaddami` → `dist/ziadaddami.html`.
 - `fuentes/`: originales que recorta `tools/golden_crop.py` según `tools/golden_crops.json`. Las de Rampassist son provisionales y salen de la presentación y del informe de la maqueta de TAD3.
-- Por confirmar: lista de proyectos y texto de «Sobre mí».
+- Pendiente: más proyectos e imágenes finales de Rampassist.
 
 ## Publicación (Vercel)
 
