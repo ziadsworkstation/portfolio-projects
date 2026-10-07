@@ -13,7 +13,7 @@
   --paper:#f2f1ee;
   --ink:#111;
   --mute:#8a8884;
-  --red:#e8251b;
+  --accent:#1f3fd1;
   --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -31,7 +31,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 .tr{right:20px;top:16px;text-align:right}
 .bl{left:20px;bottom:16px}
 .br{right:20px;bottom:16px;text-align:right}
-.phi{color:var(--red)}
+.phi{color:var(--accent)}
 .hint{transition:opacity .8s}
 .hint.off{opacity:0}
 
@@ -39,7 +39,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 .cap .i{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--mute)}
 .cap .t{font-weight:300;font-size:22px;letter-spacing:-.03em;line-height:1.1;margin-right:.5em}
 .cap .d{font-weight:300;font-size:14px;color:var(--mute)}
-.cap .n{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--red);margin-top:4px}
+.cap .n{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--accent);margin-top:4px}
 @media (max-width:700px){.cap .t{font-size:18px}.cap .d{font-size:13px}}
 /* sobre imagen: texto blanco */
 body.on-img .hud,body.on-img .cap{color:#fff;text-shadow:0 0 8px rgba(0,0,0,.45)}
@@ -129,7 +129,7 @@ const css = getComputedStyle(document.documentElement);
 const PAPER = css.getPropertyValue('--paper').trim();
 const INK = css.getPropertyValue('--ink').trim();
 const MUTE = css.getPropertyValue('--mute').trim();
-const RED = css.getPropertyValue('--red').trim();
+const ACCENT = css.getPropertyValue("--accent").trim();
 const MONO = css.getPropertyValue('--mono').trim();
 const SANS = '"Inter Tight", Helvetica, Arial, sans-serif';
 
@@ -272,7 +272,7 @@ function draw() {
   ctx.restore();
 
   // --- espiral áurea: un cuarto de circunferencia por cuadrado ---
-  ctx.strokeStyle = RED; ctx.lineWidth = hair * 1.4;
+  ctx.strokeStyle = ACCENT; ctx.lineWidth = hair * 1.4;
   ctx.beginPath();
   let first = true;
   for (let j = -2; j < 26; j++) {
