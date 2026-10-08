@@ -4,7 +4,7 @@
 """
 import base64, os, re, sys
 root = os.path.abspath(sys.argv[1]) if len(sys.argv) > 1 else os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-name = sys.argv[2] if len(sys.argv) > 2 else 'r11'
+name = sys.argv[2] if len(sys.argv) > 2 else 'ziadaddami'
 html = open(os.path.join(root, 'index.html'), encoding='utf-8').read()
 imgs = {}
 for f in sorted(os.listdir(os.path.join(root, 'img'))):

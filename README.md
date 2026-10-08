@@ -1,26 +1,16 @@
 # ziadaddami.es — portfolio
 
-Basado en la estructura de la web de R11 (`ziadsworkstation/EXARL1`, rama `claude/quirky-noether-vc8aw3`, carpeta `web/`):
-un zoom infinito por la subdivisión del rectángulo áureo. Cada paso del scroll entra en el siguiente cuadrado
-(escala ×φ, giro 90°), con una imagen a pantalla completa por paso y la construcción (cuadrados, espiral, ojo φ)
-justificando el encuadre.
+Una portada tipo sumario (bio, índice numerado y una fila por proyecto) y una página por proyecto,
+leída con el método in-out: 01 In · 02 Proceso · 03 Iteración · 04 Out. Las páginas se abren con `#rampassist`,
+`#estudio` y `#plaza`.
 
 Sin dependencias ni build: abrir `index.html` en el navegador o servir la carpeta tal cual.
 
-| Paso | Contenido |
-|---|---|
-| 0 | ziad addami |
-| 1–4 | Rampassist en in-out: in · proceso · maqueta 1:2 · out (borrador) |
-| 5 | Sobre mí |
-| 6 | Contacto |
-| 7 | Entidades: R11 · CloutNative · Blashgol |
-
-- Contenido: array `ITEMS` en `index.html` (y su copia accesible en `<main class="sr">`).
-- Imágenes: `img/<nombre>-l.webp` (escritorio, φ:1) y `img/<nombre>-p.webp` (móvil, 1:φ), recortadas con
-  `tools/golden_crop.py` (uso en su cabecera).
+- Contenido: todo en `index.html` (portada en `#home`, proyectos en `<article class="pg">`).
+- Imágenes: `img/<nombre>.webp`, generadas desde `fuentes/` con `python3 tools/web_images.py`.
+- Renders 3D: `tools/render_estudio/` y `tools/render_coworking/` (Three.js).
 - Archivo único: `python3 tools/build_single.py . ziadaddami` → `dist/ziadaddami.html`.
-- `fuentes/`: originales que recorta `tools/golden_crop.py` según `tools/golden_crops.json`. Las de Rampassist son provisionales y salen de la presentación y del informe de la maqueta de TAD3.
-- Pendiente: más proyectos e imágenes finales de Rampassist.
+- Las imágenes de Rampassist son provisionales.
 
 ## Publicación (Vercel)
 
