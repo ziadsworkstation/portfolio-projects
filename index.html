@@ -103,7 +103,7 @@ figure.hero{padding:0;max-width:none}
 .fig{grid-column:2;align-self:start}
 .fig img{width:100%}
 .txt{grid-column:3}
-.txt.full{grid-column:2 / 4}
+.txt.full,.fig.wide{grid-column:2 / 4}
 .txt>*+*{margin-top:clamp(20px,2.5vw,32px)}
 .def{display:grid;gap:16px}
 .def dd{margin-top:4px}
@@ -132,7 +132,7 @@ figure.hero{padding:0;max-width:none}
   .meta,.specs{grid-template-columns:repeat(2,minmax(0,1fr))}
   .s{grid-template-columns:1fr}
   .num{grid-row:auto}
-  .head,.fig,.txt,.txt.full{grid-column:1}
+  .head,.fig,.txt,.txt.full,.fig.wide{grid-column:1}
 }
 </style>
 </head>
@@ -261,13 +261,13 @@ figure.hero{padding:0;max-width:none}
   </section>
 
   <section class="s"><div class="num">02</div>
-    <div class="head"><h3 class="lbl">Proceso</h3><p class="lead">Un lenguaje común para las dos piezas: tubo curvado de radio amplio, lacado cobalto y canto de abedul visto.</p></div>
+    <div class="head"><h3 class="lbl">Proceso</h3><p class="lead">Un lenguaje común para las dos piezas: tubo curvado de radio amplio lacado en cobalto, y resina esmerilada que deja ver un núcleo de color.</p></div>
     <figure class="fig"><img data-img="estudio-proceso" alt="Secuencia de plegado"></figure>
     <div class="txt"><ol class="areas">
       <li><b>Plegado</b><span>Cada lado es un solo tubo cerrado que hace de patas, pie y travesaño. Gira bajo el tablero y el estrecho se anida en el ancho.</span></li>
       <li><b>Anclaje</b><span>Raíl trasero de tubo Ø40. El altavoz lo abraza con una pinza de medio tubo, se fija con imán y se carga por pogo pins.</span></li>
       <li><b>Acústica</b><span>Caja cerrada con driver de 3" y tweeter, pensada para escuchar de cerca, en triángulo con el usuario.</span></li>
-      <li><b>Materiales</b><span>Tubo de acero lacado, tablero de contrachapado de abedul lacado arriba y abajo. Piezas planas, sin tornillería vista.</span></li>
+      <li><b>Materiales</b><span>Tubo de acero lacado en cobalto y tablero de resina esmerilada con un núcleo cobalto embebido, que se lee difuso. Piezas planas, sin tornillería vista.</span></li>
     </ol></div>
   </section>
 
@@ -284,6 +284,7 @@ figure.hero{padding:0;max-width:none}
 
   <section class="s"><div class="num">04</div>
     <div class="head"><h3 class="lbl">Out</h3><p class="lead">Se despliega en segundos y el altavoz pasa de la mano a la mesa. Juntos convierten cualquier rincón en un estudio.</p></div>
+    <figure class="fig wide"><img data-img="estudio-detalle" alt="Altavoz de resina esmerilada sobre el raíl, con el núcleo cobalto difuso"></figure>
     <div class="txt full"><dl class="specs"><div><dt>Tablero</dt><dd>120 × 60 cm</dd></div><div><dt>Plegado</dt><dd>8 cm</dd></div><div><dt>Montaje</dt><dd>&lt; 1 min</dd></div><div><dt>Carga</dt><dd>40 kg</dd></div></dl></div>
   </section>
   <nav class="next"><a href="#plaza"><span>Siguiente · 03</span>Plaza abierta →</a><a href="#" data-close class="back">← Volver a la portada</a></nav>
@@ -316,11 +317,11 @@ figure.hero{padding:0;max-width:none}
   </section>
 
   <section class="s"><div class="num">02</div>
-    <div class="head"><h3 class="lbl">Proceso</h3><p class="lead">Una trama de 2,4 m y una sola pieza de chapa lacada que crece sin cambiar de lenguaje.</p></div>
+    <div class="head"><h3 class="lbl">Proceso</h3><p class="lead">Una trama de 2,4 m: estructura de tubo lacado en cobalto y cerramientos de vidrio acanalado que se tiñe de cobalto hacia el suelo. Crece sin cambiar de lenguaje.</p></div>
     <figure class="fig"><img data-img="plaza-proceso" alt="La familia de módulos en alzado"></figure>
     <div class="txt"><ol class="areas">
       <li><b>Cabina</b><span>2,4 × 2,4 m. Un puesto frente a una ventana grande.</span></li>
-      <li><b>Cabina + máquina</b><span>La misma cabina con una máquina de bebidas y snacks del mismo lacado.</span></li>
+      <li><b>Cabina + máquina</b><span>La misma cabina con una máquina de bebidas y snacks en resina esmerilada; el producto se intuye en cobalto.</span></li>
       <li><b>Quiosco</b><span>4,8 × 2,4 m. Barra con toldo abatible y taburetes de tubo; terraza en cubierta.</span></li>
       <li><b>Quiosco de dos plantas</b><span>Barra abajo, coworking arriba y terraza, con escalera de caracol.</span></li>
     </ol></div>
@@ -331,7 +332,8 @@ figure.hero{padding:0;max-width:none}
     <figure class="fig"><img data-img="plaza-iteracion" alt="Cabina a la altura de los ojos, con alguien trabajando"></figure>
     <div class="txt"><table class="ba"><thead><tr><th>Antes</th><th>Después</th></tr></thead><tbody>
       <tr><td>Esquinas vivas de chapa</td><td>Esquinas de tubo grueso</td></tr>
-      <tr><td>Ventanas rectas</td><td>Esquinas redondeadas, ojos de buey y puerta en arco</td></tr>
+      <tr><td>Cerramiento opaco de chapa</td><td>Vidrio acanalado: se intuye la actividad sin exponer a nadie</td></tr>
+      <tr><td>Ventana genérica</td><td>Banda de vidrio claro a la altura de quien trabaja</td></tr>
       <tr><td>Escalera recta</td><td>Caracol: menos superficie de plaza ocupada</td></tr>
       <tr><td>Barandilla de varios tubos</td><td>Un solo tubo continuo</td></tr>
     </tbody></table></div>
@@ -394,14 +396,14 @@ renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.95;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-const scene = new THREE.Scene();
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#ffffff');   // la resina refracta el fondo: blanco, como la página
 scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
 scene.environmentIntensity = 0.6;
 
 const V = (x, y, z) => new THREE.Vector3(x, z, y);
 const COBALT = new THREE.MeshPhysicalMaterial({ color: '#1f3fd1', roughness: 0.3, clearcoat: 1, clearcoatRoughness: 0.1 });
-const COBALT_DK = new THREE.MeshPhysicalMaterial({ color: '#0f1f6e', roughness: 0.6 });
-const BIRCH = new THREE.MeshStandardMaterial({ color: '#e2cfa8', roughness: 0.85 });
+const FROST = new THREE.MeshPhysicalMaterial({ color: '#f3f5fb', roughness: 0.3, transmission: 1, thickness: 3, ior: 1.49 });    // resina esmerilada
+const CORE = new THREE.MeshStandardMaterial({ color: '#1430d6', roughness: 0.6 });                                            // núcleo que se ve difuso
 const ALU = new THREE.MeshStandardMaterial({ color: '#c3c5c8', roughness: 0.35, metalness: 0.8 });
 const INK = new THREE.MeshStandardMaterial({ color: '#16171a', roughness: 0.5 });
 const mesh = (g, m) => { const o = new THREE.Mesh(g, m); o.castShadow = o.receiveShadow = true; return o; };
@@ -426,10 +428,9 @@ function tube(pts, radius, r, closed = false) {
 }
 function speaker() {
   const g = new THREE.Group();
-  const b = mesh(new RoundedBoxGeometry(12, 18, 13, 6, 2.2), COBALT); b.position.set(0, 9, 0); g.add(b);
-  const cone = mesh(new THREE.CylinderGeometry(4, 4, 0.6, 48), COBALT_DK); cone.rotation.x = Math.PI / 2; cone.position.set(0, 7.5, 6.55); g.add(cone);
-  const dust = mesh(new THREE.SphereGeometry(1.3, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), COBALT); dust.rotation.x = Math.PI / 2; dust.position.set(0, 7.5, 6.8); g.add(dust);
-  const tw = mesh(new THREE.CylinderGeometry(1.3, 1.3, 0.6, 32), COBALT_DK); tw.rotation.x = Math.PI / 2; tw.position.set(0, 14.4, 6.55); g.add(tw);
+  const b = mesh(new RoundedBoxGeometry(12, 18, 13, 6, 2.4), FROST); b.position.set(0, 9, 0); g.add(b);
+  const cyl = (r, d, y, z) => { const o = mesh(new THREE.CylinderGeometry(r, r, d, 48), CORE); o.rotation.x = Math.PI / 2; o.position.set(0, y, z); g.add(o); };
+  cyl(4, 1.6, 7.5, 4); cyl(3, 7, 7.5, -0.5); cyl(1.3, 1.2, 14.5, 4);   // driver, cámara y tweeter dentro de la resina
   g.add(tube([[-4, 0, 17.5], [-4, 0, 22.5], [4, 0, 22.5], [4, 0, 17.5]], 0.7, 2.6));
   return g;
 }
@@ -449,9 +450,10 @@ const legB = tube([[0, 10, 1.5], [0, 10, 70.5], [0, 54, 70.5], [0, 54, 1.5]], 1.
 const pA = new THREE.Group(), pB = new THREE.Group();
 pA.position.copy(V(8, 0, 70.5)); legA.position.copy(V(0, 0, -70.5)); pA.add(legA);
 pB.position.copy(V(112, 0, 70.5)); legB.position.copy(V(0, 0, -70.5)); pB.add(legB);
-const top = mesh(new THREE.BoxGeometry(120, 1.8, 60), [BIRCH, BIRCH, COBALT, COBALT, BIRCH, BIRCH]); top.position.copy(V(60, 34, 72.9));
+const top = mesh(new RoundedBoxGeometry(120, 4.5, 60, 3, 0.8), FROST); top.position.copy(V(60, 30, 73.5));
+const core = mesh(new THREE.BoxGeometry(78, 1, 30), CORE); core.position.copy(V(60, 32, 73.5));
 const rail = tube([[-3, 2, 73.6], [123, 2, 73.6]], 2, 1);
-inner.add(pA, pB, top, rail);
+inner.add(pA, pB, top, core, rail);
 for (const x of [20, 100]) { const c = mesh(new THREE.BoxGeometry(3, 1.6, 3), COBALT); c.position.copy(V(x, 3.6, 73)); inner.add(c); }
 const spk = [speaker(), speaker()], spkX = [18, 102];
 spk.forEach((s, i) => inner.add(s));

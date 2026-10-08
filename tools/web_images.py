@@ -10,7 +10,7 @@ IMAGES = {   # nombre en la web -> original en fuentes/
     'rampassist-in': 'rampassist-in.jpg', 'rampassist-proceso': 'rampassist-proceso.jpg',
     'rampassist-iteracion': 'rampassist-iteracion.jpg', 'rampassist-out': 'rampassist-out.jpg',
     'estudio-in': 'estudio-in.jpg', 'estudio-proceso': 'estudio-plegado.png',
-    'estudio-iteracion': 'estudio-anclaje.png', 'estudio-out': 'estudio-out.jpg',
+    'estudio-iteracion': 'estudio-anclaje.png', 'estudio-out': 'estudio-out.jpg', 'estudio-detalle': 'estudio-detalle.jpg',
     'plaza-in': 'plaza-plaza.jpg', 'plaza-proceso': 'plaza-familia.jpg',
     'plaza-iteracion': 'plaza-calle.jpg', 'plaza-out': 'plaza-out.jpg',
 }
