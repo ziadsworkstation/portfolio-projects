@@ -14,9 +14,15 @@ IMAGES = {   # nombre en la web -> original en fuentes/
     'plaza-in': 'plaza-plaza.jpg', 'plaza-proceso': 'plaza-familia.jpg',
     'plaza-iteracion': 'plaza-calle.jpg', 'plaza-out': 'plaza-out.jpg',
 }
+CUTOUTS = ['obj-rampassist', 'obj-estudio', 'obj-plaza']   # objetos recortados (PNG con alfa) para la estantería
 out = os.path.join(ROOT, 'img'); os.makedirs(out, exist_ok=True)
 for name, src in IMAGES.items():
     im = Image.open(os.path.join(ROOT, 'fuentes', src)).convert('RGB')
     if im.width > 1600: im = im.resize((1600, round(im.height * 1600 / im.width)), Image.LANCZOS)
     im.save(os.path.join(out, name + '.webp'), 'WEBP', quality=80, method=6)
+    print(name, im.size)
+for name in CUTOUTS:
+    im = Image.open(os.path.join(ROOT, 'fuentes', name + '.png')).convert('RGBA')
+    if im.width > 1000: im = im.resize((1000, round(im.height * 1000 / im.width)), Image.LANCZOS)
+    im.save(os.path.join(out, name + '.webp'), 'WEBP', quality=85, method=6)
     print(name, im.size)

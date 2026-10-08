@@ -14,7 +14,8 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 const q = new URLSearchParams(location.search);
 const VIEW = q.get('view') || 'out', W = +q.get('w') || 1600, H = +q.get('h') || 1000;
 
-const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+const CUT = VIEW === 'cut';   // el quiosco de dos plantas solo, recortado con su sombra
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: CUT });
 renderer.setSize(W, H); renderer.setPixelRatio(1);
 renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.95;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -317,6 +318,10 @@ if (VIEW === 'plaza' || VIEW === 'out') {
   add(cabina(), -11.2, 0); add(cabina(), -6.4, 0); add(vending(), -4.45, 0.5);
   add(kiosco(1), 1.2, 0); add(kiosco(2), 10.2, 0);
   cam.fov = 13; cam.position.set(0.6, 5.5, 95); cam.lookAt(0.6, 3.6, 0);
+} else if (CUT) {
+  scene.background = null; ground.material = new THREE.ShadowMaterial({ opacity: 0.1 });
+  add(kiosco(2), 0, 0); add(vending(), -3.3, 0.6, 0);
+  cam.position.set(15, 9, 22); cam.lookAt(0.6, 3.7, 0);
 } else {   // calle: a la altura de los ojos, la cabina con alguien trabajando y un paseante
   city();
   add(cabina(), 0, 0, 0.12); add(vending(), 1.95, 0.45, 0.12);

@@ -14,7 +14,8 @@ const q = new URLSearchParams(location.search);
 const VIEW = q.get('view') || 'open', W = +q.get('w') || 1600, H = +q.get('h') || 1000;
 const V = (x, y, z) => new THREE.Vector3(x, z, y);
 
-const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+const CUT = q.get('cut') === '1';   // sin pared ni suelo: objeto recortado con su sombra
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: CUT });
 renderer.setSize(W, H); renderer.setPixelRatio(1);
 renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.92;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -145,6 +146,7 @@ if (VIEW === 'open') {
   const s = speaker(); s.position.set(78, 0, 18); s.rotation.y = -0.35; scene.add(s);
   cam.position.set(120, 120, 300); cam.lookAt(10, 40, -10);
 }
+if (CUT) { scene.background = null; wall.visible = false; floor.material = new THREE.ShadowMaterial({ opacity: 0.1 }); }
 cam.updateProjectionMatrix();
 renderer.render(scene, cam);
 window.done = true;
