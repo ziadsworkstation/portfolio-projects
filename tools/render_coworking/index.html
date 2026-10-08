@@ -1,0 +1,330 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>render coworkings en la plaza</title>
+<style>html,body{margin:0;background:#000}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+</head><body>
+<script type="module">
+/* Render de «Plaza abierta»: familia de módulos de coworking en la vía pública.
+   Unidades: metros, ejes de three (y arriba). Trama de 2,4 m.
+   ?view=plaza|out|familia|calle&w=..&h=.. ; window.done = true al terminar. */
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+const q = new URLSearchParams(location.search);
+const VIEW = q.get('view') || 'out', W = +q.get('w') || 1600, H = +q.get('h') || 1000;
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H); renderer.setPixelRatio(1);
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.95;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const SKY = '#e9e5dd';
+scene.background = new THREE.Color(SKY);
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.5;
+
+// ---------------------------------------------------------------- materiales
+const COBALT = new THREE.MeshPhysicalMaterial({ color: '#1f3fd1', roughness: 0.32, clearcoat: 1, clearcoatRoughness: 0.12 });
+const COBALT_DK = new THREE.MeshPhysicalMaterial({ color: '#0f1f6e', roughness: 0.6 });
+const BIRCH = new THREE.MeshStandardMaterial({ color: '#e2cfa8', roughness: 0.85 });
+const CANVAS = new THREE.MeshStandardMaterial({ color: '#efe9dc', roughness: 0.95, side: THREE.DoubleSide });
+const GLASS = new THREE.MeshPhysicalMaterial({ color: '#dfe7ee', transparent: true, opacity: 0.16, roughness: 0.05, clearcoat: 1, depthWrite: false });
+const FROST = new THREE.MeshPhysicalMaterial({ color: '#f4f4f2', transparent: true, opacity: 0.72, roughness: 0.9, depthWrite: false });
+const WARM = new THREE.MeshStandardMaterial({ color: '#000', emissive: '#ffe9c4', emissiveIntensity: 1.1 });
+const INKM = new THREE.MeshStandardMaterial({ color: '#16171a', roughness: 0.5 });
+const ALU = new THREE.MeshStandardMaterial({ color: '#b9bbbe', roughness: 0.35, metalness: 0.8 });
+const STONE = new THREE.MeshStandardMaterial({ color: '#cfc8bb', roughness: 0.95 });
+const LEAF = new THREE.MeshStandardMaterial({ color: '#8b9468', roughness: 1 });
+const BARK = new THREE.MeshStandardMaterial({ color: '#8d8579', roughness: 1 });
+const CLOTH = ['#2a2a2c', '#cfc8bb', '#8a8378', '#55514b', '#e6e1d6', '#3d3a36'].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.9 }));
+
+function mesh(geo, mat) { const m = new THREE.Mesh(geo, mat); m.castShadow = m.receiveShadow = true; return m; }
+function box(w, h, d, r, mat) { return mesh(new RoundedBoxGeometry(w, h, d, 4, r), mat); }
+
+// pavimento crudo de piedra: losas 60x40 a matajunta, tono irregular
+function paving() {
+  const c = document.createElement('canvas'); c.width = c.height = 1024;
+  const g = c.getContext('2d'); g.fillStyle = '#a39b8e'; g.fillRect(0, 0, 1024, 1024);
+  let s = 11; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  const sw = 1024 / 10, sh = 1024 / 15;              // 6 m de textura: 10 x 15 losas
+  for (let r = 0; r < 15; r++) for (let k = -1; k < 10; k++) {
+    const x = k * sw + (r % 2) * sw / 2, v = 188 + rnd() * 20 | 0;
+    g.fillStyle = `rgb(${v},${v - 6},${v - 15})`; g.fillRect(x + 1.5, r * sh + 1.5, sw - 3, sh - 3);
+  }
+  for (let i = 0; i < 900; i++) {                   // poro y manchas
+    const x = rnd() * 1024, y = rnd() * 1024, rr = 1 + rnd() * 14;
+    g.fillStyle = `rgba(90,80,70,${0.02 + rnd() * 0.04})`; g.beginPath(); g.arc(x, y, rr, 0, 7); g.fill();
+  }
+  const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace;
+  tx.wrapS = tx.wrapT = THREE.RepeatWrapping; tx.repeat.set(30, 30); tx.anisotropy = 8; return tx;
+}
+
+// polilínea con esquinas redondeadas -> tubo (coordenadas three)
+function filletPath(pts, r, closed = false) {
+  const P = pts.map(p => new THREE.Vector3(...p)); const out = [];
+  const n = P.length, idx = closed ? [...Array(n).keys()] : [...Array(n).keys()].slice(1, -1);
+  if (!closed) out.push(P[0]);
+  for (const i of idx) {
+    const a = P[(i - 1 + n) % n], b = P[i], c = P[(i + 1) % n];
+    const u = b.clone().sub(a), v = c.clone().sub(b);
+    const rr = Math.min(r, u.length() / 2, v.length() / 2);
+    const p0 = b.clone().sub(u.normalize().multiplyScalar(rr)), p2 = b.clone().add(v.normalize().multiplyScalar(rr));
+    out.push(...new THREE.QuadraticBezierCurve3(p0, b, p2).getPoints(16));
+  }
+  if (!closed) out.push(P[n - 1]);
+  return out;
+}
+function tube(pts, radius, r, closed = false, mat = COBALT) {
+  const path = new THREE.CatmullRomCurve3(filletPath(pts, r, closed), closed, 'catmullrom', 0);
+  const g = new THREE.Group();
+  g.add(mesh(new THREE.TubeGeometry(path, 300, radius, 20, closed), mat));
+  if (!closed) for (const t of [0, 1]) { const s = mesh(new THREE.SphereGeometry(radius, 20, 10), mat); s.position.copy(path.getPoint(t)); g.add(s); }
+  return g;
+}
+
+// ---------------------------------------------------------------- piezas
+function rrect(path, x, y, w, h, r, archOnly = false) {   // rectángulo redondeado (o arco arriba)
+  const rb = archOnly ? 0 : r;
+  path.moveTo(x + rb, y); path.lineTo(x + w - rb, y);
+  if (rb) path.quadraticCurveTo(x + w, y, x + w, y + rb);
+  path.lineTo(x + w, y + h - r); path.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  path.lineTo(x + r, y + h); path.quadraticCurveTo(x, y + h, x, y + h - r);
+  path.lineTo(x, y + rb); if (rb) path.quadraticCurveTo(x, y, x + rb, y);
+  return path;
+}
+// panel de fachada de chapa lacada con huecos; holes: {x,y,w,h,r,arch|circle}
+function plate(w, h, holes = [], t = 0.08) {
+  const s = new THREE.Shape(); s.moveTo(-w / 2, 0); s.lineTo(w / 2, 0); s.lineTo(w / 2, h); s.lineTo(-w / 2, h); s.lineTo(-w / 2, 0);
+  const g = new THREE.Group();
+  for (const o of holes) {
+    const p = new THREE.Path();
+    if (o.circle) p.absarc(o.x, o.y, o.circle, 0, Math.PI * 2, true);
+    else rrect(p, o.x - o.w / 2, o.y, o.w, o.h, o.r, o.arch);
+    s.holes.push(p);
+    if (o.glass) {
+      const gs = new THREE.Shape(); if (o.circle) gs.absarc(o.x, o.y, o.circle, 0, Math.PI * 2); else rrect(gs, o.x - o.w / 2, o.y, o.w, o.h, o.r, o.arch);
+      const gm = new THREE.Mesh(new THREE.ShapeGeometry(gs, 24), o.glass); gm.renderOrder = 2; g.add(gm);
+    }
+  }
+  const geo = new THREE.ExtrudeGeometry(s, { depth: t, bevelEnabled: false, curveSegments: 24 }); geo.translate(0, 0, -t / 2);
+  g.add(mesh(geo, COBALT));
+  return g;
+}
+// caja de fachadas: front +z, back -z, left -x, right +x
+function shell(Wd, Dp, Hh, y0, faces) {
+  const g = new THREE.Group(), t = 0.08;
+  const f = plate(Wd, Hh, faces.front || []); f.position.set(0, y0, Dp / 2 - t / 2); g.add(f);
+  const b = plate(Wd, Hh, faces.back || []); b.position.set(0, y0, -Dp / 2 + t / 2); b.rotation.y = Math.PI; g.add(b);
+  const l = plate(Dp, Hh, faces.left || []); l.position.set(-Wd / 2 + t / 2, y0, 0); l.rotation.y = -Math.PI / 2; g.add(l);
+  const r = plate(Dp, Hh, faces.right || []); r.position.set(Wd / 2 - t / 2, y0, 0); r.rotation.y = Math.PI / 2; g.add(r);
+  for (const [x, z] of [[-1, -1], [-1, 1], [1, -1], [1, 1]]) {            // esquinas de tubo grueso
+    const c = mesh(new THREE.CylinderGeometry(0.14, 0.14, Hh, 32), COBALT); c.position.set(x * Wd / 2, y0 + Hh / 2, z * Dp / 2); g.add(c);
+  }
+  const ceil = new THREE.Mesh(new THREE.PlaneGeometry(Wd - 0.5, Dp - 0.5), WARM); ceil.rotation.x = Math.PI / 2; ceil.position.y = y0 + Hh - 0.02; g.add(ceil);
+  const floor = mesh(new THREE.PlaneGeometry(Wd - 0.1, Dp - 0.1), BIRCH); floor.rotation.x = -Math.PI / 2; floor.position.y = y0 + 0.01; g.add(floor);
+  const pl = new THREE.PointLight('#ffd9a0', 6, 6, 1.6); pl.position.set(0, y0 + Hh - 0.4, 0.2); g.add(pl);
+  return g;
+}
+function slab(Wd, Dp, y) { const s = box(Wd + 0.36, 0.24, Dp + 0.36, 0.11, COBALT); s.position.y = y + 0.12; return s; }
+
+function person(kind = 'stand', mat = CLOTH[0], yaw = 0) {
+  const g = new THREE.Group(); const skin = CLOTH[4];
+  if (kind === 'stand') {
+    const b = mesh(new THREE.CapsuleGeometry(0.19, 1.0, 6, 16), mat); b.position.y = 0.69; g.add(b);
+    const h = mesh(new THREE.SphereGeometry(0.12, 20, 12), skin); h.position.y = 1.56; g.add(h);
+  } else {
+    const b = mesh(new THREE.CapsuleGeometry(0.19, 0.42, 6, 16), mat); b.position.y = 0.85; g.add(b);
+    const th = mesh(new THREE.CapsuleGeometry(0.09, 0.34, 6, 12), mat); th.rotation.x = Math.PI / 2; th.position.set(0, 0.52, 0.22); g.add(th);
+    const h = mesh(new THREE.SphereGeometry(0.12, 20, 12), skin); h.position.y = 1.43; g.add(h);
+  }
+  g.rotation.y = yaw; return g;
+}
+function laptop() {
+  const g = new THREE.Group();
+  const b = mesh(new THREE.BoxGeometry(0.32, 0.015, 0.22), ALU); b.position.y = 0.008; g.add(b);
+  const l = mesh(new THREE.BoxGeometry(0.32, 0.21, 0.01), ALU); l.position.set(0, 0.11, -0.12); l.rotation.x = -0.25; g.add(l);
+  return g;
+}
+function desk(len, y, z, seats, facing = 1) {   // tablero corrido de abedul junto a la ventana, con gente
+  const g = new THREE.Group();
+  const top = mesh(new THREE.BoxGeometry(len, 0.04, 0.6), BIRCH); top.position.set(0, y + 0.74, z); g.add(top);
+  for (const x of seats) {
+    const p = person('sit', CLOTH[(x * 7 + 3 & 7) % 4 === 1 ? 3 : 0], facing > 0 ? 0 : Math.PI); p.position.set(x, y, z - facing * 0.55); g.add(p);
+    const lp = laptop(); lp.position.set(x, y + 0.76, z); lp.rotation.y = facing > 0 ? Math.PI : 0; g.add(lp);
+  }
+  return g;
+}
+function cup(x, y, z) { const c = mesh(new THREE.CylinderGeometry(0.04, 0.035, 0.09, 16), CANVAS); c.position.set(x, y + 0.045, z); return c; }
+
+// tipo A: cabina de 2,4 x 2,4 — un puesto, ventana al frente, ojo de buey, puerta en arco
+function cabina() {
+  const g = new THREE.Group(), Wd = 2.4, Dp = 2.4, Hh = 2.7, y0 = 0.16;
+  const base = box(Wd + 0.2, 0.16, Dp + 0.2, 0.06, COBALT); base.position.y = 0.08; g.add(base);
+  g.add(shell(Wd, Dp, Hh, y0, {
+    front: [{ x: 0, y: 0.82, w: 1.9, h: 1.55, r: 0.5, glass: GLASS }],
+    left: [{ x: 0, y: 1.75, circle: 0.36, glass: GLASS }],
+    right: [{ x: 0, y: 0.02, w: 0.9, h: 2.15, r: 0.45, arch: true, glass: FROST }],
+  }));
+  g.add(slab(Wd, Dp, y0 + Hh));
+  g.add(desk(1.7, y0, Dp / 2 - 0.42, [0], 1));
+  g.add(cup(0.45, y0 + 0.76, Dp / 2 - 0.4));
+  return g;
+}
+// máquina de bebidas y snacks, mismo lacado
+function vending() {
+  const g = new THREE.Group();
+  const b = box(1.0, 1.95, 0.85, 0.16, COBALT); b.position.y = 0.975; g.add(b);
+  const win = new THREE.Mesh(new THREE.PlaneGeometry(0.6, 1.15), WARM); win.position.set(-0.1, 1.22, 0.428); g.add(win);
+  for (let i = 0; i < 5; i++) { const s = mesh(new THREE.BoxGeometry(0.6, 0.02, 0.03), COBALT_DK); s.position.set(-0.1, 0.72 + i * 0.25, 0.44); g.add(s); }
+  const pad = mesh(new THREE.BoxGeometry(0.16, 0.34, 0.02), INKM); pad.position.set(0.32, 1.3, 0.43); g.add(pad);
+  const slot = mesh(new THREE.BoxGeometry(0.6, 0.16, 0.03), COBALT_DK); slot.position.set(-0.1, 0.36, 0.43); g.add(slot);
+  return g;
+}
+function stool(x, z) {
+  const g = new THREE.Group();
+  const seat = box(0.36, 0.06, 0.36, 0.03, COBALT); seat.position.y = 0.76; g.add(seat);
+  g.add(tube([[0, 0.02, -0.16], [0, 0.73, -0.16], [0, 0.73, 0.16], [0, 0.02, 0.16]], 0.022, 0.12, true));
+  g.position.set(x, 0, z); return g;
+}
+function spiral(cx, cz, top, endAngle) {         // escalera de caracol: escalones, mástil y pasamanos en hélice
+  const g = new THREE.Group(), rise = 0.19, n = Math.round(top / rise), da = 0.44, a0 = endAngle - (n - 1) * da;
+  const mast = mesh(new THREE.CylinderGeometry(0.08, 0.08, top + 1.0, 24), COBALT); mast.position.set(cx, (top + 1.0) / 2, cz); g.add(mast);
+  const rail = [];
+  for (let i = 0; i < n; i++) {
+    const a = a0 + i * da, y = (i + 1) * rise;
+    const st = box(0.95, 0.05, 0.36, 0.02, COBALT); st.position.set(cx + 0.5 * Math.cos(a), y, cz + 0.5 * Math.sin(a)); st.rotation.y = -a; g.add(st);
+  }
+  for (let k = 0; k <= n * 6; k++) { const a = a0 + k * da / 6, y = rise + k * rise / 6 + 0.9; rail.push(new THREE.Vector3(cx + 0.95 * Math.cos(a), y, cz + 0.95 * Math.sin(a))); }
+  g.add(mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(rail), 600, 0.03, 12), COBALT));
+  for (let k = 0; k < n; k += 3) { const a = a0 + k * da, y = (k + 1) * rise; const p = mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.9, 8), COBALT); p.position.set(cx + 0.95 * Math.cos(a), y + 0.45, cz + 0.95 * Math.sin(a)); g.add(p); }
+  return g;
+}
+function parasol(x, z, y) {
+  const g = new THREE.Group();
+  const pole = mesh(new THREE.CylinderGeometry(0.03, 0.03, 2.4, 12), COBALT); pole.position.set(x, y + 1.2, z); g.add(pole);
+  const c = mesh(new THREE.ConeGeometry(1.35, 0.38, 48, 1, true), CANVAS); c.position.set(x, y + 2.35, z); g.add(c);
+  const tb = mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.03, 32), BIRCH); tb.position.set(x, y + 0.74, z); g.add(tb);
+  const p1 = person('sit', CLOTH[2], -Math.PI / 2); p1.position.set(x + 0.75, y, z); g.add(p1);
+  const p2 = person('sit', CLOTH[5], Math.PI / 2); p2.position.set(x - 0.75, y, z); g.add(p2);
+  g.add(cup(x + 0.15, y + 0.75, z), cup(x - 0.12, y + 0.75, z + 0.1));
+  return g;
+}
+
+// tipo B: quiosco de 4,8 x 2,4 — barra abajo; arriba coworking; cubierta terraza con caracol
+function kiosco(floors = 2) {
+  const g = new THREE.Group(), Wd = 4.8, Dp = 2.4, H1 = 2.9, y0 = 0.16;
+  const base = box(Wd + 0.2, 0.16, Dp + 0.2, 0.06, COBALT); base.position.y = 0.08; g.add(base);
+  g.add(shell(Wd, Dp, H1, y0, {
+    front: [{ x: 0, y: 1.02, w: 4.0, h: 1.45, r: 0.35 }],
+    left: [{ x: 0, y: 1.8, circle: 0.36, glass: GLASS }],
+    right: [{ x: 0, y: 0.02, w: 0.9, h: 2.15, r: 0.45, arch: true, glass: FROST }],
+  }));
+  // barra: mostrador de abedul, toldo de chapa abatible, taburetes de tubo
+  const bar = mesh(new THREE.BoxGeometry(4.3, 0.05, 0.42), BIRCH); bar.position.set(0, y0 + 1.04, Dp / 2 + 0.17); g.add(bar);
+  const back = mesh(new THREE.BoxGeometry(4.2, 0.9, 0.5), BIRCH); back.position.set(0, y0 + 0.45, -Dp / 2 + 0.35); g.add(back);
+  const flap = new THREE.Group(); flap.position.set(0, y0 + 2.5, Dp / 2 + 0.02);
+  const fp = box(4.3, 0.05, 1.05, 0.02, COBALT); fp.position.z = 0.52; flap.add(fp); flap.rotation.x = 0.32; g.add(flap);
+  const barista = person('stand', CLOTH[1], 0); barista.position.set(-0.8, y0, -0.1); g.add(barista);
+  for (const x of [-1.4, -0.45, 0.5, 1.45]) g.add(stool(x, Dp / 2 + 0.75));
+  const c1 = person('sit', CLOTH[3], Math.PI); c1.position.set(-0.45, 0.31, Dp / 2 + 0.9); g.add(c1);
+  const c2 = person('stand', CLOTH[0], Math.PI); c2.position.set(1.0, 0, Dp / 2 + 0.75); g.add(c2);
+  g.add(cup(-0.4, y0 + 1.065, Dp / 2 + 0.2), cup(0.95, y0 + 1.065, Dp / 2 + 0.22));
+  let top = y0 + H1;
+  g.add(slab(Wd, Dp, top)); top += 0.24;
+  if (floors > 1) {
+    const H2 = 2.7;
+    g.add(shell(Wd, Dp, H2, top, {
+      front: [{ x: 0, y: 0.72, w: 4.15, h: 1.6, r: 0.55, glass: GLASS }],
+      left: [{ x: 0, y: 1.6, circle: 0.36, glass: GLASS }],
+      right: [{ x: 0, y: 0.02, w: 0.9, h: 2.15, r: 0.45, arch: true, glass: FROST }],
+    }));
+    g.add(desk(4.1, top, Dp / 2 - 0.42, [-1.5, -0.1, 1.3], 1));
+    g.add(cup(-1.05, top + 0.76, Dp / 2 - 0.4), cup(1.7, top + 0.76, Dp / 2 - 0.35));
+    top += H2; g.add(slab(Wd, Dp, top)); top += 0.24;
+  }
+  // terraza en cubierta: barandilla de un solo tubo, abierta donde llega la escalera
+  const y = top + 1.0, e = 0.05, xs = Wd / 2 + 0.1 - e, zs = Dp / 2 + 0.1 - e;
+  const loop = [[xs, y, -0.35], [xs, y, -zs], [-xs, y, -zs], [-xs, y, zs], [xs, y, zs], [xs, y, 0.55]];
+  g.add(tube(loop, 0.035, 0.55));
+  g.add(tube(loop.map(p => [p[0], top + 0.5, p[2]]), 0.022, 0.55));
+  for (const [x, z] of [[-xs, -zs], [-xs, zs], [xs, -zs], [xs, zs], [0, -zs], [0, zs], [xs, -0.35], [xs, 0.55]]) {
+    const p = mesh(new THREE.CylinderGeometry(0.022, 0.022, 1.0, 10), COBALT); p.position.set(x * 0.985, top + 0.5, z * 0.985); g.add(p);
+  }
+  g.add(parasol(-0.9, 0, top));
+  g.add(spiral(Wd / 2 + 1.25, 0.1, top, Math.PI));
+  return g;
+}
+
+// ---------------------------------------------------------------- ciudad
+function tree(x, z, s = 1) {
+  const g = new THREE.Group();
+  const t = mesh(new THREE.CylinderGeometry(0.13 * s, 0.18 * s, 3.2 * s, 12), BARK); t.position.y = 1.6 * s; g.add(t);
+  for (const [dx, dy, dz, r] of [[0, 4.2, 0, 2.0], [0.9, 3.8, 0.4, 1.4], [-0.8, 4.0, -0.5, 1.5], [0.2, 5.0, -0.3, 1.3]]) {
+    const c = mesh(new THREE.IcosahedronGeometry(r * s, 2), LEAF); c.position.set(dx * s, dy * s, dz * s); c.scale.y = 0.85; g.add(c);
+  }
+  const pit = mesh(new THREE.BoxGeometry(1.4, 0.03, 1.4), new THREE.MeshStandardMaterial({ color: '#8f8576', roughness: 1 })); pit.position.y = 0.015; g.add(pit);
+  g.position.set(x, 0, z); return g;
+}
+function facades() {   // frente urbano: bloques de piedra clara con ventanas en retícula
+  const c = document.createElement('canvas'); c.width = 512; c.height = 512; const g = c.getContext('2d');
+  g.fillStyle = '#ddd7cc'; g.fillRect(0, 0, 512, 512); g.fillStyle = '#bdb5a8';
+  for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) g.fillRect(x * 64 + 22, y * 64 + 14, 20, 36);
+  const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace; tx.wrapS = tx.wrapT = THREE.RepeatWrapping;
+  for (const [x, z, w, h, yaw] of [[-30, -34, 40, 19, 0], [12, -36, 44, 23, 0], [52, -20, 40, 20, -Math.PI / 2.2], [-58, -8, 40, 18, Math.PI / 2.4]]) {
+    const t = tx.clone(); t.repeat.set(w / 24, h / 24); t.needsUpdate = true;
+    const m = mesh(new THREE.BoxGeometry(w, h, 12), new THREE.MeshStandardMaterial({ map: t, roughness: 1 }));
+    m.position.set(x, h / 2, z); m.rotation.y = yaw; scene.add(m);
+  }
+}
+function bench(x, z, yaw = 0) { const b = box(2.2, 0.45, 0.6, 0.08, STONE); b.position.set(x, 0.225, z); b.rotation.y = yaw; return b; }
+
+const ground = mesh(new THREE.PlaneGeometry(400, 400), VIEW === 'familia'
+  ? new THREE.MeshStandardMaterial({ color: '#dcd7cd', roughness: 0.95 })
+  : new THREE.MeshStandardMaterial({ map: paving(), roughness: 0.95 }));
+ground.rotation.x = -Math.PI / 2; scene.add(ground);
+
+const sun = new THREE.DirectionalLight('#fff3e2', 2.5);
+sun.position.set(-30, 42, 26); sun.castShadow = true;
+sun.shadow.mapSize.set(4096, 4096); sun.shadow.radius = 5; sun.shadow.bias = -0.0003; sun.shadow.normalBias = 0.02;
+Object.assign(sun.shadow.camera, { left: -32, right: 32, top: 32, bottom: -32, near: 1, far: 140 });
+scene.add(sun); scene.add(new THREE.HemisphereLight('#ffffff', '#c9c3b8', 0.55));
+
+function add(o, x, z, yaw = 0) { o.position.x += x; o.position.z += z; o.rotation.y += yaw; scene.add(o); return o; }
+function walkers(list) { for (const [x, z, yaw, m] of list) add(person('stand', CLOTH[m]), x, z, yaw); }
+function city() {
+  scene.fog = new THREE.Fog(SKY, 35, 140); facades();
+  for (let x = -24; x <= 26; x += 7) add(tree(x, -9.5), 0, 0);
+  for (const [x, z] of [[-17, 9], [19, 10]]) add(tree(x, z, 0.9), 0, 0);
+  add(bench(-3, -6.8), 0, 0); add(bench(5, -6.8), 0, 0); add(bench(13, -6.8), 0, 0);
+}
+
+const cam = new THREE.PerspectiveCamera(30, W / H, 0.5, 600);
+if (VIEW === 'plaza' || VIEW === 'out') {
+  city();
+  walkers([[6, 8, 2.4, 0], [6.6, 8.3, 2.4, 2], [-12, 7, 0.6, 3], [14, 1, -2.0, 5], [-4, 11, 3.0, 1], [2.5, -4.8, 1.4, 0], [-15, -2, -0.4, 2]]);
+  if (VIEW === 'out') {
+    add(kiosco(2), 0, 0);
+    add(cabina(), -9.2, 2.0, 0.28); add(vending(), -7.25, 2.6, 0.28);
+    add(cabina(), 10.4, 3.2, -0.32); add(vending(), 8.6, 3.85, -0.32);
+  }
+  cam.position.set(24, 15.5, 31); cam.lookAt(0.5, 2.4, 0);
+} else if (VIEW === 'familia') {
+  // la familia sobre la trama de 2,4 m: cabina, cabina + máquina, quiosco, quiosco de dos plantas
+  add(cabina(), -11.2, 0); add(cabina(), -6.4, 0); add(vending(), -4.45, 0.5);
+  add(kiosco(1), 1.2, 0); add(kiosco(2), 10.2, 0);
+  cam.fov = 13; cam.position.set(0.6, 5.5, 95); cam.lookAt(0.6, 3.6, 0);
+} else {   // calle: a la altura de los ojos, la cabina con alguien trabajando y un paseante
+  city();
+  add(cabina(), 0, 0, 0.12); add(vending(), 1.95, 0.45, 0.12);
+  add(tree(-5.5, -3.5), 0, 0);
+  walkers([[3.9, 1.8, -1.9, 3], [-3.6, 5.5, 1.2, 0], [-6.5, 2.5, 0.3, 2]]);
+  cam.fov = 32; cam.position.set(5.2, 1.6, 10.5); cam.lookAt(0.2, 1.5, 0);
+}
+cam.updateProjectionMatrix();
+renderer.render(scene, cam);
+window.done = true;
+</script></body></html>
