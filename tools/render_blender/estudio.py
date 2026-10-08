@@ -17,13 +17,33 @@ W, H, SPP = (int(a) for a in (sys.argv[3:6] if len(sys.argv) > 5 else (1600, 100
 
 TOP = principled('resina_tablero', **{'Base Color': srgb('#eef1f8'), 'Roughness': 0.6, 'Transmission Weight': 1.0, 'IOR': 1.49})
 
+RUBBER = principled('goma', **{'Base Color': srgb('#2a2b30'), 'Roughness': 0.7})
+CONE = principled('cono', **{'Base Color': srgb('#0a1458'), 'Roughness': 0.9})          # papel tratado, cobalto profundo
+DOME = principled('cupula', **{'Base Color': srgb('#1b1c21'), 'Roughness': 0.55})   # cúpula textil
+
+def driver(g, r, z, y):
+    """Altavoz real montado en el frontal: aro, suspensión de goma, cono y cubrepolvo."""
+    rot = (math.pi / 2, 0, 0)
+    bpy.ops.mesh.primitive_torus_add(major_radius=r * 0.95, minor_radius=r * 0.12, location=(0, y - 0.001, z), rotation=rot, major_segments=96, minor_segments=24)
+    a = bpy.context.active_object; a.scale[2] = 0.35; a.data.materials.append(COBALT); a.parent = g; bpy.ops.object.shade_smooth()   # aro de montaje lacado
+    bpy.ops.mesh.primitive_torus_add(major_radius=r * 0.82, minor_radius=r * 0.075, location=(0, y - 0.004, z), rotation=rot, major_segments=96, minor_segments=24)
+    t = bpy.context.active_object; t.scale[2] = 0.7; t.data.materials.append(RUBBER); t.parent = g; bpy.ops.object.shade_smooth()
+    bpy.ops.mesh.primitive_cone_add(radius1=r * 0.76, radius2=r * 0.24, depth=r * 0.45, location=(0, y - 0.005 + r * 0.225, z), rotation=(-math.pi / 2, 0, 0), vertices=96, end_fill_type='NOTHING')
+    c = bpy.context.active_object; c.data.materials.append(CONE); c.parent = g; bpy.ops.object.shade_smooth()
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=r * 0.27, location=(0, y + r * 0.4, z), segments=48, ring_count=24)
+    d = bpy.context.active_object; d.scale[1] = 0.55; d.data.materials.append(CONE); d.parent = g; bpy.ops.object.shade_smooth()
+
 def speaker(loc, rot_z=0.0, parent=None):
+    """Caja de resina esmerilada (se intuyen imán y cámara en cobalto) con el frontal lacado y los altavoces a la vista."""
     g = empty('altavoz', loc, parent); g.rotation_euler[2] = rot_z
     box((0.12, 0.13, 0.18), (0, 0, 0.09), FROST, bevel=0.024, seg=8, parent=g, name='caja')
-    cyl(0.040, 0.016, (0, -0.040, 0.075), CORE, rot=(math.pi / 2, 0, 0), parent=g)      # driver, dentro de la resina
-    cyl(0.030, 0.070, (0, 0.005, 0.075), CORE, rot=(math.pi / 2, 0, 0), parent=g)       # cámara
-    cyl(0.013, 0.012, (0, -0.040, 0.145), CORE, rot=(math.pi / 2, 0, 0), parent=g)      # tweeter
-    tube([(-0.04, 0, 0.175), (-0.04, 0, 0.225), (0.04, 0, 0.225), (0.04, 0, 0.175)], 0.007, 0.026, parent=g, name='asa')
+    cyl(0.022, 0.03, (0, -0.035, 0.075), CORE, rot=(math.pi / 2, 0, 0), parent=g)        # imán, difuso a través de la resina
+    cyl(0.03, 0.05, (0, 0.025, 0.075), CORE, rot=(math.pi / 2, 0, 0), parent=g)         # cámara
+    driver(g, 0.042, 0.072, -0.066)                                                      # medio-graves 3,5"
+    cyl(0.017, 0.004, (0, -0.067, 0.146), COBALT, rot=(math.pi / 2, 0, 0), parent=g)     # tweeter: aro
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.011, location=(0, -0.069, 0.146), segments=48, ring_count=24)
+    d = bpy.context.active_object; d.scale[1] = 0.6; d.data.materials.append(DOME); d.parent = g; bpy.ops.object.shade_smooth()
+    cyl(0.009, 0.004, (0, -0.066, 0.02), RUBBER, rot=(math.pi / 2, 0, 0), parent=g)      # puerto réflex
     return g
 
 def laptop(loc, parent=None):
