@@ -51,6 +51,64 @@ body.on-img .phi{color:#fff}
   background:linear-gradient(180deg,rgba(0,0,0,.32) 0,rgba(0,0,0,0) 120px,rgba(0,0,0,0) 55%,rgba(0,0,0,.5) 100%)}
 body.on-img .veil{opacity:1}
 
+/* ---------- página de proyecto ---------- */
+.page{position:fixed;inset:0;z-index:10;overflow-y:auto;overflow-x:hidden;background:var(--paper);color:var(--ink);
+  touch-action:pan-y;user-select:text;-webkit-user-select:text;overscroll-behavior:contain}
+.page[hidden]{display:none}
+.page a{color:inherit;text-decoration:none}
+.pg-bar{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;padding:16px 20px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;background:var(--paper);border-bottom:1px solid #dddbd6}
+.pg{max-width:1240px;margin:0 auto;padding:0 20px}
+.pg-h{padding:clamp(56px,10vw,120px) 0 clamp(32px,5vw,56px)}
+.k{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--mute);text-transform:uppercase}
+.k .no{color:var(--accent);margin-right:1.2em}
+.ttl{font-weight:200;font-size:clamp(52px,10.5vw,148px);letter-spacing:-.055em;line-height:.92;margin:.18em 0 .22em -.04em}
+.claim{font-weight:300;font-size:clamp(19px,2.3vw,28px);line-height:1.28;letter-spacing:-.015em;max-width:30em}
+.meta{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:clamp(32px,5vw,56px);padding-top:16px;border-top:1px solid var(--ink)}
+.meta dt,.def dt,.specs dt,.sub,.ba th{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--mute);text-transform:uppercase;font-weight:400}
+.meta dd{font-weight:300;font-size:15px;margin-top:4px}
+.hero{margin:0 calc(50% - 50vw);max-width:none}
+.hero img{width:100%}
+figure img{display:block;width:100%;height:auto;background:#e5e3de}
+.s{display:grid;grid-template-columns:minmax(150px,1fr) 3fr;gap:20px;padding:clamp(56px,8vw,104px) 0 0;border-top:1px solid #dddbd6;margin-top:clamp(56px,8vw,104px)}
+.s:first-of-type{margin-top:clamp(40px,6vw,72px)}
+.lbl{font-weight:300;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.035em;line-height:1;position:sticky;top:72px;align-self:start}
+.lbl span{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--accent);margin-bottom:10px}
+.b>*+*{margin-top:clamp(28px,3.5vw,44px)}
+.lead{font-weight:300;font-size:clamp(20px,2vw,26px);line-height:1.3;letter-spacing:-.015em;max-width:32em}
+.def{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.def dd{font-weight:300;font-size:15px;line-height:1.45;margin-top:8px;color:#333}
+.sub{margin-bottom:-18px}
+.req{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:0 24px}
+.req li{font-weight:300;font-size:15px;padding:10px 0;border-bottom:1px solid #dddbd6}
+.areas{list-style:none;counter-reset:a}
+.areas li{display:grid;grid-template-columns:1fr 2fr;gap:20px;padding:14px 0;border-bottom:1px solid #dddbd6;counter-increment:a}
+.areas b{font-weight:400;font-size:15px}
+.areas b::before{content:counter(a,decimal-leading-zero);font-family:var(--mono);font-size:11px;color:var(--accent);margin-right:12px;font-weight:400}
+.areas span{font-weight:300;font-size:15px;line-height:1.45;color:#333}
+.ba{width:100%;border-collapse:collapse}
+.ba th{text-align:left;padding:0 0 10px;border-bottom:1px solid var(--ink)}
+.ba td{font-weight:300;font-size:15px;padding:12px 20px 12px 0;border-bottom:1px solid #dddbd6;vertical-align:top;width:50%}
+.ba td:first-child{color:var(--mute)}
+.ba td:last-child::before{content:'→';color:var(--accent);margin-right:10px}
+.specs{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;border-top:1px solid var(--ink);padding-top:16px}
+.specs dd{font-weight:200;font-size:clamp(30px,3.6vw,48px);letter-spacing:-.04em;margin-top:6px;line-height:1}
+.next{margin-top:clamp(80px,12vw,160px);border-top:1px solid var(--ink)}
+.next a{display:block;padding:24px 0 clamp(56px,8vw,96px);font-weight:200;font-size:clamp(36px,6vw,80px);letter-spacing:-.05em;line-height:1}
+.next a span{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--mute);margin-bottom:14px}
+.next a:hover{color:var(--accent)}
+.pg-f{max-width:1240px;margin:0 auto;padding:16px 20px 24px;display:flex;gap:24px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;border-top:1px solid #dddbd6}
+@media (max-width:760px){
+  .meta,.specs{grid-template-columns:repeat(2,1fr)}
+  .s{grid-template-columns:1fr}
+  .lbl{position:static}
+  .def,.req{grid-template-columns:1fr}
+  .areas li{grid-template-columns:1fr;gap:6px}
+}
+/* pie del zoom: enlace al proyecto */
+.cap .go{pointer-events:auto;display:inline-block;margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:inherit;text-decoration:none;border-bottom:1px solid currentColor}
+.cap .go:empty{display:none}
+
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 </head>
@@ -59,7 +117,7 @@ body.on-img .veil{opacity:1}
 <canvas id="c" aria-hidden="true"></canvas>
 
 <div class="veil" aria-hidden="true"></div>
-<div class="cap" id="cap" aria-hidden="true"><span class="i"></span><span class="t"></span><span class="d"></span><span class="n"></span></div>
+<div class="cap" id="cap" aria-hidden="true"><span class="i"></span><span class="t"></span><span class="d"></span><span class="n"></span><a class="go" id="go" href="#"></a></div>
 
 <div class="hud tl"><span>ZIAD ADDAMI</span><br><span class="m">DISEÑO INDUSTRIAL</span></div>
 <div class="hud tr"><span class="phi">φ = 1.6180339887…</span><br><span class="m">(a + b) / a = a / b</span></div>
@@ -70,12 +128,183 @@ body.on-img .veil{opacity:1}
 <main class="sr">
   <h1>Ziad Addami Ech Chaouy — Diseño industrial</h1>
   <p>Diseñador industrial. Construyo sistemas creativos y funcionales: del problema al objeto, con método, ingeniería y forma.</p>
-  <h2>Rampassist</h2><p>Rediseño de una ayuda motriz para que usuarios en silla de ruedas suban y bajen rampas con autonomía. In: necesidad, usuario y normativa. Proceso: tracción y brazo elevador, materiales con CES EduPack, cálculo FEA. Maqueta 1:2 y cinco cambios de diseño. Out: 150 kg, pendiente del 12 %, 0,15 m/s, instalación sin obra. 2025, proyecto en equipo.</p>
-  <h2>Estudio portátil</h2><p>Escritorio plegable y altavoz portátil para home studio, diseñados como un solo sistema. In: un estudio que no se puede mover. Proceso: dos marcos de tubo que se anidan bajo el tablero y un raíl trasero que ancla y carga el altavoz. Out: plegado sin herramientas en menos de un minuto, 8 cm de grosor, tubo lacado cobalto y canto de abedul.</p>
-  <h2>Plaza abierta</h2><p>Familia de mini coworkings para la Plaza España. In: una plaza de paso sin lugar para quedarse a trabajar. Proceso: una trama de 2,4 m y una sola pieza de chapa lacada que crece de cabina con máquina de bebidas a quiosco de dos plantas con barra y terraza. Out: trabajar a la vista, con un café, en un objeto cuidado y coherente con la vía pública.</p>
   <h2>Contacto</h2><p><a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a> · <a href="https://www.linkedin.com/in/ziad-addami-3972b0280/">LinkedIn</a></p>
   <h2>Entidades</h2><p>R11 · CloutNative · Blashgol</p>
 </main>
+
+<!-- Una página por proyecto, leída con el método in-out: in → proceso → iteración → out -->
+<div class="page" id="page" hidden>
+<div class="pg-bar"><a href="#" data-close>ZIAD ADDAMI</a><a href="#" data-close>ÍNDICE ✕</a></div>
+
+<article class="pg" id="rampassist">
+  <header class="pg-h">
+    <p class="k"><span class="no">01</span> Producto · Movilidad</p>
+    <h2 class="ttl">Rampassist</h2>
+    <p class="claim">Una ayuda motriz que lleva la silla de ruedas por la rampa, en subida y en bajada, sin que nadie empuje.</p>
+    <dl class="meta">
+      <div><dt>Año</dt><dd>2025</dd></div>
+      <div><dt>Tipo</dt><dd>Rediseño de producto</dd></div>
+      <div><dt>Ámbito</dt><dd>Accesibilidad urbana</dd></div>
+      <div><dt>Equipo</dt><dd>Proyecto en equipo</dd></div>
+    </dl>
+  </header>
+  <figure class="hero"><img data-img="rampassist-out-l" alt="Rampassist instalado junto a una rampa"></figure>
+
+  <section class="s"><h3 class="lbl"><span>01</span>In</h3><div class="b">
+    <p class="lead">Subir una rampa en silla de ruedas sin ayuda agota el tren superior, y muchas rampas no cumplen la normativa. El punto de partida es una ayuda motriz que ya existe en el mercado.</p>
+    <dl class="def">
+      <div><dt>Necesidad</dt><dd>Autonomía total en rampas, en los dos sentidos.</dd></div>
+      <div><dt>Usuario</dt><dd>Personas con movilidad reducida, sobre todo mayores de 65 años. Lo compran familias, administraciones y empresas.</dd></div>
+      <div><dt>Producto existente</dt><dd>Un sistema comercial de ayuda motriz para sillas de ruedas: el objeto que se rediseña.</dd></div>
+    </dl>
+    <h4 class="sub">Requisitos</h4>
+    <ul class="req"><li>150 kg y pendiente de hasta el 12 %</li><li>Sin obra, sobre las barandillas existentes</li><li>La silla nunca se levanta del suelo</li><li>2006/42/CE · UNE-EN 81-40 · ISO 9386-2</li></ul>
+    <figure><img data-img="rampassist-in-l" alt="Usuario en silla de ruedas ante una rampa"></figure>
+  </div></section>
+
+  <section class="s"><h3 class="lbl"><span>02</span>Proceso</h3><div class="b">
+    <p class="lead">Dos sistemas simples, tracción y brazo elevador, con lógica cableada y sin electrónica programable.</p>
+    <ol class="areas">
+      <li><b>Mecánica</b><span>Carro de tracción sobre la barandilla y brazo elevador que acompaña la silla.</span></li>
+      <li><b>Materiales</b><span>Acero 4140T en el brazo, inox 304 en la carcasa, ganchos de PA66 y amortiguadores de goma. Comerciales, reciclables y modulares.</span></li>
+      <li><b>Resistencia</b><span>Acciones en subida y bajada; cálculo y FEA del eje del brazo.</span></li>
+      <li><b>Forma y uso</b><span>Volumen ortogonal, metal pulido y botonera con contraste. Interfaz analógica. No parece un aparato médico.</span></li>
+      <li><b>Negocio</b><span>Venta con instalación y mantenimiento. Coste 850 €, PVP 1.250 €.</span></li>
+    </ol>
+    <figure><img data-img="rampassist-proceso-l" alt="Bocetos del conjunto"></figure>
+  </div></section>
+
+  <section class="s"><h3 class="lbl"><span>03</span>Iteración</h3><div class="b">
+    <p class="lead">Maqueta 1:2 en PVC, perfil de acero y contrachapado. Lo que cambió el diseño:</p>
+    <table class="ba"><thead><tr><th>Antes</th><th>Después</th></tr></thead><tbody>
+      <tr><td>Cantos vivos</td><td>Todos los cantos redondeados</td></tr>
+      <tr><td>Carcasa de una pieza</td><td>Cuerpo y tapa, con acceso al interior</td></tr>
+      <tr><td>Pies rectos</td><td>Escuadras triangulares</td></tr>
+      <tr><td>Rodamientos</td><td>Guía prismática interior</td></tr>
+      <tr><td>Extremos abiertos</td><td>Tapas y topes de plástico</td></tr>
+    </tbody></table>
+    <figure><img data-img="rampassist-iteracion-l" alt="Maqueta a escala 1:2"></figure>
+  </div></section>
+
+  <section class="s"><h3 class="lbl"><span>04</span>Out</h3><div class="b">
+    <p class="lead">Se fija junto a la rampa y se integra en la barandilla que ya existe. Discreto, sin obra y sin aspecto de aparato médico.</p>
+    <dl class="specs"><div><dt>Carga</dt><dd>150 kg</dd></div><div><dt>Pendiente</dt><dd>12 %</dd></div><div><dt>Velocidad</dt><dd>0,15 m/s</dd></div><div><dt>Instalación</dt><dd>Sin obra</dd></div></dl>
+  </div></section>
+  <nav class="next"><a href="#estudio"><span>Siguiente · 02</span>Estudio portátil →</a></nav>
+</article>
+
+<article class="pg" id="estudio">
+  <header class="pg-h">
+    <p class="k"><span class="no">02</span> Mobiliario · Audio</p>
+    <h2 class="ttl">Estudio portátil</h2>
+    <p class="claim">Un escritorio plegable y un altavoz portátil diseñados como un solo sistema: un home studio que se monta en segundos y se guarda detrás de una puerta.</p>
+    <dl class="meta">
+      <div><dt>Año</dt><dd>2026</dd></div>
+      <div><dt>Tipo</dt><dd>Sistema de producto</dd></div>
+      <div><dt>Ámbito</dt><dd>Home studio</dd></div>
+      <div><dt>Estado</dt><dd>Concepto</dd></div>
+    </dl>
+  </header>
+  <figure class="hero"><img data-img="estudio-out-l" alt="Escritorio montado con dos altavoces en el raíl"></figure>
+
+  <section class="s"><h3 class="lbl"><span>01</span>In</h3><div class="b">
+    <p class="lead">Los home studios se montan con piezas sueltas: una mesa genérica, monitores pesados que necesitan enchufe y una maraña de cables. Nada se mueve y nada se guarda.</p>
+    <dl class="def">
+      <div><dt>Necesidad</dt><dd>Montar y desmontar un estudio en minutos sin perder sonido ni orden.</dd></div>
+      <div><dt>Usuario</dt><dd>Productores y creadores que trabajan en pisos pequeños o compartidos, y quien viaja.</dd></div>
+      <div><dt>Producto existente</dt><dd>Mesas plegables que ignoran el audio y altavoces Bluetooth hechos para escuchar, no para trabajar.</dd></div>
+    </dl>
+    <h4 class="sub">Requisitos</h4>
+    <ul class="req"><li>Plegado sin herramientas, en menos de un minuto</li><li>Plegado de 8 cm, cabe detrás de una puerta</li><li>Portátil, controlador de 49 teclas e interfaz</li><li>Altavoz con batería, en mano o anclado</li></ul>
+    <figure><img data-img="estudio-in-l" alt="Escritorio plegado contra la pared y altavoz en el suelo"></figure>
+  </div></section>
+
+  <section class="s"><h3 class="lbl"><span>02</span>Proceso</h3><div class="b">
+    <p class="lead">Un lenguaje común para las dos piezas: tubo curvado de radio amplio, lacado cobalto y canto de abedul visto.</p>
+    <ol class="areas">
+      <li><b>Plegado</b><span>Cada lado es un solo tubo cerrado que hace de patas, pie y travesaño. Gira bajo el tablero y el estrecho se anida en el ancho.</span></li>
+      <li><b>Anclaje</b><span>Raíl trasero de tubo Ø40. El altavoz lo abraza con una pinza de medio tubo, se fija con imán y se carga por pogo pins.</span></li>
+      <li><b>Acústica</b><span>Caja cerrada con driver de 3" y tweeter, pensada para escuchar de cerca, en triángulo con el usuario.</span></li>
+      <li><b>Materiales</b><span>Tubo de acero lacado, tablero de contrachapado de abedul lacado arriba y abajo. Piezas planas, sin tornillería vista.</span></li>
+    </ol>
+    <figure><img data-img="estudio-proceso-l" alt="Secuencia de plegado"></figure>
+  </div></section>
+
+  <section class="s"><h3 class="lbl"><span>03</span>Iteración</h3><div class="b">
+    <p class="lead">Del boceto al sistema: cada decisión quita una pieza.</p>
+    <table class="ba"><thead><tr><th>Antes</th><th>Después</th></tr></thead><tbody>
+      <tr><td>Cuatro patas con bisagra y pestillo</td><td>Un tubo cerrado por lado que gira y se anida</td></tr>
+      <tr><td>Soporte propio para cada altavoz</td><td>Un raíl común: pinza, imán y carga</td></tr>
+      <tr><td>Cables por el suelo</td><td>Cables por dentro del raíl</td></tr>
+      <tr><td>Asa añadida para transportarlo</td><td>El raíl hace de asa una vez plegado</td></tr>
+    </tbody></table>
+    <figure><img data-img="estudio-iteracion-l" alt="Sección del raíl con el anclaje del altavoz"></figure>
+  </div></section>
+
+  <section class="s"><h3 class="lbl"><span>04</span>Out</h3><div class="b">
+    <p class="lead">Se despliega en segundos y el altavoz pasa de la mano a la mesa. Juntos convierten cualquier rincón en un estudio.</p>
+    <dl class="specs"><div><dt>Tablero</dt><dd>120 × 60 cm</dd></div><div><dt>Plegado</dt><dd>8 cm</dd></div><div><dt>Montaje</dt><dd>&lt; 1 min</dd></div><div><dt>Carga</dt><dd>40 kg</dd></div></dl>
+  </div></section>
+  <nav class="next"><a href="#plaza"><span>Siguiente · 03</span>Plaza abierta →</a></nav>
+</article>
+
+<article class="pg" id="plaza">
+  <header class="pg-h">
+    <p class="k"><span class="no">03</span> Arquitectura efímera · Espacio público</p>
+    <h2 class="ttl">Plaza abierta</h2>
+    <p class="claim">Una familia de mini coworkings para la Plaza España: trabajar a la vista, con un café, en un objeto cuidado y coherente con la vía pública.</p>
+    <dl class="meta">
+      <div><dt>Año</dt><dd>2026</dd></div>
+      <div><dt>Tipo</dt><dd>Pabellones modulares</dd></div>
+      <div><dt>Lugar</dt><dd>Plaza España</dd></div>
+      <div><dt>Estado</dt><dd>Concepto</dd></div>
+    </dl>
+  </header>
+  <figure class="hero"><img data-img="plaza-out-l" alt="La plaza con los módulos instalados"></figure>
+
+  <section class="s"><h3 class="lbl"><span>01</span>In</h3><div class="b">
+    <p class="lead">La plaza es un lugar de paso: mucha gente, bancos y arbolado, y ningún sitio donde quedarse a trabajar o a tomar algo con calma.</p>
+    <dl class="def">
+      <div><dt>Necesidad</dt><dd>Puestos de trabajo puntuales en la calle, con café a mano, que se instalen sin obra.</dd></div>
+      <div><dt>Usuario</dt><dd>Quien trabaja en remoto, estudia o vive cerca. Y quien pasa, que también forma parte de la escena.</dd></div>
+      <div><dt>Producto existente</dt><dd>Quioscos y cabinas que se cierran sobre sí mismos y no dialogan con la plaza.</dd></div>
+    </dl>
+    <h4 class="sub">Requisitos</h4>
+    <ul class="req"><li>Transportable en camión: 2,4 m de ancho</li><li>Sin cimentación</li><li>Planta baja accesible</li><li>Un material y un color para toda la familia</li></ul>
+    <figure><img data-img="plaza-in-l" alt="La plaza vacía"></figure>
+  </div></section>
+
+  <section class="s"><h3 class="lbl"><span>02</span>Proceso</h3><div class="b">
+    <p class="lead">Una trama de 2,4 m y una sola pieza de chapa lacada que crece sin cambiar de lenguaje.</p>
+    <ol class="areas">
+      <li><b>Cabina</b><span>2,4 × 2,4 m. Un puesto frente a una ventana grande.</span></li>
+      <li><b>Cabina + máquina</b><span>La misma cabina con una máquina de bebidas y snacks del mismo lacado.</span></li>
+      <li><b>Quiosco</b><span>4,8 × 2,4 m. Barra con toldo abatible y taburetes de tubo; terraza en cubierta.</span></li>
+      <li><b>Quiosco de dos plantas</b><span>Barra abajo, coworking arriba y terraza, con escalera de caracol.</span></li>
+    </ol>
+    <figure><img data-img="plaza-proceso-l" alt="La familia de módulos en alzado"></figure>
+  </div></section>
+
+  <section class="s"><h3 class="lbl"><span>03</span>Iteración</h3><div class="b">
+    <p class="lead">De un contenedor cerrado a un objeto que se deja mirar.</p>
+    <table class="ba"><thead><tr><th>Antes</th><th>Después</th></tr></thead><tbody>
+      <tr><td>Esquinas vivas de chapa</td><td>Esquinas de tubo grueso</td></tr>
+      <tr><td>Ventanas rectas</td><td>Esquinas redondeadas, ojos de buey y puerta en arco</td></tr>
+      <tr><td>Escalera recta</td><td>Caracol: menos superficie de plaza ocupada</td></tr>
+      <tr><td>Barandilla de varios tubos</td><td>Un solo tubo continuo</td></tr>
+    </tbody></table>
+    <figure><img data-img="plaza-iteracion-l" alt="Cabina a la altura de los ojos, con alguien trabajando"></figure>
+  </div></section>
+
+  <section class="s"><h3 class="lbl"><span>04</span>Out</h3><div class="b">
+    <p class="lead">Quien pasa te ve trabajar con calma. La plaza gana un lugar donde quedarse.</p>
+    <dl class="specs"><div><dt>Trama</dt><dd>2,4 m</dd></div><div><dt>Tipos</dt><dd>4</dd></div><div><dt>Puestos</dt><dd>1 – 7</dd></div><div><dt>Cimentación</dt><dd>Ninguna</dd></div></dl>
+  </div></section>
+  <nav class="next"><a href="#rampassist"><span>Siguiente · 01</span>Rampassist →</a></nav>
+</article>
+
+<footer class="pg-f"><a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a><a href="https://www.linkedin.com/in/ziad-addami-3972b0280/" target="_blank" rel="noopener">LinkedIn</a></footer>
+</div>
 
 <script>
 (() => {
@@ -98,32 +327,11 @@ const den = 1 + 1 / (PHI * PHI);
 const O = { x: PHI / den, y: 1 / den };
 
 const ITEMS = [
-  // Proyectos pendientes de definir: uno por paso, con img (img/<nombre>-l.webp y -p.webp, de tools/golden_crop.py) y note.
+  // Un paso por proyecto (portada); href abre su página: in → proceso → iteración → out.
   { t: 'ziad\naddami', d: 'diseño industrial', mark: true, fs: 0.3 },
-  { t: 'Rampassist · in', d: 'Subir una rampa en silla de ruedas sin ayuda: el tren superior no llega y muchas rampas no cumplen la norma. Rediseño de una ayuda motriz existente.', img: 'rampassist-in',
-    note: { L: 'Barandilla y mando en el cuadrado 1; el usuario, en el rectángulo que queda.', P: 'El usuario y el mando, en el rectángulo áureo vertical.' } },
-  { t: 'proceso', d: 'Tracción y brazo elevador, sin electrónica programable. Acero 4140T, inox 304, PA66 y goma, elegidos con CES EduPack. Cálculo FEA del eje del brazo.', img: 'rampassist-proceso',
-    note: { L: 'El conjunto en el cuadrado 1; el ojo φ cae en el carro del brazo.', P: 'El boceto del conjunto, en el cuadrado inferior.' } },
-  { t: 'maqueta 1:2', d: 'La maqueta cambió el proyecto: cantos redondeados, carcasa en dos piezas, escuadras en los pies, guía prismática sin rodamientos y tapas de plástico.', img: 'rampassist-iteracion',
-    note: { L: 'La botonera, en el cuadrado 1; el ojo φ, sobre el brazo.', P: 'Botonera y brazo, en la diagonal del rectángulo.' } },
-  { t: 'Rampassist · out', d: 'Lleva la silla por rampas de hasta el 12 %. 150 kg · 0,15 m/s · sin obra · compatible con barandillas existentes. 2025 · en equipo.', img: 'rampassist-out',
-    note: { L: 'El brazo extensible cruza el cuadrado 1 hasta el rectángulo φ.', P: 'Producto completo, centrado en el rectángulo áureo.' } },
-  { t: 'Estudio portátil · in', d: 'Un home studio cabe en cualquier rincón, pero no se mueve: mesa genérica, monitores pesados, cables. Escritorio y altavoz, pensados como un solo sistema.', img: 'estudio-in',
-    note: { L: 'El escritorio plegado ocupa el cuadrado 1; el ojo φ cae en el altavoz.', P: 'Paquete y altavoz, en el rectángulo vertical.' } },
-  { t: 'plegado', d: 'Dos marcos de tubo que giran bajo el tablero y se anidan. Sin herramientas, en menos de un minuto: 8 cm de grosor y el raíl hace de asa.', img: 'estudio-proceso',
-    note: { L: 'La secuencia de plegado, de izquierda a derecha.', P: 'La secuencia, en el cuadrado inferior.' } },
-  { t: 'anclaje', d: 'El raíl trasero sostiene el altavoz en cualquier punto: pinza de medio tubo, imán y pogo pins que lo cargan. Por dentro del tubo, los cables.', img: 'estudio-iteracion',
-    note: { L: 'Sección del raíl en el cuadrado 1.', P: 'Sección del raíl, centrada.' } },
-  { t: 'Estudio portátil · out', d: 'Se despliega en segundos y el altavoz pasa de la mano a la mesa. Tubo curvado y lacado cobalto, canto de abedul.', img: 'estudio-out',
-    note: { L: 'El escritorio montado; el ojo φ cae en la pata derecha.', P: 'El sistema completo, en el rectángulo áureo.' } },
-  { t: 'Plaza abierta · in', d: 'Plaza España: mucha gente de paso y ningún sitio donde quedarse a trabajar. Mini coworkings en la vía pública, cuidados y coherentes con la plaza.', img: 'plaza-in',
-    note: { L: 'La plaza vacía; el ojo φ, en el arbolado.', P: 'La plaza, de canto.' } },
-  { t: 'familia', d: 'Una trama de 2,4 m y una sola pieza de chapa lacada. Cabina, cabina con máquina de bebidas y snacks, quiosco con barra y quiosco de dos plantas con terraza.', img: 'plaza-proceso',
-    note: { L: 'De la cabina al quiosco de dos plantas; el ojo φ, en la escalera.', P: 'El quiosco de dos plantas, en el rectángulo vertical.' } },
-  { t: 'a la vista', d: 'Ventanas grandes de esquinas redondeadas, ojos de buey y puerta en arco. Quien pasa te ve trabajar con calma, con un café.', img: 'plaza-iteracion',
-    note: { L: 'La cabina a la altura de los ojos.', P: 'La cabina y su puesto, centrados.' } },
-  { t: 'Plaza abierta · out', d: 'Barra abajo, coworking arriba y terraza en cubierta, con escalera de caracol y barandilla de un solo tubo. Lacado cobalto sobre piedra.', img: 'plaza-out',
-    note: { L: 'La plaza con la familia montada.', P: 'El quiosco de dos plantas, centrado.' } },
+  { t: 'Rampassist', d: 'Lleva la silla de ruedas por la rampa, en subida y en bajada.', img: 'rampassist-out', href: 'rampassist', area: 'Producto · Movilidad' },
+  { t: 'Estudio portátil', d: 'Escritorio plegable y altavoz portátil: un home studio que se monta en segundos.', img: 'estudio-out', href: 'estudio', area: 'Mobiliario · Audio' },
+  { t: 'Plaza abierta', d: 'Mini coworkings para la Plaza España: trabajar a la vista, con un café.', img: 'plaza-out', href: 'plaza', area: 'Arquitectura efímera · Espacio público' },
   { t: 'sistemas creativos\ny funcionales', d: 'Diseñador industrial. Del problema al objeto, con método, ingeniería y forma.', fs: 0.062, ds: 0.028 },
   { t: 'contacto@ziadaddami.es', d: 'Proyectos y colaboraciones\nlinkedin.com/in/ziad-addami-3972b0280', small: true },
   { t: 'R11 · CloutNative · Blashgol', d: 'Entidades en las que participo', fs: 0.04, ds: 0.024 },
@@ -156,6 +364,7 @@ const capI = cap.querySelector('.i'), capT = cap.querySelector('.t'), capD = cap
 const depth = document.getElementById('depth');
 const scale = document.getElementById('scale');
 const hint = document.getElementById('hint');
+const go = document.getElementById('go');
 
 let W = 0, H = 0, DPR = 1, view = null;
 
@@ -344,7 +553,8 @@ function draw() {
     capI.textContent = `${String(i + 1).padStart(2, '0')} / ${String(ITEMS.length).padStart(2, '0')} · R${sub(n)} · lado ${phiPow(n)}`;
     capT.textContent = cur.img ? cur.t : '';
     capD.textContent = cur.img ? cur.d : '';
-    capN.textContent = cur.note ? '↳ ' + cur.note[view.portrait ? 'P' : 'L'] : '';
+    capN.textContent = cur.area ? cur.area : '';
+    go.textContent = cur.href ? 'VER PROYECTO →' : ''; go.href = cur.href ? '#' + cur.href : '#';
   }
   cap.style.opacity = capA;
   document.body.classList.toggle('on-img', !!cur.img);
@@ -362,22 +572,50 @@ const sub = n => String(n).split('').map(c => SUB[c]).join('');
 let idle = 0;
 const push = d => { target += d; idle = performance.now(); hint.classList.add('off'); };
 addEventListener('wheel', e => {
+  if (open) return;
   e.preventDefault();
   const px = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * H : e.deltaY;
   push(Math.max(-0.5, Math.min(0.5, px / 900)));
 }, { passive: false });
 let ty = null;
-addEventListener('touchstart', e => { ty = e.touches[0].clientY; }, { passive: true });
+addEventListener('touchstart', e => { ty = open ? null : e.touches[0].clientY; }, { passive: true });
 addEventListener('touchmove', e => {
   if (ty == null) return;
   const y = e.touches[0].clientY; push((ty - y) / (H * 0.55)); ty = y;
 }, { passive: true });
 addEventListener('touchend', () => { ty = null; }, { passive: true });
 addEventListener('keydown', e => {
+  if (open) { if (e.key === 'Escape') closePage(); return; }
+  if (e.key === 'Enter' && itemAt(Math.round(t)).href) { location.hash = itemAt(Math.round(t)).href; return; }
   if (['ArrowDown', 'PageDown', ' ', 'ArrowRight'].includes(e.key)) { e.preventDefault(); target = Math.round(target) + 1; idle = 0; hint.classList.add('off'); }
   if (['ArrowUp', 'PageUp', 'ArrowLeft'].includes(e.key)) { e.preventDefault(); target = Math.round(target) - 1; idle = 0; }
   if (e.key === 'Home') { target = 0; idle = 0; }
 });
+
+
+/* ------------------------------------------------------------------
+   Páginas de proyecto: #rampassist, #estudio, #plaza. Sin hash, el zoom.
+------------------------------------------------------------------- */
+const page = document.getElementById('page');
+const srcOf = f => IMG[`${f}.webp`];
+let open = false;
+function route() {
+  const id = location.hash.slice(1), art = id && document.getElementById(id);
+  open = !!(art && art.classList.contains('pg'));
+  page.hidden = !open;
+  for (const a of page.querySelectorAll('.pg')) a.hidden = a !== art;
+  if (open) {
+    for (const im of art.querySelectorAll('img[data-img]')) if (!im.src) { im.loading = 'lazy'; im.decoding = 'async'; im.src = srcOf(im.dataset.img); }
+    page.scrollTop = 0;
+    document.title = art.querySelector('.ttl').textContent + ' — Ziad Addami';
+    const k = ITEMS.findIndex(it => it.href === id);       // al volver, el zoom queda en ese proyecto
+    if (k >= 0) { t = target = k; lastCap = null; dirty = true; }
+  } else document.title = 'Ziad Addami — Diseño industrial';
+}
+function closePage() { history.pushState('', '', location.pathname + location.search); route(); }
+for (const a of page.querySelectorAll('[data-close]')) a.addEventListener('click', e => { e.preventDefault(); closePage(); });
+cv.addEventListener('click', () => { const it = itemAt(Math.round(t)); if (it.href && Math.abs(t - Math.round(t)) < 0.1) location.hash = it.href; });
+addEventListener('hashchange', route);
 
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 function loop(now) {
@@ -392,6 +630,7 @@ function loop(now) {
 addEventListener('resize', () => { resize(); lastCap = null; dirty = true; });
 if (document.fonts) document.fonts.ready.then(() => { dirty = true; });
 resize();
+route();
 requestAnimationFrame(loop);
 })();
 </script>
