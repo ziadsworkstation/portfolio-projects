@@ -97,6 +97,8 @@ figure img{display:block;width:100%;height:auto;background:#e5e3de}
 .next a{display:block;padding:24px 0 clamp(56px,8vw,96px);font-weight:200;font-size:clamp(36px,6vw,80px);letter-spacing:-.05em;line-height:1}
 .next a span{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--mute);margin-bottom:14px}
 .next a:hover{color:var(--accent)}
+.next a.back{font-family:var(--mono);font-size:11px;letter-spacing:.04em;padding:0 0 clamp(40px,6vw,64px);font-weight:400}
+.pg-bar a{padding:6px 0}
 .pg-f{max-width:1240px;margin:0 auto;padding:16px 20px 24px;display:flex;gap:24px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;border-top:1px solid #dddbd6}
 @media (max-width:760px){
   .meta,.specs{grid-template-columns:repeat(2,1fr)}
@@ -134,7 +136,7 @@ figure img{display:block;width:100%;height:auto;background:#e5e3de}
 
 <!-- Una página por proyecto, leída con el método in-out: in → proceso → iteración → out -->
 <div class="page" id="page" hidden>
-<div class="pg-bar"><a href="#" data-close>ZIAD ADDAMI</a><a href="#" data-close>ÍNDICE ✕</a></div>
+<div class="pg-bar"><a href="#" data-close>← ÍNDICE</a><a href="#" data-close>ZIAD ADDAMI</a></div>
 
 <article class="pg" id="rampassist">
   <header class="pg-h">
@@ -190,7 +192,7 @@ figure img{display:block;width:100%;height:auto;background:#e5e3de}
     <p class="lead">Se fija junto a la rampa y se integra en la barandilla que ya existe. Discreto, sin obra y sin aspecto de aparato médico.</p>
     <dl class="specs"><div><dt>Carga</dt><dd>150 kg</dd></div><div><dt>Pendiente</dt><dd>12 %</dd></div><div><dt>Velocidad</dt><dd>0,15 m/s</dd></div><div><dt>Instalación</dt><dd>Sin obra</dd></div></dl>
   </div></section>
-  <nav class="next"><a href="#estudio"><span>Siguiente · 02</span>Estudio portátil →</a></nav>
+  <nav class="next"><a href="#estudio"><span>Siguiente · 02</span>Estudio portátil →</a><a href="#" data-close class="back">← Volver al índice</a></nav>
 </article>
 
 <article class="pg" id="estudio">
@@ -245,7 +247,7 @@ figure img{display:block;width:100%;height:auto;background:#e5e3de}
     <p class="lead">Se despliega en segundos y el altavoz pasa de la mano a la mesa. Juntos convierten cualquier rincón en un estudio.</p>
     <dl class="specs"><div><dt>Tablero</dt><dd>120 × 60 cm</dd></div><div><dt>Plegado</dt><dd>8 cm</dd></div><div><dt>Montaje</dt><dd>&lt; 1 min</dd></div><div><dt>Carga</dt><dd>40 kg</dd></div></dl>
   </div></section>
-  <nav class="next"><a href="#plaza"><span>Siguiente · 03</span>Plaza abierta →</a></nav>
+  <nav class="next"><a href="#plaza"><span>Siguiente · 03</span>Plaza abierta →</a><a href="#" data-close class="back">← Volver al índice</a></nav>
 </article>
 
 <article class="pg" id="plaza">
@@ -300,7 +302,7 @@ figure img{display:block;width:100%;height:auto;background:#e5e3de}
     <p class="lead">Quien pasa te ve trabajar con calma. La plaza gana un lugar donde quedarse.</p>
     <dl class="specs"><div><dt>Trama</dt><dd>2,4 m</dd></div><div><dt>Tipos</dt><dd>4</dd></div><div><dt>Puestos</dt><dd>1 – 7</dd></div><div><dt>Cimentación</dt><dd>Ninguna</dd></div></dl>
   </div></section>
-  <nav class="next"><a href="#rampassist"><span>Siguiente · 01</span>Rampassist →</a></nav>
+  <nav class="next"><a href="#rampassist"><span>Siguiente · 01</span>Rampassist →</a><a href="#" data-close class="back">← Volver al índice</a></nav>
 </article>
 
 <footer class="pg-f"><a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a><a href="https://www.linkedin.com/in/ziad-addami-3972b0280/" target="_blank" rel="noopener">LinkedIn</a></footer>
@@ -585,7 +587,7 @@ addEventListener('touchmove', e => {
 addEventListener('touchend', () => { ty = null; }, { passive: true });
 addEventListener('keydown', e => {
   if (open) { if (e.key === 'Escape') closePage(); return; }
-  if (e.key === 'Enter' && itemAt(Math.round(t)).href) { location.hash = itemAt(Math.round(t)).href; return; }
+  if (e.key === 'Enter' && itemAt(Math.round(t)).href) { openPage(itemAt(Math.round(t)).href); return; }
   if (['ArrowDown', 'PageDown', ' ', 'ArrowRight'].includes(e.key)) { e.preventDefault(); target = Math.round(target) + 1; idle = 0; hint.classList.add('off'); }
   if (['ArrowUp', 'PageUp', 'ArrowLeft'].includes(e.key)) { e.preventDefault(); target = Math.round(target) - 1; idle = 0; }
   if (e.key === 'Home') { target = 0; idle = 0; }
@@ -598,8 +600,8 @@ addEventListener('keydown', e => {
 const page = document.getElementById('page');
 const srcOf = f => `img/${f}.webp`;
 let open = false;
-function route() {
-  const id = location.hash.slice(1), art = id && document.getElementById(id);
+function route(force) {
+  const id = force !== undefined ? force : location.hash.slice(1), art = id && document.getElementById(id);
   open = !!(art && art.classList.contains('pg'));
   page.hidden = !open;
   for (const a of page.querySelectorAll('.pg')) a.hidden = a !== art;
@@ -611,10 +613,16 @@ function route() {
     if (k >= 0) { t = target = k; lastCap = null; dirty = true; }
   } else document.title = 'Ziad Addami — Diseño industrial';
 }
-function closePage() { history.pushState('', '', location.pathname + location.search); route(); }
+function closePage() {        // vuelve al índice aunque el historial no se pueda tocar (iframes, file://)
+  try { history.pushState(null, '', location.pathname + location.search); } catch (e) { try { location.hash = ''; } catch (_) {} }
+  route('');
+}
+function openPage(id) { try { location.hash = id; } catch (e) {} route(id); }
 for (const a of page.querySelectorAll('[data-close]')) a.addEventListener('click', e => { e.preventDefault(); closePage(); });
-cv.addEventListener('click', () => { const it = itemAt(Math.round(t)); if (it.href && Math.abs(t - Math.round(t)) < 0.1) location.hash = it.href; });
-addEventListener('hashchange', route);
+cv.addEventListener('click', () => { const it = itemAt(Math.round(t)); if (it.href && Math.abs(t - Math.round(t)) < 0.1) openPage(it.href); });
+addEventListener('hashchange', () => route());
+go.addEventListener('click', e => { const it = itemAt(Math.round(t)); if (it.href) { e.preventDefault(); openPage(it.href); } });
+for (const a of page.querySelectorAll('.next a')) a.addEventListener('click', e => { e.preventDefault(); openPage(a.getAttribute('href').slice(1)); });
 
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 function loop(now) {
