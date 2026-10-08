@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ziad Addami — Diseño industrial</title>
-<meta name="description" content="Portfolio de Ziad Addami Ech Chaouy, diseñador industrial. Cada proyecto, encuadrado en la proporción áurea.">
+<meta name="description" content="Portfolio de Ziad Addami Ech Chaouy, diseñador industrial. Sistemas creativos y funcionales: cada proyecto, de la necesidad al objeto.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
@@ -17,40 +17,49 @@
   --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;background:var(--paper);color:var(--ink)}
-body{font-family:"Inter Tight",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;
-  overscroll-behavior:none;touch-action:none;user-select:none;-webkit-user-select:none}
-canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+html{background:var(--paper)}
+body{background:var(--paper);color:var(--ink);font-family:"Inter Tight",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+body.locked{overflow:hidden}
+a{color:inherit;text-decoration:none}
 
-.hud{position:fixed;z-index:2;font-family:var(--mono);font-size:11px;letter-spacing:.04em;line-height:1.6;
-  color:var(--ink);pointer-events:none}
-.hud,.cap,.cap *,.hud *{transition:color .5s,text-shadow .5s,border-color .5s}
-.hud a{pointer-events:auto;color:inherit;text-decoration:none;border-bottom:1px solid currentColor}
-.hud .m{color:var(--mute)}
-.tl{left:20px;top:16px}
-.tr{right:20px;top:16px;text-align:right}
-.bl{left:20px;bottom:16px}
-.br{right:20px;bottom:16px;text-align:right}
-.phi{color:var(--accent)}
-.hint{transition:opacity .8s}
-.hint.off{opacity:0}
-
-.cap{position:fixed;z-index:2;pointer-events:none;left:20px;bottom:64px;max-width:min(440px,calc(100vw - 40px))}
-.cap .i{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--mute)}
-.cap .t{font-weight:300;font-size:22px;letter-spacing:-.03em;line-height:1.1;margin-right:.5em}
-.cap .d{font-weight:300;font-size:14px;color:var(--mute)}
-.cap .n{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--accent);margin-top:4px}
-@media (max-width:700px){.cap .t{font-size:18px}.cap .d{font-size:13px}}
-/* sobre imagen: texto blanco */
-body.on-img .hud,body.on-img .cap{color:#fff;text-shadow:0 0 8px rgba(0,0,0,.45)}
-body.on-img .hud .m,body.on-img .cap .i,body.on-img .cap .d{color:rgba(255,255,255,.82)}
-body.on-img .cap .n{color:#fff}
-body.on-img .phi{color:#fff}
-
-.veil{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity .6s;
-  background:linear-gradient(180deg,rgba(0,0,0,.32) 0,rgba(0,0,0,0) 120px,rgba(0,0,0,0) 55%,rgba(0,0,0,.5) 100%)}
-body.on-img .veil{opacity:1}
-
+/* ---------- portada: bio + índice, como un sumario ---------- */
+.top{position:sticky;top:0;z-index:3;display:flex;justify-content:space-between;padding:16px 20px;background:var(--paper);
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;line-height:1.6;border-bottom:1px solid #dddbd6}
+.top .r{text-align:right}
+.top .r a{border-bottom:1px solid currentColor}
+.m{color:var(--mute)}
+.intro{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,64px);padding:clamp(48px,8vw,104px) 0 clamp(40px,6vw,72px)}
+.bio-t{font-weight:200;font-size:clamp(36px,4.6vw,64px);letter-spacing:-.045em;line-height:1}
+.bio-d{font-weight:300;font-size:clamp(17px,1.5vw,20px);line-height:1.4;color:#333;margin-top:24px;max-width:26em}
+.toc-h{font-family:var(--mono);font-size:11px;letter-spacing:.04em;line-height:1.6;margin-bottom:18px}
+.toc{list-style:none;border-top:1px solid var(--ink)}
+.toc a{display:grid;grid-template-columns:3.2em 1fr auto;align-items:baseline;gap:12px;padding:14px 0;border-bottom:1px solid #dddbd6}
+.toc .n{font-family:var(--mono);font-size:11px;color:var(--accent)}
+.toc .t{font-weight:300;font-size:clamp(20px,2vw,26px);letter-spacing:-.02em}
+.toc .a{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--mute);text-transform:uppercase;text-align:right}
+.toc a:hover .t{color:var(--accent)}
+.mark{position:relative;aspect-ratio:1.618/1;margin-top:clamp(8px,2vw,24px)}
+.phi-mark{position:absolute;inset:0;width:100%;height:100%;fill:none}
+.phi-mark rect,.phi-mark .sq{stroke:var(--ink);stroke-width:1;vector-effect:non-scaling-stroke}
+.phi-mark .sp{stroke:var(--accent);stroke-width:1.5;vector-effect:non-scaling-stroke}
+.name{position:absolute;left:3.5%;bottom:6%;font-weight:200;font-size:clamp(64px,17vw,260px);letter-spacing:-.07em;line-height:.86}
+.rt{font-weight:200;font-size:clamp(40px,5.4vw,76px);letter-spacing:-.05em;line-height:.95;margin-bottom:14px}
+.rt a:hover{color:var(--accent)}
+.fig img{display:block;width:100%;height:auto;background:#e5e3de}
+.row .fig img{transition:opacity .3s}
+.row .fig:hover img{opacity:.88}
+.more{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.04em;border-bottom:1px solid currentColor}
+.more:hover{color:var(--accent)}
+.home-f{display:grid;grid-template-columns:3fr 5fr 4fr;column-gap:clamp(20px,2.5vw,36px);row-gap:28px;padding:clamp(24px,3vw,36px) 0 clamp(64px,9vw,120px);
+  border-top:1px solid var(--ink);margin-top:clamp(72px,10vw,136px)}
+.home-f .lead a{border-bottom:1px solid currentColor}
+.ent{grid-template-columns:1fr 1fr}
+@media (max-width:760px){
+  .intro{grid-template-columns:1fr}
+  .home-f{grid-template-columns:1fr}
+  .ent{grid-template-columns:1fr}
+  .toc .a{display:none}
+}
 /* ---------- página de proyecto ---------- */
 .page{position:fixed;inset:0;z-index:10;overflow-y:auto;overflow-x:hidden;background:var(--paper);color:var(--ink);
   touch-action:pan-y;user-select:text;-webkit-user-select:text;overscroll-behavior:contain}
@@ -70,25 +79,29 @@ body.on-img .veil{opacity:1}
 .hero{margin:0 calc(50% - 50vw);max-width:none}
 .hero img{width:100%}
 figure img{display:block;width:100%;height:auto;background:#e5e3de}
-.s{display:grid;grid-template-columns:minmax(150px,1fr) 3fr;gap:20px;padding:clamp(56px,8vw,104px) 0 0;border-top:1px solid #dddbd6;margin-top:clamp(56px,8vw,104px)}
-.s:first-of-type{margin-top:clamp(40px,6vw,72px)}
-.lbl{font-weight:300;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.035em;line-height:1;position:sticky;top:72px;align-self:start}
-.lbl span{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--accent);margin-bottom:10px}
-.b>*+*{margin-top:clamp(28px,3.5vw,44px)}
-.lead{font-weight:300;font-size:clamp(20px,2vw,26px);line-height:1.3;letter-spacing:-.015em;max-width:32em}
-.def{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.s{display:grid;grid-template-columns:3fr 5fr 4fr;column-gap:clamp(20px,2.5vw,36px);row-gap:clamp(28px,3.5vw,44px);
+  padding-top:clamp(24px,3vw,36px);border-top:1px solid var(--ink);margin-top:clamp(72px,10vw,136px)}
+.s:first-of-type{margin-top:clamp(48px,7vw,88px)}
+.num{grid-row:1 / span 2;font-weight:200;font-size:clamp(96px,14vw,210px);line-height:.8;letter-spacing:-.07em;color:var(--accent);margin-left:-.05em}
+.head{grid-column:2 / 4}
+.lbl{font-family:var(--mono);font-weight:400;font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+.fig{grid-column:2;align-self:start}
+.txt{grid-column:3}
+.txt.full{grid-column:2 / 4}
+.txt>*+*{margin-top:clamp(24px,3vw,36px)}
+.def{display:grid;grid-template-columns:1fr;gap:20px}
 .def dd{font-weight:300;font-size:15px;line-height:1.45;margin-top:8px;color:#333}
-.sub{margin-bottom:-18px}
-.req{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:0 24px}
+.sub{margin-bottom:-22px}
+.req{list-style:none}
 .req li{font-weight:300;font-size:15px;padding:10px 0;border-bottom:1px solid #dddbd6}
 .areas{list-style:none;counter-reset:a}
-.areas li{display:grid;grid-template-columns:1fr 2fr;gap:20px;padding:14px 0;border-bottom:1px solid #dddbd6;counter-increment:a}
+.areas li{display:grid;grid-template-columns:1fr;gap:4px;padding:14px 0;border-bottom:1px solid #dddbd6;counter-increment:a}
 .areas b{font-weight:400;font-size:15px}
 .areas b::before{content:counter(a,decimal-leading-zero);font-family:var(--mono);font-size:11px;color:var(--accent);margin-right:12px;font-weight:400}
 .areas span{font-weight:300;font-size:15px;line-height:1.45;color:#333}
 .ba{width:100%;border-collapse:collapse}
 .ba th{text-align:left;padding:0 0 10px;border-bottom:1px solid var(--ink)}
-.ba td{font-weight:300;font-size:15px;padding:12px 20px 12px 0;border-bottom:1px solid #dddbd6;vertical-align:top;width:50%}
+.ba td{font-weight:300;font-size:14px;padding:11px 14px 11px 0;border-bottom:1px solid #dddbd6;vertical-align:top;width:50%}
 .ba td:first-child{color:var(--mute)}
 .ba td:last-child::before{content:'→';color:var(--accent);margin-right:10px}
 .specs{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;border-top:1px solid var(--ink);padding-top:16px}
@@ -103,40 +116,74 @@ figure img{display:block;width:100%;height:auto;background:#e5e3de}
 @media (max-width:760px){
   .meta,.specs{grid-template-columns:repeat(2,1fr)}
   .s{grid-template-columns:1fr}
-  .lbl{position:static}
-  .def,.req{grid-template-columns:1fr}
-  .areas li{grid-template-columns:1fr;gap:6px}
+  .num{grid-row:auto}
+  .head,.fig,.txt,.txt.full{grid-column:1}
 }
 /* pie del zoom: enlace al proyecto */
 .cap .go{pointer-events:auto;display:inline-block;margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:inherit;text-decoration:none;border-bottom:1px solid currentColor}
 .cap .go:empty{display:none}
 
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.page{z-index:10}
 </style>
 </head>
 <body>
 
-<canvas id="c" aria-hidden="true"></canvas>
+<div class="home" id="home">
+<header class="top"><span>ZIAD ADDAMI<br><span class="m">DISEÑO INDUSTRIAL</span></span><span class="r"><a href="https://www.linkedin.com/in/ziad-addami-3972b0280/" target="_blank" rel="noopener">LINKEDIN</a><br><a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a></span></header>
 
-<div class="veil" aria-hidden="true"></div>
-<div class="cap" id="cap" aria-hidden="true"><span class="i"></span><span class="t"></span><span class="d"></span><span class="n"></span><a class="go" id="go" href="#"></a></div>
+<div class="pg">
+  <section class="intro">
+    <div class="bio">
+      <p class="bio-t">Sistemas creativos y funcionales.</p>
+      <p class="bio-d">Diseñador industrial. Del problema al objeto, con método, ingeniería y forma. Cada proyecto se lee igual: lo que hay, lo que se decide, lo que cambia y lo que sale.</p>
+    </div>
+    <nav class="toc-w" aria-label="Proyectos">
+      <p class="toc-h">ÍNDICE<br><span class="m">(PROYECTOS)</span></p>
+      <ol class="toc"><li><a href="#rampassist" data-open><span class="n">01</span><span class="t">Rampassist</span><span class="a">Producto · Movilidad</span></a></li><li><a href="#estudio" data-open><span class="n">02</span><span class="t">Estudio portátil</span><span class="a">Mobiliario · Audio</span></a></li><li><a href="#plaza" data-open><span class="n">03</span><span class="t">Plaza abierta</span><span class="a">Arquitectura efímera · Espacio público</span></a></li></ol>
+    </nav>
+  </section>
 
-<div class="hud tl"><span>ZIAD ADDAMI</span><br><span class="m">DISEÑO INDUSTRIAL</span></div>
-<div class="hud tr"><span class="phi">φ = 1.6180339887…</span><br><span class="m">(a + b) / a = a / b</span></div>
-<div class="hud bl"><span id="depth">n = 0</span><br><span class="m" id="scale">1 : φ⁰ = 1.000</span></div>
-<div class="hud br"><a href="https://www.linkedin.com/in/ziad-addami-3972b0280/" target="_blank" rel="noopener">LINKEDIN</a> · <a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a><br><span class="m hint" id="hint">DESPLAZA ↓ PARA ENTRAR</span></div>
+  <div class="mark"><svg class="phi-mark" viewBox="0 0 1618 1000" aria-hidden="true"><rect x=".5" y=".5" width="1617" height="999" /><path class="sq" d="M1000.0 0.0L1000.0 1000.0M1000.0 618.0L1618.0 618.0M1236.1 618.0L1236.1 1000.0M1000.0 763.9L1236.1 763.9M1145.9 618.0L1145.9 763.9M1145.9 708.2L1236.1 708.2M1180.3 708.2L1180.3 763.9M1145.9 729.5L1180.3 729.5M1167.2 708.2L1167.2 729.5M1167.2 721.4L1180.3 721.4"/><path class="sp" d="M0.0 1000.0A1000.0 1000.0 0 0 1 1000.0 0.0A618.0 618.0 0 0 1 1618.0 618.0A382.0 382.0 0 0 1 1236.1 1000.0A236.1 236.1 0 0 1 1000.0 763.9A145.9 145.9 0 0 1 1145.9 618.0A90.2 90.2 0 0 1 1236.1 708.2A55.7 55.7 0 0 1 1180.3 763.9A34.4 34.4 0 0 1 1145.9 729.5A21.3 21.3 0 0 1 1167.2 708.2A13.2 13.2 0 0 1 1180.3 721.4"/></svg><h1 class="name">ziad<br>addami</h1></div>
 
-<!-- Contenido accesible / indexable -->
-<main class="sr">
-  <h1>Ziad Addami Ech Chaouy — Diseño industrial</h1>
-  <p>Diseñador industrial. Construyo sistemas creativos y funcionales: del problema al objeto, con método, ingeniería y forma.</p>
-  <h2>Contacto</h2><p><a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a> · <a href="https://www.linkedin.com/in/ziad-addami-3972b0280/">LinkedIn</a></p>
-  <h2>Entidades</h2><p>R11 · CloutNative · Blashgol</p>
-</main>
+  <section class="s row">
+    <div class="num">01</div>
+    <div class="head"><h3 class="lbl">Producto · Movilidad · 2025</h3><h2 class="rt"><a href="#rampassist" data-open>Rampassist</a></h2><p class="lead">Una ayuda motriz que lleva la silla de ruedas por la rampa, en subida y en bajada, sin que nadie empuje.</p></div>
+    <a class="fig" href="#rampassist" data-open><img data-img="rampassist-out-l" alt="Rampassist"></a>
+    <div class="txt">
+      <dl class="def"><div><dt>In</dt><dd>Rampas que agotan el tren superior y no cumplen la norma.</dd></div><div><dt>Proceso</dt><dd>Tracción y brazo elevador, sin electrónica programable.</dd></div><div><dt>Out</dt><dd>150 kg · 12 % · 0,15 m/s · sin obra.</dd></div></dl>
+      <a class="more" href="#rampassist" data-open>VER PROYECTO →</a>
+    </div>
+  </section>
+  <section class="s row">
+    <div class="num">02</div>
+    <div class="head"><h3 class="lbl">Mobiliario · Audio · 2026</h3><h2 class="rt"><a href="#estudio" data-open>Estudio portátil</a></h2><p class="lead">Un escritorio plegable y un altavoz portátil diseñados como un solo sistema.</p></div>
+    <a class="fig" href="#estudio" data-open><img data-img="estudio-out-l" alt="Estudio portátil"></a>
+    <div class="txt">
+      <dl class="def"><div><dt>In</dt><dd>Home studios hechos de piezas sueltas que no se mueven.</dd></div><div><dt>Proceso</dt><dd>Tubo curvado que se anida y un raíl que ancla y carga el altavoz.</dd></div><div><dt>Out</dt><dd>Montaje en menos de un minuto · 8 cm plegado.</dd></div></dl>
+      <a class="more" href="#estudio" data-open>VER PROYECTO →</a>
+    </div>
+  </section>
+  <section class="s row">
+    <div class="num">03</div>
+    <div class="head"><h3 class="lbl">Arquitectura efímera · Espacio público · 2026</h3><h2 class="rt"><a href="#plaza" data-open>Plaza abierta</a></h2><p class="lead">Una familia de mini coworkings para la Plaza España: trabajar a la vista, con un café.</p></div>
+    <a class="fig" href="#plaza" data-open><img data-img="plaza-out-l" alt="Plaza abierta"></a>
+    <div class="txt">
+      <dl class="def"><div><dt>In</dt><dd>Una plaza de paso sin lugar para quedarse.</dd></div><div><dt>Proceso</dt><dd>Una trama de 2,4 m y una chapa lacada que crece de cabina a quiosco.</dd></div><div><dt>Out</dt><dd>4 tipos · de 1 a 7 puestos · sin cimentación.</dd></div></dl>
+      <a class="more" href="#plaza" data-open>VER PROYECTO →</a>
+    </div>
+  </section>
 
-<!-- Una página por proyecto, leída con el método in-out: in → proceso → iteración → out -->
+  <footer class="home-f">
+    <div class="num">@</div>
+    <div class="head"><h3 class="lbl">Contacto</h3><p class="lead"><a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a></p></div>
+    <div class="txt full"><dl class="def ent"><div><dt>Proyectos y colaboraciones</dt><dd><a href="https://www.linkedin.com/in/ziad-addami-3972b0280/" target="_blank" rel="noopener">linkedin.com/in/ziad-addami-3972b0280</a></dd></div><div><dt>Entidades en las que participo</dt><dd>R11 · CloutNative · Blashgol</dd></div></dl></div>
+  </footer>
+</div>
+</div>
+
 <div class="page" id="page" hidden>
-<div class="pg-bar"><a href="#" data-close>← ÍNDICE</a><a href="#" data-close>ZIAD ADDAMI</a></div>
+<div class="pg-bar"><a href="#" data-close>← PORTADA</a><a href="#" data-close>ZIAD ADDAMI</a></div>
 
 <article class="pg" id="rampassist">
   <header class="pg-h">
@@ -152,47 +199,47 @@ figure img{display:block;width:100%;height:auto;background:#e5e3de}
   </header>
   <figure class="hero"><img data-img="rampassist-out-l" alt="Rampassist instalado junto a una rampa"></figure>
 
-  <section class="s"><h3 class="lbl"><span>01</span>In</h3><div class="b">
-    <p class="lead">Subir una rampa en silla de ruedas sin ayuda agota el tren superior, y muchas rampas no cumplen la normativa. El punto de partida es una ayuda motriz que ya existe en el mercado.</p>
-    <dl class="def">
+  <section class="s"><div class="num">01</div>
+    <div class="head"><h3 class="lbl">In</h3><p class="lead">Subir una rampa en silla de ruedas sin ayuda agota el tren superior, y muchas rampas no cumplen la normativa. El punto de partida es una ayuda motriz que ya existe en el mercado.</p></div>
+    <figure class="fig"><img data-img="rampassist-in-l" alt="Usuario en silla de ruedas ante una rampa"></figure>
+    <div class="txt"><dl class="def">
       <div><dt>Necesidad</dt><dd>Autonomía total en rampas, en los dos sentidos.</dd></div>
       <div><dt>Usuario</dt><dd>Personas con movilidad reducida, sobre todo mayores de 65 años. Lo compran familias, administraciones y empresas.</dd></div>
       <div><dt>Producto existente</dt><dd>Un sistema comercial de ayuda motriz para sillas de ruedas: el objeto que se rediseña.</dd></div>
     </dl>
     <h4 class="sub">Requisitos</h4>
-    <ul class="req"><li>150 kg y pendiente de hasta el 12 %</li><li>Sin obra, sobre las barandillas existentes</li><li>La silla nunca se levanta del suelo</li><li>2006/42/CE · UNE-EN 81-40 · ISO 9386-2</li></ul>
-    <figure><img data-img="rampassist-in-l" alt="Usuario en silla de ruedas ante una rampa"></figure>
-  </div></section>
+    <ul class="req"><li>150 kg y pendiente de hasta el 12 %</li><li>Sin obra, sobre las barandillas existentes</li><li>La silla nunca se levanta del suelo</li><li>2006/42/CE · UNE-EN 81-40 · ISO 9386-2</li></ul></div>
+  </section>
 
-  <section class="s"><h3 class="lbl"><span>02</span>Proceso</h3><div class="b">
-    <p class="lead">Dos sistemas simples, tracción y brazo elevador, con lógica cableada y sin electrónica programable.</p>
-    <ol class="areas">
+  <section class="s"><div class="num">02</div>
+    <div class="head"><h3 class="lbl">Proceso</h3><p class="lead">Dos sistemas simples, tracción y brazo elevador, con lógica cableada y sin electrónica programable.</p></div>
+    <figure class="fig"><img data-img="rampassist-proceso-l" alt="Bocetos del conjunto"></figure>
+    <div class="txt"><ol class="areas">
       <li><b>Mecánica</b><span>Carro de tracción sobre la barandilla y brazo elevador que acompaña la silla.</span></li>
       <li><b>Materiales</b><span>Acero 4140T en el brazo, inox 304 en la carcasa, ganchos de PA66 y amortiguadores de goma. Comerciales, reciclables y modulares.</span></li>
       <li><b>Resistencia</b><span>Acciones en subida y bajada; cálculo y FEA del eje del brazo.</span></li>
       <li><b>Forma y uso</b><span>Volumen ortogonal, metal pulido y botonera con contraste. Interfaz analógica. No parece un aparato médico.</span></li>
       <li><b>Negocio</b><span>Venta con instalación y mantenimiento. Coste 850 €, PVP 1.250 €.</span></li>
-    </ol>
-    <figure><img data-img="rampassist-proceso-l" alt="Bocetos del conjunto"></figure>
-  </div></section>
+    </ol></div>
+  </section>
 
-  <section class="s"><h3 class="lbl"><span>03</span>Iteración</h3><div class="b">
-    <p class="lead">Maqueta 1:2 en PVC, perfil de acero y contrachapado. Lo que cambió el diseño:</p>
-    <table class="ba"><thead><tr><th>Antes</th><th>Después</th></tr></thead><tbody>
+  <section class="s"><div class="num">03</div>
+    <div class="head"><h3 class="lbl">Iteración</h3><p class="lead">Maqueta 1:2 en PVC, perfil de acero y contrachapado. Lo que cambió el diseño:</p></div>
+    <figure class="fig"><img data-img="rampassist-iteracion-l" alt="Maqueta a escala 1:2"></figure>
+    <div class="txt"><table class="ba"><thead><tr><th>Antes</th><th>Después</th></tr></thead><tbody>
       <tr><td>Cantos vivos</td><td>Todos los cantos redondeados</td></tr>
       <tr><td>Carcasa de una pieza</td><td>Cuerpo y tapa, con acceso al interior</td></tr>
       <tr><td>Pies rectos</td><td>Escuadras triangulares</td></tr>
       <tr><td>Rodamientos</td><td>Guía prismática interior</td></tr>
       <tr><td>Extremos abiertos</td><td>Tapas y topes de plástico</td></tr>
-    </tbody></table>
-    <figure><img data-img="rampassist-iteracion-l" alt="Maqueta a escala 1:2"></figure>
-  </div></section>
+    </tbody></table></div>
+  </section>
 
-  <section class="s"><h3 class="lbl"><span>04</span>Out</h3><div class="b">
-    <p class="lead">Se fija junto a la rampa y se integra en la barandilla que ya existe. Discreto, sin obra y sin aspecto de aparato médico.</p>
-    <dl class="specs"><div><dt>Carga</dt><dd>150 kg</dd></div><div><dt>Pendiente</dt><dd>12 %</dd></div><div><dt>Velocidad</dt><dd>0,15 m/s</dd></div><div><dt>Instalación</dt><dd>Sin obra</dd></div></dl>
-  </div></section>
-  <nav class="next"><a href="#estudio"><span>Siguiente · 02</span>Estudio portátil →</a><a href="#" data-close class="back">← Volver al índice</a></nav>
+  <section class="s"><div class="num">04</div>
+    <div class="head"><h3 class="lbl">Out</h3><p class="lead">Se fija junto a la rampa y se integra en la barandilla que ya existe. Discreto, sin obra y sin aspecto de aparato médico.</p></div>
+    <div class="txt full"><dl class="specs"><div><dt>Carga</dt><dd>150 kg</dd></div><div><dt>Pendiente</dt><dd>12 %</dd></div><div><dt>Velocidad</dt><dd>0,15 m/s</dd></div><div><dt>Instalación</dt><dd>Sin obra</dd></div></dl></div>
+  </section>
+  <nav class="next"><a href="#estudio"><span>Siguiente · 02</span>Estudio portátil →</a><a href="#" data-close class="back">← Volver a la portada</a></nav>
 </article>
 
 <article class="pg" id="estudio">
@@ -209,45 +256,45 @@ figure img{display:block;width:100%;height:auto;background:#e5e3de}
   </header>
   <figure class="hero"><img data-img="estudio-out-l" alt="Escritorio montado con dos altavoces en el raíl"></figure>
 
-  <section class="s"><h3 class="lbl"><span>01</span>In</h3><div class="b">
-    <p class="lead">Los home studios se montan con piezas sueltas: una mesa genérica, monitores pesados que necesitan enchufe y una maraña de cables. Nada se mueve y nada se guarda.</p>
-    <dl class="def">
+  <section class="s"><div class="num">01</div>
+    <div class="head"><h3 class="lbl">In</h3><p class="lead">Los home studios se montan con piezas sueltas: una mesa genérica, monitores pesados que necesitan enchufe y una maraña de cables. Nada se mueve y nada se guarda.</p></div>
+    <figure class="fig"><img data-img="estudio-in-l" alt="Escritorio plegado contra la pared y altavoz en el suelo"></figure>
+    <div class="txt"><dl class="def">
       <div><dt>Necesidad</dt><dd>Montar y desmontar un estudio en minutos sin perder sonido ni orden.</dd></div>
       <div><dt>Usuario</dt><dd>Productores y creadores que trabajan en pisos pequeños o compartidos, y quien viaja.</dd></div>
       <div><dt>Producto existente</dt><dd>Mesas plegables que ignoran el audio y altavoces Bluetooth hechos para escuchar, no para trabajar.</dd></div>
     </dl>
     <h4 class="sub">Requisitos</h4>
-    <ul class="req"><li>Plegado sin herramientas, en menos de un minuto</li><li>Plegado de 8 cm, cabe detrás de una puerta</li><li>Portátil, controlador de 49 teclas e interfaz</li><li>Altavoz con batería, en mano o anclado</li></ul>
-    <figure><img data-img="estudio-in-l" alt="Escritorio plegado contra la pared y altavoz en el suelo"></figure>
-  </div></section>
+    <ul class="req"><li>Plegado sin herramientas, en menos de un minuto</li><li>Plegado de 8 cm, cabe detrás de una puerta</li><li>Portátil, controlador de 49 teclas e interfaz</li><li>Altavoz con batería, en mano o anclado</li></ul></div>
+  </section>
 
-  <section class="s"><h3 class="lbl"><span>02</span>Proceso</h3><div class="b">
-    <p class="lead">Un lenguaje común para las dos piezas: tubo curvado de radio amplio, lacado cobalto y canto de abedul visto.</p>
-    <ol class="areas">
+  <section class="s"><div class="num">02</div>
+    <div class="head"><h3 class="lbl">Proceso</h3><p class="lead">Un lenguaje común para las dos piezas: tubo curvado de radio amplio, lacado cobalto y canto de abedul visto.</p></div>
+    <figure class="fig"><img data-img="estudio-proceso-l" alt="Secuencia de plegado"></figure>
+    <div class="txt"><ol class="areas">
       <li><b>Plegado</b><span>Cada lado es un solo tubo cerrado que hace de patas, pie y travesaño. Gira bajo el tablero y el estrecho se anida en el ancho.</span></li>
       <li><b>Anclaje</b><span>Raíl trasero de tubo Ø40. El altavoz lo abraza con una pinza de medio tubo, se fija con imán y se carga por pogo pins.</span></li>
       <li><b>Acústica</b><span>Caja cerrada con driver de 3" y tweeter, pensada para escuchar de cerca, en triángulo con el usuario.</span></li>
       <li><b>Materiales</b><span>Tubo de acero lacado, tablero de contrachapado de abedul lacado arriba y abajo. Piezas planas, sin tornillería vista.</span></li>
-    </ol>
-    <figure><img data-img="estudio-proceso-l" alt="Secuencia de plegado"></figure>
-  </div></section>
+    </ol></div>
+  </section>
 
-  <section class="s"><h3 class="lbl"><span>03</span>Iteración</h3><div class="b">
-    <p class="lead">Del boceto al sistema: cada decisión quita una pieza.</p>
-    <table class="ba"><thead><tr><th>Antes</th><th>Después</th></tr></thead><tbody>
+  <section class="s"><div class="num">03</div>
+    <div class="head"><h3 class="lbl">Iteración</h3><p class="lead">Del boceto al sistema: cada decisión quita una pieza.</p></div>
+    <figure class="fig"><img data-img="estudio-iteracion-l" alt="Sección del raíl con el anclaje del altavoz"></figure>
+    <div class="txt"><table class="ba"><thead><tr><th>Antes</th><th>Después</th></tr></thead><tbody>
       <tr><td>Cuatro patas con bisagra y pestillo</td><td>Un tubo cerrado por lado que gira y se anida</td></tr>
       <tr><td>Soporte propio para cada altavoz</td><td>Un raíl común: pinza, imán y carga</td></tr>
       <tr><td>Cables por el suelo</td><td>Cables por dentro del raíl</td></tr>
       <tr><td>Asa añadida para transportarlo</td><td>El raíl hace de asa una vez plegado</td></tr>
-    </tbody></table>
-    <figure><img data-img="estudio-iteracion-l" alt="Sección del raíl con el anclaje del altavoz"></figure>
-  </div></section>
+    </tbody></table></div>
+  </section>
 
-  <section class="s"><h3 class="lbl"><span>04</span>Out</h3><div class="b">
-    <p class="lead">Se despliega en segundos y el altavoz pasa de la mano a la mesa. Juntos convierten cualquier rincón en un estudio.</p>
-    <dl class="specs"><div><dt>Tablero</dt><dd>120 × 60 cm</dd></div><div><dt>Plegado</dt><dd>8 cm</dd></div><div><dt>Montaje</dt><dd>&lt; 1 min</dd></div><div><dt>Carga</dt><dd>40 kg</dd></div></dl>
-  </div></section>
-  <nav class="next"><a href="#plaza"><span>Siguiente · 03</span>Plaza abierta →</a><a href="#" data-close class="back">← Volver al índice</a></nav>
+  <section class="s"><div class="num">04</div>
+    <div class="head"><h3 class="lbl">Out</h3><p class="lead">Se despliega en segundos y el altavoz pasa de la mano a la mesa. Juntos convierten cualquier rincón en un estudio.</p></div>
+    <div class="txt full"><dl class="specs"><div><dt>Tablero</dt><dd>120 × 60 cm</dd></div><div><dt>Plegado</dt><dd>8 cm</dd></div><div><dt>Montaje</dt><dd>&lt; 1 min</dd></div><div><dt>Carga</dt><dd>40 kg</dd></div></dl></div>
+  </section>
+  <nav class="next"><a href="#plaza"><span>Siguiente · 03</span>Plaza abierta →</a><a href="#" data-close class="back">← Volver a la portada</a></nav>
 </article>
 
 <article class="pg" id="plaza">
@@ -264,45 +311,45 @@ figure img{display:block;width:100%;height:auto;background:#e5e3de}
   </header>
   <figure class="hero"><img data-img="plaza-out-l" alt="La plaza con los módulos instalados"></figure>
 
-  <section class="s"><h3 class="lbl"><span>01</span>In</h3><div class="b">
-    <p class="lead">La plaza es un lugar de paso: mucha gente, bancos y arbolado, y ningún sitio donde quedarse a trabajar o a tomar algo con calma.</p>
-    <dl class="def">
+  <section class="s"><div class="num">01</div>
+    <div class="head"><h3 class="lbl">In</h3><p class="lead">La plaza es un lugar de paso: mucha gente, bancos y arbolado, y ningún sitio donde quedarse a trabajar o a tomar algo con calma.</p></div>
+    <figure class="fig"><img data-img="plaza-in-l" alt="La plaza vacía"></figure>
+    <div class="txt"><dl class="def">
       <div><dt>Necesidad</dt><dd>Puestos de trabajo puntuales en la calle, con café a mano, que se instalen sin obra.</dd></div>
       <div><dt>Usuario</dt><dd>Quien trabaja en remoto, estudia o vive cerca. Y quien pasa, que también forma parte de la escena.</dd></div>
       <div><dt>Producto existente</dt><dd>Quioscos y cabinas que se cierran sobre sí mismos y no dialogan con la plaza.</dd></div>
     </dl>
     <h4 class="sub">Requisitos</h4>
-    <ul class="req"><li>Transportable en camión: 2,4 m de ancho</li><li>Sin cimentación</li><li>Planta baja accesible</li><li>Un material y un color para toda la familia</li></ul>
-    <figure><img data-img="plaza-in-l" alt="La plaza vacía"></figure>
-  </div></section>
+    <ul class="req"><li>Transportable en camión: 2,4 m de ancho</li><li>Sin cimentación</li><li>Planta baja accesible</li><li>Un material y un color para toda la familia</li></ul></div>
+  </section>
 
-  <section class="s"><h3 class="lbl"><span>02</span>Proceso</h3><div class="b">
-    <p class="lead">Una trama de 2,4 m y una sola pieza de chapa lacada que crece sin cambiar de lenguaje.</p>
-    <ol class="areas">
+  <section class="s"><div class="num">02</div>
+    <div class="head"><h3 class="lbl">Proceso</h3><p class="lead">Una trama de 2,4 m y una sola pieza de chapa lacada que crece sin cambiar de lenguaje.</p></div>
+    <figure class="fig"><img data-img="plaza-proceso-l" alt="La familia de módulos en alzado"></figure>
+    <div class="txt"><ol class="areas">
       <li><b>Cabina</b><span>2,4 × 2,4 m. Un puesto frente a una ventana grande.</span></li>
       <li><b>Cabina + máquina</b><span>La misma cabina con una máquina de bebidas y snacks del mismo lacado.</span></li>
       <li><b>Quiosco</b><span>4,8 × 2,4 m. Barra con toldo abatible y taburetes de tubo; terraza en cubierta.</span></li>
       <li><b>Quiosco de dos plantas</b><span>Barra abajo, coworking arriba y terraza, con escalera de caracol.</span></li>
-    </ol>
-    <figure><img data-img="plaza-proceso-l" alt="La familia de módulos en alzado"></figure>
-  </div></section>
+    </ol></div>
+  </section>
 
-  <section class="s"><h3 class="lbl"><span>03</span>Iteración</h3><div class="b">
-    <p class="lead">De un contenedor cerrado a un objeto que se deja mirar.</p>
-    <table class="ba"><thead><tr><th>Antes</th><th>Después</th></tr></thead><tbody>
+  <section class="s"><div class="num">03</div>
+    <div class="head"><h3 class="lbl">Iteración</h3><p class="lead">De un contenedor cerrado a un objeto que se deja mirar.</p></div>
+    <figure class="fig"><img data-img="plaza-iteracion-l" alt="Cabina a la altura de los ojos, con alguien trabajando"></figure>
+    <div class="txt"><table class="ba"><thead><tr><th>Antes</th><th>Después</th></tr></thead><tbody>
       <tr><td>Esquinas vivas de chapa</td><td>Esquinas de tubo grueso</td></tr>
       <tr><td>Ventanas rectas</td><td>Esquinas redondeadas, ojos de buey y puerta en arco</td></tr>
       <tr><td>Escalera recta</td><td>Caracol: menos superficie de plaza ocupada</td></tr>
       <tr><td>Barandilla de varios tubos</td><td>Un solo tubo continuo</td></tr>
-    </tbody></table>
-    <figure><img data-img="plaza-iteracion-l" alt="Cabina a la altura de los ojos, con alguien trabajando"></figure>
-  </div></section>
+    </tbody></table></div>
+  </section>
 
-  <section class="s"><h3 class="lbl"><span>04</span>Out</h3><div class="b">
-    <p class="lead">Quien pasa te ve trabajar con calma. La plaza gana un lugar donde quedarse.</p>
-    <dl class="specs"><div><dt>Trama</dt><dd>2,4 m</dd></div><div><dt>Tipos</dt><dd>4</dd></div><div><dt>Puestos</dt><dd>1 – 7</dd></div><div><dt>Cimentación</dt><dd>Ninguna</dd></div></dl>
-  </div></section>
-  <nav class="next"><a href="#rampassist"><span>Siguiente · 01</span>Rampassist →</a><a href="#" data-close class="back">← Volver al índice</a></nav>
+  <section class="s"><div class="num">04</div>
+    <div class="head"><h3 class="lbl">Out</h3><p class="lead">Quien pasa te ve trabajar con calma. La plaza gana un lugar donde quedarse.</p></div>
+    <div class="txt full"><dl class="specs"><div><dt>Trama</dt><dd>2,4 m</dd></div><div><dt>Tipos</dt><dd>4</dd></div><div><dt>Puestos</dt><dd>1 – 7</dd></div><div><dt>Cimentación</dt><dd>Ninguna</dd></div></dl></div>
+  </section>
+  <nav class="next"><a href="#rampassist"><span>Siguiente · 01</span>Rampassist →</a><a href="#" data-close class="back">← Volver a la portada</a></nav>
 </article>
 
 <footer class="pg-f"><a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a><a href="https://www.linkedin.com/in/ziad-addami-3972b0280/" target="_blank" rel="noopener">LinkedIn</a></footer>
@@ -310,335 +357,32 @@ figure img{display:block;width:100%;height:auto;background:#e5e3de}
 
 <script>
 (() => {
-/* ------------------------------------------------------------------
-   Rectángulo áureo R = [0,φ]×[0,1] (y hacia abajo).
-   El cuadrado 0 es [0,1]×[0,1]; el resto de R es otro rectángulo áureo,
-   R1 = f(R), con f(z) = a·z + φ, a = i/φ (escala 1/φ, giro 90°).
-   Cada paso de scroll aplica f⁻¹ de forma continua: f^t, t ∈ ℝ.
-   Como la figura es autosemejante, t = n se ve igual que t = 0 → bucle infinito.
-
-   Cada paso n ocupa su rectángulo R_n con una imagen recortada para que la
-   construcción (cuadrados, líneas φ y ojo de la espiral) caiga sobre el objeto
-   (ver tools/golden_crop.py). Hay un recorte horizontal (φ:1) y otro vertical (1:φ).
-------------------------------------------------------------------- */
-const PHI = (1 + Math.sqrt(5)) / 2;
-const LN_PHI = Math.log(PHI);
-// Punto fijo de f (ojo de la espiral): O = φ / (1 − i/φ)
-const den = 1 + 1 / (PHI * PHI);
-const O = { x: PHI / den, y: 1 / den };
-
-const ITEMS = [
-  // Un paso por proyecto (portada); href abre su página: in → proceso → iteración → out.
-  { t: 'ziad\naddami', d: 'diseño industrial', mark: true, fs: 0.3 },
-  { t: 'Rampassist', d: 'Lleva la silla de ruedas por la rampa, en subida y en bajada.', img: 'rampassist-out', href: 'rampassist', area: 'Producto · Movilidad' },
-  { t: 'Estudio portátil', d: 'Escritorio plegable y altavoz portátil: un home studio que se monta en segundos.', img: 'estudio-out', href: 'estudio', area: 'Mobiliario · Audio' },
-  { t: 'Plaza abierta', d: 'Mini coworkings para la Plaza España: trabajar a la vista, con un café.', img: 'plaza-out', href: 'plaza', area: 'Arquitectura efímera · Espacio público' },
-  { t: 'sistemas creativos\ny funcionales', d: 'Diseñador industrial. Del problema al objeto, con método, ingeniería y forma.', fs: 0.062, ds: 0.028 },
-  { t: 'contacto@ziadaddami.es', d: 'Proyectos y colaboraciones\nlinkedin.com/in/ziad-addami-3972b0280', small: true },
-  { t: 'R11 · CloutNative · Blashgol', d: 'Entidades en las que participo', fs: 0.04, ds: 0.024 },
-];
-for (const it of ITEMS) if (it.img) {
-  it.im = {};
-  for (const o of ['l', 'p']) { const im = new Image(); im.decoding = 'async'; im.onload = () => { dirty = true; }; im.src = `img/${it.img}-${o}.webp`; it.im[o] = im; }
-}
-let dirty = true;
-const mod = n => ((n % ITEMS.length) + ITEMS.length) % ITEMS.length;
-const itemAt = n => ITEMS[mod(n)];
-
-const SUP = { '-': '⁻', 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹' };
-const sup = n => String(n).split('').map(c => SUP[c]).join('');
-const phiPow = n => n === 0 ? '1' : 'φ' + sup(-n);   // lado del cuadrado n = φ⁻ⁿ
-const smooth = (x, a, b) => { const u = Math.min(1, Math.max(0, (x - a) / (b - a))); return u * u * (3 - 2 * u); };
-
-const cv = document.getElementById('c');
-const ctx = cv.getContext('2d');
-const css = getComputedStyle(document.documentElement);
-const PAPER = css.getPropertyValue('--paper').trim();
-const INK = css.getPropertyValue('--ink').trim();
-const MUTE = css.getPropertyValue('--mute').trim();
-const ACCENT = css.getPropertyValue("--accent").trim();
-const MONO = css.getPropertyValue('--mono').trim();
-const SANS = '"Inter Tight", Helvetica, Arial, sans-serif';
-
-const cap = document.getElementById('cap');
-const capI = cap.querySelector('.i'), capT = cap.querySelector('.t'), capD = cap.querySelector('.d'), capN = cap.querySelector('.n');
-const depth = document.getElementById('depth');
-const scale = document.getElementById('scale');
-const hint = document.getElementById('hint');
-const go = document.getElementById('go');
-
-let W = 0, H = 0, DPR = 1, view = null;
-
-function resize() {
-  DPR = Math.min(devicePixelRatio || 1, 2);
-  W = innerWidth; H = innerHeight;
-  cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
-  const portrait = H > W;
-  const rho = portrait ? -Math.PI / 2 : 0;              // en vertical giramos el rectángulo
-  // el rectángulo áureo cubre toda la pantalla (como background-size: cover)
-  const k = portrait ? Math.max(W, H / PHI) : Math.max(W / PHI, H);
-  view = { k, rho, portrait, cr: Math.cos(rho), sr: Math.sin(rho), cx: W / 2, cy: H / 2 };
-}
-
-// Mundo → pantalla para la capa m (m = n − t): z ↦ C + k·e^{iρ}·(O + (z−O)·φ^{−m}·e^{iπm/2} − c_R)
-function maker(m) {
-  const s = Math.exp(-m * LN_PHI), th = m * Math.PI / 2;
-  const c = Math.cos(th) * s, sn = Math.sin(th) * s;
-  const { k, cr, sr, cx, cy } = view;
-  return (x, y) => {
-    const dx = x - O.x, dy = y - O.y;
-    const wx = O.x + c * dx - sn * dy - PHI / 2;
-    const wy = O.y + sn * dx + c * dy - 0.5;
-    return [cx + k * (cr * wx - sr * wy), cy + k * (sr * wx + cr * wy)];
-  };
-}
-
-function rectPath(P) {
-  ctx.moveTo(...P(0, 0)); ctx.lineTo(...P(PHI, 0)); ctx.lineTo(...P(PHI, 1)); ctx.lineTo(...P(0, 1)); ctx.closePath();
-}
-
-function wrap(text, maxW) {
-  const out = [];
-  for (const para of text.split('\n')) {
-    let line = '';
-    for (const w of para.split(' ')) {
-      const t = line ? line + ' ' + w : w;
-      if (ctx.measureText(t).width > maxW && line) { out.push(line); line = w; } else line = t;
-    }
-    out.push(line);
-  }
-  return out;
-}
-
-// Imagen (o papel) del paso n llenando su rectángulo R_n; queda recta cuando R_n llena el marco
-function drawStep(j, frac, alpha) {
-  if (alpha <= 0.002) return false;
-  const m = j - frac, item = itemAt(Math.floor(t) + j);
-  const side = view.k * Math.exp(-m * LN_PHI);
-  const [cx, cy] = maker(m)(PHI / 2, 0.5);
-  const w = view.portrait ? side : side * PHI, h = view.portrait ? side * PHI : side;
-  ctx.save();
-  ctx.globalAlpha = alpha;
-  ctx.translate(cx, cy); ctx.rotate(m * Math.PI / 2);
-  const im = item.im && item.im[view.portrait ? 'p' : 'l'];
-  if (im && im.complete && im.naturalWidth) ctx.drawImage(im, -w / 2, -h / 2, w, h);
-  else { ctx.fillStyle = PAPER; ctx.fillRect(-w / 2, -h / 2, w, h); }
-  ctx.restore();
-  return !!im;
-}
-
-// Texto grande solo en los pasos sin imagen (marca, fundadores, contacto)
-function drawText(j, frac, al) {
-  const n = Math.floor(t) + j, item = itemAt(n);
-  if (item.img || al <= 0.01) return;
-  const m = j - frac;
-  // en móvil el cuadrado es más ancho que la pantalla: el texto se ajusta a la parte visible
-  const side = view.k * Math.exp(-m * LN_PHI) * Math.min(1, (view.portrait ? W : W / PHI) / view.k);
-  const [cx, cy] = maker(m)(0.5, 0.5);
-  ctx.save();
-  ctx.globalAlpha = al;
-  ctx.translate(cx, cy); ctx.rotate(m * Math.PI / 2);
-  ctx.translate(-side / 2, -side / 2);
-  const pad = side * 0.075;
-  ctx.fillStyle = INK; ctx.textBaseline = 'alphabetic';
-  const fs = side * (item.fs || (item.mark ? 0.46 : item.small ? 0.075 : 0.13));
-  ctx.font = `${item.mark ? 200 : 300} ${fs}px ${SANS}`;
-  if ('letterSpacing' in ctx) ctx.letterSpacing = `${-fs * (item.mark ? 0.07 : 0.045)}px`;
-  const lines = wrap(item.t, side - pad * 2);
-  const lh = fs * (item.mark ? 0.9 : 1.0);
-  let y = side * (item.mark ? 0.66 : 0.6) - (lines.length - 1) * lh;
-  for (const l of lines) { ctx.fillText(l, pad - (item.mark ? fs * 0.04 : 0), y); y += lh; }
-  if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
-  const ds = side * (item.ds || (item.mark ? 0.05 : 0.034));
-  if (ds >= 8) {
-    ctx.font = `300 ${ds}px ${SANS}`;
-    ctx.fillStyle = item.mark ? INK : MUTE;
-    let dy = side * (item.mark ? 0.8 : 0.72);
-    for (const l of wrap(item.d, side * 0.7)) { ctx.fillText(l, pad, dy); dy += ds * 1.35; }
-  }
-  ctx.restore();
-}
-
-function strokeSquares(frac) {
-  for (let j = -2; j < 26; j++) {
-    const m = j - frac, P = maker(m);
-    if (view.k * Math.exp(-m * LN_PHI) < 1.2) break;
-    ctx.moveTo(...P(0, 0)); ctx.lineTo(...P(1, 0)); ctx.lineTo(...P(1, 1)); ctx.lineTo(...P(0, 1)); ctx.closePath();
-  }
-}
-
-let t = 0, target = 0, lastCap = null;
-
-function draw() {
-  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  ctx.fillStyle = PAPER; ctx.fillRect(0, 0, W, H);
-  const base = Math.floor(t), frac = t - base;
-  const hair = DPR >= 2 ? 0.75 : 1;
-
-  // --- imágenes: la actual se va al entrar en R_{n+1}; la siguiente aparece dentro de R_{n+1} ---
-  const a0 = 1 - smooth(frac, 0.55, 1), a1 = smooth(frac, 0.2, 0.85);
-  const img0 = drawStep(0, frac, a0);
-  const img1 = drawStep(1, frac, a1);
-
-  // --- cuadrados: blancos sobre la imagen, tinta sobre el papel ---
-  const onImg = img0 ? a0 : 0;
-  ctx.lineWidth = hair;
-  ctx.save();
-  ctx.beginPath(); ctx.rect(0, 0, W, H); rectPath(maker(-frac)); ctx.clip('evenodd');
-  ctx.beginPath(); strokeSquares(frac); ctx.strokeStyle = INK; ctx.stroke();
-  ctx.restore();
-  ctx.save();
-  ctx.beginPath(); rectPath(maker(-frac)); ctx.clip();
-  ctx.beginPath(); strokeSquares(frac);
-  if (onImg > 0.01 || img1) {
-    ctx.shadowColor = 'rgba(0,0,0,.45)'; ctx.shadowBlur = 3;
-    ctx.strokeStyle = `rgba(255,255,255,${0.9 * Math.max(onImg, img1 ? a1 : 0)})`; ctx.stroke();
-    ctx.shadowBlur = 0;
-  }
-  ctx.globalAlpha = 1 - Math.max(onImg, img1 ? a1 : 0);
-  ctx.strokeStyle = INK; ctx.stroke();
-  ctx.restore();
-
-  // --- espiral áurea: un cuarto de circunferencia por cuadrado ---
-  ctx.strokeStyle = ACCENT; ctx.lineWidth = hair * 1.4;
-  ctx.beginPath();
-  let first = true;
-  for (let j = -2; j < 26; j++) {
-    const m = j - frac, P = maker(m);
-    if (view.k * Math.exp(-m * LN_PHI) < 0.6) break;
-    for (let i = 0; i <= 24; i++) {            // arco centrado en (1,1), de (0,1) a (1,0)
-      const a = Math.PI + (i / 24) * Math.PI / 2;
-      const [x, y] = P(1 + Math.cos(a), 1 + Math.sin(a));
-      if (first) { ctx.moveTo(x, y); first = false; } else ctx.lineTo(x, y);
-    }
-  }
-  ctx.stroke();
-
-  // --- texto de los pasos sin imagen ---
-  drawText(0, frac, 1 - smooth(frac, 0, 0.45));
-  drawText(1, frac, smooth(frac, 0.55, 1));
-
-  // --- cotas del rectángulo actual: φ y 1 ---
-  {
-    const P = maker(-frac), al = Math.max(0, 1 - frac * 2.5);
-    if (al > 0) {
-      ctx.globalAlpha = al;
-      ctx.font = `400 11px ${MONO}`; ctx.fillStyle = MUTE; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText('φ', ...P(PHI / 2, -0.04));
-      if (!view.portrait) ctx.fillText('1', ...P(-0.04, 0.5));
-      ctx.textAlign = 'left'; ctx.globalAlpha = 1;
-    }
-  }
-
-  // --- ojo de la espiral: marca qué detalle del objeto justifica ---
-  const n = Math.round(t), cur = itemAt(n);
-  const capA = Math.max(0, 1 - Math.abs(t - n) * 2.4);
-  if (cur.eye && capA > 0.01) {
-    const [ex, ey] = maker(0)(O.x, O.y);
-    ctx.save();
-    ctx.globalAlpha = capA;
-    ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 3;
-    ctx.strokeStyle = '#fff'; ctx.fillStyle = '#fff'; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.arc(ex, ey, 9, 0, Math.PI * 2); ctx.stroke();
-    const dir = ex + 190 > W ? -1 : 1;           // la etiqueta no se sale de la pantalla
-    ctx.beginPath(); ctx.moveTo(ex + 7 * dir, ey - 7); ctx.lineTo(ex + 34 * dir, ey - 34); ctx.lineTo(ex + 44 * dir, ey - 34); ctx.stroke();
-    ctx.font = `400 11px ${MONO}`; ctx.textBaseline = 'middle'; ctx.textAlign = dir > 0 ? 'left' : 'right';
-    ctx.fillText(`ojo φ · ${cur.eye}`, ex + 50 * dir, ey - 34);
-    ctx.restore();
-  }
-
-  // --- pie de foto (DOM) y HUD ---
-  if (lastCap !== n) {
-    lastCap = n;
-    const i = mod(n);
-    capI.textContent = `${String(i + 1).padStart(2, '0')} / ${String(ITEMS.length).padStart(2, '0')} · R${sub(n)} · lado ${phiPow(n)}`;
-    capT.textContent = cur.img ? cur.t : '';
-    capD.textContent = cur.img ? cur.d : '';
-    capN.textContent = cur.area ? cur.area : '';
-    go.textContent = cur.href ? 'VER PROYECTO →' : ''; go.href = cur.href ? '#' + cur.href : '#';
-  }
-  cap.style.opacity = capA;
-  document.body.classList.toggle('on-img', !!cur.img);
-  depth.textContent = `n = ${n}`;
-  scale.textContent = `1 : φ${sup(n)} = ${Math.pow(PHI, t).toPrecision(5)}`;
-}
-
-const SUB = { '-': '₋', 0: '₀', 1: '₁', 2: '₂', 3: '₃', 4: '₄', 5: '₅', 6: '₆', 7: '₇', 8: '₈', 9: '₉' };
-const sub = n => String(n).split('').map(c => SUB[c]).join('');
-
-/* ------------------------------------------------------------------
-   Scroll virtual: rueda, teclado y gesto táctil mueven t.
-   Al soltar, se asienta en el paso más cercano.
-------------------------------------------------------------------- */
-let idle = 0;
-const push = d => { target += d; idle = performance.now(); hint.classList.add('off'); };
-addEventListener('wheel', e => {
-  if (open) return;
-  e.preventDefault();
-  const px = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * H : e.deltaY;
-  push(Math.max(-0.5, Math.min(0.5, px / 900)));
-}, { passive: false });
-let ty = null;
-addEventListener('touchstart', e => { ty = open ? null : e.touches[0].clientY; }, { passive: true });
-addEventListener('touchmove', e => {
-  if (ty == null) return;
-  const y = e.touches[0].clientY; push((ty - y) / (H * 0.55)); ty = y;
-}, { passive: true });
-addEventListener('touchend', () => { ty = null; }, { passive: true });
-addEventListener('keydown', e => {
-  if (open) { if (e.key === 'Escape') closePage(); return; }
-  if (e.key === 'Enter' && itemAt(Math.round(t)).href) { openPage(itemAt(Math.round(t)).href); return; }
-  if (['ArrowDown', 'PageDown', ' ', 'ArrowRight'].includes(e.key)) { e.preventDefault(); target = Math.round(target) + 1; idle = 0; hint.classList.add('off'); }
-  if (['ArrowUp', 'PageUp', 'ArrowLeft'].includes(e.key)) { e.preventDefault(); target = Math.round(target) - 1; idle = 0; }
-  if (e.key === 'Home') { target = 0; idle = 0; }
-});
-
-
-/* ------------------------------------------------------------------
-   Páginas de proyecto: #rampassist, #estudio, #plaza. Sin hash, el zoom.
-------------------------------------------------------------------- */
-const page = document.getElementById('page');
+/* Portada larga (bio, índice y una fila por proyecto) y una página por proyecto: #rampassist, #estudio, #plaza. */
 const srcOf = f => `img/${f}.webp`;
-let open = false;
+const page = document.getElementById('page');
+function load(root) { for (const im of root.querySelectorAll('img[data-img]')) if (!im.src) { im.decoding = 'async'; im.src = srcOf(im.dataset.img); } }
+load(document.getElementById('home'));
+let homeY = 0;
 function route(force) {
   const id = force !== undefined ? force : location.hash.slice(1), art = id && document.getElementById(id);
-  open = !!(art && art.classList.contains('pg'));
+  const open = !!(art && art.classList.contains('pg') && art.tagName === 'ARTICLE');
+  if (open && page.hidden) homeY = scrollY;
   page.hidden = !open;
-  for (const a of page.querySelectorAll('.pg')) a.hidden = a !== art;
-  if (open) {
-    for (const im of art.querySelectorAll('img[data-img]')) if (!im.src) { im.loading = 'lazy'; im.decoding = 'async'; im.src = srcOf(im.dataset.img); }
-    page.scrollTop = 0;
-    document.title = art.querySelector('.ttl').textContent + ' — Ziad Addami';
-    const k = ITEMS.findIndex(it => it.href === id);       // al volver, el zoom queda en ese proyecto
-    if (k >= 0) { t = target = k; lastCap = null; dirty = true; }
-  } else document.title = 'Ziad Addami — Diseño industrial';
+  document.body.classList.toggle('locked', open);
+  for (const a of page.querySelectorAll('article.pg')) a.hidden = a !== art;
+  if (open) { load(art); page.scrollTop = 0; document.title = art.querySelector('.ttl').textContent + ' — Ziad Addami'; }
+  else { document.title = 'Ziad Addami — Diseño industrial'; scrollTo(0, homeY); }
 }
-function closePage() {        // vuelve al índice aunque el historial no se pueda tocar (iframes, file://)
+function openPage(id) { try { location.hash = id; } catch (e) {} route(id); }
+function closePage() {        // vuelve a la portada aunque el historial no se pueda tocar (iframes, file://)
   try { history.pushState(null, '', location.pathname + location.search); } catch (e) { try { location.hash = ''; } catch (_) {} }
   route('');
 }
-function openPage(id) { try { location.hash = id; } catch (e) {} route(id); }
+for (const a of document.querySelectorAll('[data-open], .next a:not(.back)')) a.addEventListener('click', e => { e.preventDefault(); openPage(a.getAttribute('href').slice(1)); });
 for (const a of page.querySelectorAll('[data-close]')) a.addEventListener('click', e => { e.preventDefault(); closePage(); });
-cv.addEventListener('click', () => { const it = itemAt(Math.round(t)); if (it.href && Math.abs(t - Math.round(t)) < 0.1) openPage(it.href); });
+addEventListener('keydown', e => { if (e.key === 'Escape' && !page.hidden) closePage(); });
 addEventListener('hashchange', () => route());
-go.addEventListener('click', e => { const it = itemAt(Math.round(t)); if (it.href) { e.preventDefault(); openPage(it.href); } });
-for (const a of page.querySelectorAll('.next a')) a.addEventListener('click', e => { e.preventDefault(); openPage(a.getAttribute('href').slice(1)); });
-
-const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-function loop(now) {
-  if (idle && now - idle > 450) { target = Math.round(target); idle = 0; }
-  const diff = target - t;
-  const moving = Math.abs(diff) >= 1e-4;
-  t = moving ? t + diff * (reduce ? 0.35 : 0.085) : target;
-  if (moving || dirty) { draw(); dirty = false; }   // quieto: no se redibuja
-  requestAnimationFrame(loop);
-}
-
-addEventListener('resize', () => { resize(); lastCap = null; dirty = true; });
-if (document.fonts) document.fonts.ready.then(() => { dirty = true; });
-resize();
 route();
-requestAnimationFrame(loop);
 })();
 </script>
 </body>
