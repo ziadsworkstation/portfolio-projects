@@ -22,7 +22,7 @@ renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadow
 document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-const SKY = '#e9e5dd';
+const SKY = '#f5f4f1';
 scene.background = new THREE.Color(SKY);
 scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
 scene.environmentIntensity = 0.5;
@@ -48,11 +48,11 @@ function box(w, h, d, r, mat) { return mesh(new RoundedBoxGeometry(w, h, d, 4, r
 // pavimento crudo de piedra: losas 60x40 a matajunta, tono irregular
 function paving() {
   const c = document.createElement('canvas'); c.width = c.height = 1024;
-  const g = c.getContext('2d'); g.fillStyle = '#a39b8e'; g.fillRect(0, 0, 1024, 1024);
+  const g = c.getContext('2d'); g.fillStyle = '#b8b1a5'; g.fillRect(0, 0, 1024, 1024);
   let s = 11; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
   const sw = 1024 / 10, sh = 1024 / 15;              // 6 m de textura: 10 x 15 losas
   for (let r = 0; r < 15; r++) for (let k = -1; k < 10; k++) {
-    const x = k * sw + (r % 2) * sw / 2, v = 188 + rnd() * 20 | 0;
+    const x = k * sw + (r % 2) * sw / 2, v = 214 + rnd() * 16 | 0;
     g.fillStyle = `rgb(${v},${v - 6},${v - 15})`; g.fillRect(x + 1.5, r * sh + 1.5, sw - 3, sh - 3);
   }
   for (let i = 0; i < 900; i++) {                   // poro y manchas
@@ -271,7 +271,7 @@ function tree(x, z, s = 1) {
 }
 function facades() {   // frente urbano: bloques de piedra clara con ventanas en retícula
   const c = document.createElement('canvas'); c.width = 512; c.height = 512; const g = c.getContext('2d');
-  g.fillStyle = '#ddd7cc'; g.fillRect(0, 0, 512, 512); g.fillStyle = '#bdb5a8';
+  g.fillStyle = '#ebe7e0'; g.fillRect(0, 0, 512, 512); g.fillStyle = '#d3cdc3';
   for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) g.fillRect(x * 64 + 22, y * 64 + 14, 20, 36);
   const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace; tx.wrapS = tx.wrapT = THREE.RepeatWrapping;
   for (const [x, z, w, h, yaw] of [[-30, -34, 40, 19, 0], [12, -36, 44, 23, 0], [52, -20, 40, 20, -Math.PI / 2.2], [-58, -8, 40, 18, Math.PI / 2.4]]) {
@@ -283,7 +283,7 @@ function facades() {   // frente urbano: bloques de piedra clara con ventanas en
 function bench(x, z, yaw = 0) { const b = box(2.2, 0.45, 0.6, 0.08, STONE); b.position.set(x, 0.225, z); b.rotation.y = yaw; return b; }
 
 const ground = mesh(new THREE.PlaneGeometry(400, 400), VIEW === 'familia'
-  ? new THREE.MeshStandardMaterial({ color: '#dcd7cd', roughness: 0.95 })
+  ? new THREE.MeshStandardMaterial({ color: '#efede9', roughness: 0.95 })
   : new THREE.MeshStandardMaterial({ map: paving(), roughness: 0.95 }));
 ground.rotation.x = -Math.PI / 2; scene.add(ground);
 

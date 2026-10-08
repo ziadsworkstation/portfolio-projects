@@ -1,6 +1,6 @@
 # ziadaddami.es — portfolio
 
-Una portada tipo sumario (bio, índice numerado y una fila por proyecto) y una página por proyecto,
+Una portada blanca y limpia (frase, proyectos en miniatura con su nombre debajo, contacto) y una página por proyecto,
 leída con el método in-out: 01 In · 02 Proceso · 03 Iteración · 04 Out. Las páginas se abren con `#rampassist`,
 `#estudio` y `#plaza`.
 
