@@ -4,370 +4,516 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ziad Addami — Diseño industrial</title>
-<meta name="description" content="Portfolio de Ziad Addami Ech Chaouy, diseñador industrial y cofundador de R11. Cada proyecto, encuadrado en la proporción áurea.">
+<meta name="description" content="Portfolio de Ziad Addami Ech Chaouy, diseñador industrial. Sistemas creativos y funcionales: cada proyecto, de la necesidad al objeto.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
+/* blanco, limpio y con aire: Geist fina, mono pequeña, líneas de 0,75 px y un solo acento cobalto */
 :root{
-  --paper:#f2f1ee;
-  --ink:#111;
-  --mute:#8a8884;
-  --red:#e8251b;
-  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  --paper:#ffffff;
+  --ink:#040b05;
+  --mute:#5b5b58;
+  --line:rgba(4,11,5,.14);
+  --accent:#1f3fd1;
+  --sans:"Geist",Helvetica,Arial,sans-serif;
+  --mono:"Geist Mono",ui-monospace,Menlo,monospace;
+  --pad:clamp(20px,7.5vw,144px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;background:var(--paper);color:var(--ink)}
-body{font-family:"Inter Tight",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;
-  overscroll-behavior:none;touch-action:none;user-select:none;-webkit-user-select:none}
-canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+html{background:var(--paper)}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:400;font-size:14px;line-height:1.5;letter-spacing:.01em;-webkit-font-smoothing:antialiased}
+body.locked{overflow:hidden}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%;height:auto}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:-.04em}
+.btn{display:inline-block;font-family:var(--mono);font-size:12px;letter-spacing:-.04em;border:.75px solid var(--ink);border-radius:2px;padding:11px 16px;background:var(--paper);white-space:nowrap;transition:opacity .2s}
+.btn:hover{opacity:.6}
 
-.hud{position:fixed;z-index:2;font-family:var(--mono);font-size:11px;letter-spacing:.04em;line-height:1.6;
-  color:var(--ink);pointer-events:none}
-.hud,.cap,.cap *,.hud *{transition:color .5s,text-shadow .5s,border-color .5s}
-.hud a{pointer-events:auto;color:inherit;text-decoration:none;border-bottom:1px solid currentColor}
-.hud .m{color:var(--mute)}
-.tl{left:20px;top:16px}
-.tr{right:20px;top:16px;text-align:right}
-.bl{left:20px;bottom:16px}
-.br{right:20px;bottom:16px;text-align:right}
-.phi{color:var(--red)}
-.hint{transition:opacity .8s}
-.hint.off{opacity:0}
+/* ---------- portada ---------- */
+.top{display:flex;justify-content:space-between;align-items:flex-start;padding:clamp(28px,5vw,72px) var(--pad) 0}
+.logo{font-weight:500;font-size:15px;letter-spacing:-.02em;line-height:1.2}
+.logo span{display:block;font-family:var(--mono);font-weight:400;font-size:12px;letter-spacing:-.04em;color:var(--mute);margin-top:4px}
+.stage{position:relative;height:280vh}
+.stick{position:sticky;top:0;height:100vh;overflow:hidden}
+#obj{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;opacity:0;transition:opacity .8s}
+.stage.live #obj{opacity:1}
+.still{position:absolute;left:50%;top:52%;width:min(88vw,1100px);transform:translate(-50%,-50%);display:none}
+.stage.nogl{height:auto}.stage.nogl .stick{position:relative;height:auto;padding-bottom:40px}.stage.nogl .still{position:relative;left:auto;top:auto;transform:none;margin:24px var(--pad) 0;display:block;width:auto}
+.stage.nogl .st-c,.stage.nogl .scroll{display:none}
+.st-t{position:absolute;left:var(--pad);top:clamp(40px,8vh,96px);max-width:679px;opacity:calc(1 - var(--p,0) * 3);pointer-events:none}
+.stage.nogl .st-t{position:relative;left:auto;top:auto;padding:clamp(56px,10vw,144px) var(--pad) 0;opacity:1}
+.st-t h1{font-weight:300;font-size:clamp(34px,3.4vw,48px);letter-spacing:-.02em;line-height:1.05}
+.st-t p{margin-top:10px;max-width:30em}
+.scroll{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);color:var(--mute);opacity:calc(1 - var(--p,0) * 6)}
+.st-c{position:absolute;right:var(--pad);bottom:clamp(40px,10vh,112px);display:flex;flex-direction:column;align-items:flex-end;gap:8px;text-align:right;
+  opacity:calc((var(--p,0) - .82) * 6);pointer-events:none}
+.st-c b{font-weight:300;font-size:clamp(24px,2.4vw,34px);letter-spacing:-.02em;line-height:1.1}
+.st-c .mono{color:var(--mute)}
+.st-c .btn{margin-top:8px}
+html[style*="--p: 1"] .st-c,html[style*="--p: 0.9"] .st-c{pointer-events:auto}
+/* estantería: los objetos recortados, apoyados en una misma línea */
+.work{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:end;gap:0 clamp(24px,4vw,72px);padding:clamp(40px,6vw,96px) var(--pad) 0}
+.work::after{content:'';grid-column:1 / -1;grid-row:2;border-top:.75px solid var(--ink);margin-top:-1px}
+.card{display:contents}
+.card .im{grid-row:1;display:flex;align-items:flex-end;justify-content:center;height:clamp(220px,27vw,400px);padding-bottom:6px}
+.card img{max-height:calc(100% * var(--h));width:auto;max-width:100%;transform-origin:center bottom;transition:transform .5s cubic-bezier(.22,1,.36,1),filter .5s}
+.card:hover img,.card:focus-visible img{transform:translateY(-14px) rotate(-1.5deg);filter:drop-shadow(0 18px 14px rgba(4,11,5,.10))}
+.card b,.card .mono{grid-row:3}
+.card b{font-weight:500;font-size:18px;letter-spacing:-.02em;line-height:1.5;opacity:.85;padding-top:16px;align-self:start}
+.card .mono{grid-row:4;color:var(--mute);align-self:start}
+.card:hover b{color:var(--accent)}
+.about{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,4vw,64px);padding:clamp(96px,12vw,176px) var(--pad) clamp(96px,10vw,144px);max-width:calc(1100px + 2 * var(--pad))}
+.about dt{font-family:var(--mono);font-size:12px;letter-spacing:-.04em;color:var(--mute);margin-bottom:8px}
+.about a{border-bottom:.75px solid currentColor}
+.mark{position:fixed;left:var(--pad);bottom:calc(env(safe-area-inset-bottom) + 20px);font-family:var(--mono);font-size:10.5px;letter-spacing:-.04em;color:var(--mute);opacity:.8;pointer-events:none;z-index:5}
+@media (max-width:700px){
+  .about{grid-template-columns:1fr}
+  .work{grid-template-columns:1fr;gap:0}
+  .work::after{display:none}
+  .card{display:flex;flex-direction:column;padding-bottom:48px}
+  .card .im{height:auto;border-bottom:.75px solid var(--ink);padding-bottom:0}
+  .card img{max-height:none;max-width:calc(100% * var(--h))}
+  .mark{display:none}
+}
 
-.cap{position:fixed;z-index:2;pointer-events:none;left:20px;bottom:64px;max-width:min(440px,calc(100vw - 40px))}
-.cap .i{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--mute)}
-.cap .t{font-weight:300;font-size:22px;letter-spacing:-.03em;line-height:1.1;margin-right:.5em}
-.cap .d{font-weight:300;font-size:14px;color:var(--mute)}
-.cap .n{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--red);margin-top:4px}
-@media (max-width:700px){.cap .t{font-size:18px}.cap .d{font-size:13px}}
-/* sobre imagen: texto blanco */
-body.on-img .hud,body.on-img .cap{color:#fff;text-shadow:0 0 8px rgba(0,0,0,.45)}
-body.on-img .hud .m,body.on-img .cap .i,body.on-img .cap .d{color:rgba(255,255,255,.82)}
-body.on-img .cap .n{color:#fff}
-body.on-img .phi{color:#fff}
-
-.veil{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity .6s;
-  background:linear-gradient(180deg,rgba(0,0,0,.32) 0,rgba(0,0,0,0) 120px,rgba(0,0,0,0) 55%,rgba(0,0,0,.5) 100%)}
-body.on-img .veil{opacity:1}
-
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* ---------- página de proyecto ---------- */
+.page{position:fixed;inset:0;z-index:10;overflow-y:auto;overflow-x:hidden;background:var(--paper);overscroll-behavior:contain}
+.page[hidden]{display:none}
+.pg-bar{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:16px var(--pad);background:rgba(255,255,255,.94);backdrop-filter:blur(6px)}
+.pg-bar a:first-child{font-family:var(--mono);font-size:12px;letter-spacing:-.04em;border:.75px solid var(--ink);border-radius:2px;padding:9px 14px}
+.pg-bar a:last-child{font-weight:500;font-size:15px;letter-spacing:-.02em}
+.pg{padding:0 var(--pad)}
+.pg-h{padding:clamp(56px,9vw,128px) 0 clamp(40px,5vw,64px);max-width:860px}
+.k{font-family:var(--mono);font-size:12px;letter-spacing:-.04em;color:var(--mute)}
+.k .no{color:var(--accent);margin-right:1em}
+.ttl{font-weight:300;font-size:clamp(40px,5vw,72px);letter-spacing:-.03em;line-height:1;margin:16px 0 14px;text-transform:lowercase}
+.claim{font-size:clamp(15px,1.3vw,18px);line-height:1.5;max-width:36em}
+.meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin-top:clamp(32px,4vw,48px);padding-top:14px;border-top:.75px solid var(--line)}
+.meta dt,.def dt,.specs dt,.sub,.ba th{font-family:var(--mono);font-size:12px;letter-spacing:-.04em;color:var(--mute);font-weight:400}
+.meta dd{margin-top:4px}
+.hero-i img,.hero img{width:100%}
+figure.hero{padding:0;max-width:none}
+.s{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,5fr) minmax(0,4fr);column-gap:clamp(20px,3vw,48px);row-gap:clamp(20px,2.5vw,32px);
+  padding-top:clamp(20px,2vw,28px);border-top:.75px solid var(--line);margin-top:clamp(80px,10vw,144px)}
+.num{grid-row:1 / span 2;font-family:var(--mono);font-size:12px;letter-spacing:-.04em;color:var(--accent)}
+.head{grid-column:2 / 4}
+.lbl{font-weight:300;font-size:clamp(28px,2.8vw,40px);letter-spacing:-.02em;line-height:1;text-transform:lowercase;margin-bottom:12px}
+.lead{font-size:clamp(15px,1.3vw,18px);line-height:1.5;max-width:38em}
+.fig{grid-column:2;align-self:start}
+.fig img{width:100%}
+.txt{grid-column:3}
+.txt.full,.fig.wide{grid-column:2 / 4}
+.txt>*+*{margin-top:clamp(20px,2.5vw,32px)}
+.def{display:grid;gap:16px}
+.def dd{margin-top:4px}
+.sub{margin-bottom:-14px}
+.req{list-style:none}
+.req li{padding:9px 0;border-bottom:.75px solid var(--line)}
+.areas{list-style:none;counter-reset:a}
+.areas li{display:grid;gap:2px;padding:12px 0;border-bottom:.75px solid var(--line);counter-increment:a}
+.areas b{font-weight:500;letter-spacing:-.01em}
+.areas b::before{content:counter(a,decimal-leading-zero);font-family:var(--mono);font-size:12px;letter-spacing:-.04em;color:var(--accent);margin-right:10px;font-weight:400}
+.areas span{color:var(--mute)}
+.ba{width:100%;border-collapse:collapse}
+.ba th{text-align:left;padding:0 0 8px;border-bottom:.75px solid var(--ink)}
+.ba td{padding:10px 14px 10px 0;border-bottom:.75px solid var(--line);vertical-align:top;width:50%}
+.ba td:first-child{color:var(--mute)}
+.ba td:last-child::before{content:'→';color:var(--accent);margin-right:8px}
+.specs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;border-top:.75px solid var(--line);padding-top:14px}
+.specs dd{font-weight:300;font-size:clamp(26px,2.6vw,36px);letter-spacing:-.03em;line-height:1.1;margin-top:6px}
+.next{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;margin-top:clamp(96px,12vw,176px);padding:20px 0 clamp(64px,8vw,112px);border-top:.75px solid var(--line)}
+.next a{font-weight:300;font-size:clamp(28px,3.4vw,48px);letter-spacing:-.02em;line-height:1.1;text-transform:lowercase;transition:opacity .2s}
+.next a:hover{opacity:.6}
+.next a span{display:block;font-family:var(--mono);font-size:12px;letter-spacing:-.04em;color:var(--mute);text-transform:none;margin-bottom:10px}
+.next a.back{font-family:var(--mono);font-size:12px;letter-spacing:-.04em;text-transform:none;border:.75px solid var(--ink);border-radius:2px;padding:11px 16px}
+.pg-f{display:flex;gap:24px;padding:0 var(--pad) 32px;font-family:var(--mono);font-size:12px;letter-spacing:-.04em;color:var(--mute)}
+@media (max-width:760px){
+  .meta,.specs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .s{grid-template-columns:1fr}
+  .num{grid-row:auto}
+  .head,.fig,.txt,.txt.full,.fig.wide{grid-column:1}
+}
 </style>
 </head>
 <body>
 
-<canvas id="c" aria-hidden="true"></canvas>
+<div class="home" id="home">
+<header class="top"><div class="logo">ziad addami<span>diseño industrial</span></div><a class="btn" href="mailto:contacto@ziadaddami.es">CONTACTO ↗</a></header>
 
-<div class="veil" aria-hidden="true"></div>
-<div class="cap" id="cap" aria-hidden="true"><span class="i"></span><span class="t"></span><span class="d"></span><span class="n"></span></div>
+<main>
+  <section class="stage" id="stage">
+    <div class="stick">
+      <canvas id="obj" aria-label="Estudio portátil: el escritorio se despliega al hacer scroll"></canvas>
+      <img class="still" data-img="estudio-out" alt="Estudio portátil montado">
+      <div class="st-t">
+        <h1>sistemas creativos y funcionales</h1>
+        <p>Diseñador industrial. Del problema al objeto, con método, ingeniería y forma.</p>
+      </div>
+      <span class="scroll mono">scroll ↓</span>
+      <div class="st-c">
+        <span class="mono">02 · estudio portátil</span>
+        <b>se despliega en segundos</b>
+        <a class="btn" href="#estudio" data-open>VER PROYECTO ↗</a>
+      </div>
+    </div>
+  </section>
 
-<div class="hud tl"><span>ZIAD ADDAMI</span><br><span class="m">DISEÑO INDUSTRIAL</span></div>
-<div class="hud tr"><span class="phi">φ = 1.6180339887…</span><br><span class="m">(a + b) / a = a / b</span></div>
-<div class="hud bl"><span id="depth">n = 0</span><br><span class="m" id="scale">1 : φ⁰ = 1.000</span></div>
-<div class="hud br"><a href="mailto:hola@ziadaddami.es">hola@ziadaddami.es</a><br><span class="m hint" id="hint">DESPLAZA ↓ PARA ENTRAR</span></div>
+  <nav class="work" aria-label="Proyectos">
+    <a class="card" href="#rampassist" data-open style="--h:0.62"><span class="im"><img data-img="obj-rampassist" alt="rampassist"></span><b>rampassist</b><span class="mono">01 · producto · movilidad</span></a>
+    <a class="card" href="#estudio" data-open style="--h:0.8"><span class="im"><img data-img="obj-estudio" alt="estudio portátil"></span><b>estudio portátil</b><span class="mono">02 · mobiliario · audio</span></a>
+    <a class="card" href="#plaza" data-open style="--h:1"><span class="im"><img data-img="obj-plaza" alt="plaza abierta"></span><b>plaza abierta</b><span class="mono">03 · arquitectura efímera · espacio público</span></a>
+  </nav>
 
-<!-- Contenido accesible / indexable -->
-<main class="sr">
-  <h1>Ziad Addami Ech Chaouy — Diseño industrial</h1>
-  <p>Diseñador industrial y cofundador de R11. Estudiante en la UPC · EPSEVG.</p>
-  <!-- Proyectos: añadir un <h2> por cada entrada de ITEMS -->
-  <h2>R11</h2><p>Estudio de diseño industrial dirigido con Efrain David Rondon: producto + espacio + experiencia.</p>
-  <h2>Contacto</h2><p><a href="mailto:hola@ziadaddami.es">hola@ziadaddami.es</a></p>
+  <dl class="about">
+    <div><dt>método</dt><dd>Cada proyecto se lee igual: lo que hay, lo que se decide, lo que cambia y lo que sale.</dd></div>
+    <div><dt>contacto</dt><dd><a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a><br><a href="https://www.linkedin.com/in/ziad-addami-3972b0280/" target="_blank" rel="noopener">linkedin</a></dd></div>
+    <div><dt>entidades</dt><dd>R11 · CloutNative · Blashgol</dd></div>
+  </dl>
 </main>
+
+</div>
+
+<div class="page" id="page" hidden>
+<div class="pg-bar"><a href="#" data-close>← PORTADA</a><a href="#" data-close>ziad addami</a></div>
+
+<article class="pg" id="rampassist">
+  <header class="pg-h">
+    <p class="k"><span class="no">01</span> Producto · Movilidad</p>
+    <h2 class="ttl">Rampassist</h2>
+    <p class="claim">Una ayuda motriz que lleva la silla de ruedas por la rampa, en subida y en bajada, sin que nadie empuje.</p>
+    <dl class="meta">
+      <div><dt>Año</dt><dd>2025</dd></div>
+      <div><dt>Tipo</dt><dd>Rediseño de producto</dd></div>
+      <div><dt>Ámbito</dt><dd>Accesibilidad urbana</dd></div>
+      <div><dt>Equipo</dt><dd>Proyecto en equipo</dd></div>
+    </dl>
+  </header>
+  <figure class="hero"><img data-img="rampassist-out" alt="Rampassist instalado junto a una rampa"></figure>
+
+  <section class="s"><div class="num">01</div>
+    <div class="head"><h3 class="lbl">In</h3><p class="lead">Subir una rampa en silla de ruedas sin ayuda agota el tren superior, y muchas rampas no cumplen la normativa. El punto de partida es una ayuda motriz que ya existe en el mercado.</p></div>
+    <figure class="fig"><img data-img="rampassist-in" alt="Usuario en silla de ruedas ante una rampa"></figure>
+    <div class="txt"><dl class="def">
+      <div><dt>Necesidad</dt><dd>Autonomía total en rampas, en los dos sentidos.</dd></div>
+      <div><dt>Usuario</dt><dd>Personas con movilidad reducida, sobre todo mayores de 65 años. Lo compran familias, administraciones y empresas.</dd></div>
+      <div><dt>Producto existente</dt><dd>Un sistema comercial de ayuda motriz para sillas de ruedas: el objeto que se rediseña.</dd></div>
+    </dl>
+    <h4 class="sub">Requisitos</h4>
+    <ul class="req"><li>150 kg y pendiente de hasta el 12 %</li><li>Sin obra, sobre las barandillas existentes</li><li>La silla nunca se levanta del suelo</li><li>2006/42/CE · UNE-EN 81-40 · ISO 9386-2</li></ul></div>
+  </section>
+
+  <section class="s"><div class="num">02</div>
+    <div class="head"><h3 class="lbl">Proceso</h3><p class="lead">Dos sistemas simples, tracción y brazo elevador, con lógica cableada y sin electrónica programable.</p></div>
+    <figure class="fig"><img data-img="rampassist-proceso" alt="Bocetos del conjunto"></figure>
+    <div class="txt"><ol class="areas">
+      <li><b>Mecánica</b><span>Carro de tracción sobre la barandilla y brazo elevador que acompaña la silla.</span></li>
+      <li><b>Materiales</b><span>Acero 4140T en el brazo, inox 304 en la carcasa, ganchos de PA66 y amortiguadores de goma. Comerciales, reciclables y modulares.</span></li>
+      <li><b>Resistencia</b><span>Acciones en subida y bajada; cálculo y FEA del eje del brazo.</span></li>
+      <li><b>Forma y uso</b><span>Volumen ortogonal, metal pulido y botonera con contraste. Interfaz analógica. No parece un aparato médico.</span></li>
+      <li><b>Negocio</b><span>Venta con instalación y mantenimiento. Coste 850 €, PVP 1.250 €.</span></li>
+    </ol></div>
+  </section>
+
+  <section class="s"><div class="num">03</div>
+    <div class="head"><h3 class="lbl">Iteración</h3><p class="lead">Maqueta 1:2 en PVC, perfil de acero y contrachapado. Lo que cambió el diseño:</p></div>
+    <figure class="fig"><img data-img="rampassist-iteracion" alt="Maqueta a escala 1:2"></figure>
+    <div class="txt"><table class="ba"><thead><tr><th>Antes</th><th>Después</th></tr></thead><tbody>
+      <tr><td>Cantos vivos</td><td>Todos los cantos redondeados</td></tr>
+      <tr><td>Carcasa de una pieza</td><td>Cuerpo y tapa, con acceso al interior</td></tr>
+      <tr><td>Pies rectos</td><td>Escuadras triangulares</td></tr>
+      <tr><td>Rodamientos</td><td>Guía prismática interior</td></tr>
+      <tr><td>Extremos abiertos</td><td>Tapas y topes de plástico</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section class="s"><div class="num">04</div>
+    <div class="head"><h3 class="lbl">Out</h3><p class="lead">Se fija junto a la rampa y se integra en la barandilla que ya existe. Discreto, sin obra y sin aspecto de aparato médico.</p></div>
+    <div class="txt full"><dl class="specs"><div><dt>Carga</dt><dd>150 kg</dd></div><div><dt>Pendiente</dt><dd>12 %</dd></div><div><dt>Velocidad</dt><dd>0,15 m/s</dd></div><div><dt>Instalación</dt><dd>Sin obra</dd></div></dl></div>
+  </section>
+  <nav class="next"><a href="#estudio"><span>Siguiente · 02</span>Estudio portátil →</a><a href="#" data-close class="back">← Volver a la portada</a></nav>
+</article>
+
+<article class="pg" id="estudio">
+  <header class="pg-h">
+    <p class="k"><span class="no">02</span> Mobiliario · Audio</p>
+    <h2 class="ttl">Estudio portátil</h2>
+    <p class="claim">Un escritorio plegable y un altavoz portátil diseñados como un solo sistema: un home studio que se monta en segundos y se guarda detrás de una puerta.</p>
+    <dl class="meta">
+      <div><dt>Año</dt><dd>2026</dd></div>
+      <div><dt>Tipo</dt><dd>Sistema de producto</dd></div>
+      <div><dt>Ámbito</dt><dd>Home studio</dd></div>
+      <div><dt>Estado</dt><dd>Concepto</dd></div>
+    </dl>
+  </header>
+  <figure class="hero"><img data-img="estudio-out" alt="Escritorio montado con dos altavoces en el raíl"></figure>
+
+  <section class="s"><div class="num">01</div>
+    <div class="head"><h3 class="lbl">In</h3><p class="lead">Los home studios se montan con piezas sueltas: una mesa genérica, monitores pesados que necesitan enchufe y una maraña de cables. Nada se mueve y nada se guarda.</p></div>
+    <figure class="fig"><img data-img="estudio-in" alt="Escritorio plegado contra la pared y altavoz en el suelo"></figure>
+    <div class="txt"><dl class="def">
+      <div><dt>Necesidad</dt><dd>Montar y desmontar un estudio en minutos sin perder sonido ni orden.</dd></div>
+      <div><dt>Usuario</dt><dd>Productores y creadores que trabajan en pisos pequeños o compartidos, y quien viaja.</dd></div>
+      <div><dt>Producto existente</dt><dd>Mesas plegables que ignoran el audio y altavoces Bluetooth hechos para escuchar, no para trabajar.</dd></div>
+    </dl>
+    <h4 class="sub">Requisitos</h4>
+    <ul class="req"><li>Plegado sin herramientas, en menos de un minuto</li><li>Plegado de 8 cm, cabe detrás de una puerta</li><li>Portátil, controlador de 49 teclas e interfaz</li><li>Altavoz con batería, en mano o anclado</li></ul></div>
+  </section>
+
+  <section class="s"><div class="num">02</div>
+    <div class="head"><h3 class="lbl">Proceso</h3><p class="lead">Un lenguaje común para las dos piezas: tubo curvado de radio amplio lacado en cobalto, y resina esmerilada que deja ver un núcleo de color.</p></div>
+    <figure class="fig"><img data-img="estudio-proceso" alt="Secuencia de plegado"></figure>
+    <div class="txt"><ol class="areas">
+      <li><b>Plegado</b><span>Cada lado es un solo tubo cerrado que hace de patas, pie y travesaño. Gira bajo el tablero y el estrecho se anida en el ancho.</span></li>
+      <li><b>Anclaje</b><span>Raíl trasero de tubo Ø40. El altavoz lo abraza con una pinza de medio tubo, se fija con imán y se carga por pogo pins.</span></li>
+      <li><b>Acústica</b><span>Caja cerrada con driver de 3" y tweeter, pensada para escuchar de cerca, en triángulo con el usuario.</span></li>
+      <li><b>Materiales</b><span>Tubo de acero lacado en cobalto y tablero de resina esmerilada con un núcleo cobalto embebido, que se lee difuso. Piezas planas, sin tornillería vista.</span></li>
+    </ol></div>
+  </section>
+
+  <section class="s"><div class="num">03</div>
+    <div class="head"><h3 class="lbl">Iteración</h3><p class="lead">Del boceto al sistema: cada decisión quita una pieza.</p></div>
+    <figure class="fig"><img data-img="estudio-iteracion" alt="Sección del raíl con el anclaje del altavoz"></figure>
+    <div class="txt"><table class="ba"><thead><tr><th>Antes</th><th>Después</th></tr></thead><tbody>
+      <tr><td>Cuatro patas con bisagra y pestillo</td><td>Un tubo cerrado por lado que gira y se anida</td></tr>
+      <tr><td>Soporte propio para cada altavoz</td><td>Un raíl común: pinza, imán y carga</td></tr>
+      <tr><td>Cables por el suelo</td><td>Cables por dentro del raíl</td></tr>
+      <tr><td>Asa añadida para transportarlo</td><td>El raíl hace de asa una vez plegado</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section class="s"><div class="num">04</div>
+    <div class="head"><h3 class="lbl">Out</h3><p class="lead">Se despliega en segundos y el altavoz pasa de la mano a la mesa. Juntos convierten cualquier rincón en un estudio.</p></div>
+    <figure class="fig wide"><img data-img="estudio-detalle" alt="Altavoz de resina esmerilada sobre el raíl, con el núcleo cobalto difuso"></figure>
+    <div class="txt full"><dl class="specs"><div><dt>Tablero</dt><dd>120 × 60 cm</dd></div><div><dt>Plegado</dt><dd>8 cm</dd></div><div><dt>Montaje</dt><dd>&lt; 1 min</dd></div><div><dt>Carga</dt><dd>40 kg</dd></div></dl></div>
+  </section>
+  <nav class="next"><a href="#plaza"><span>Siguiente · 03</span>Plaza abierta →</a><a href="#" data-close class="back">← Volver a la portada</a></nav>
+</article>
+
+<article class="pg" id="plaza">
+  <header class="pg-h">
+    <p class="k"><span class="no">03</span> Arquitectura efímera · Espacio público</p>
+    <h2 class="ttl">Plaza abierta</h2>
+    <p class="claim">Una familia de mini coworkings para la Plaza España: trabajar a la vista, con un café, en un objeto cuidado y coherente con la vía pública.</p>
+    <dl class="meta">
+      <div><dt>Año</dt><dd>2026</dd></div>
+      <div><dt>Tipo</dt><dd>Pabellones modulares</dd></div>
+      <div><dt>Lugar</dt><dd>Plaza España</dd></div>
+      <div><dt>Estado</dt><dd>Concepto</dd></div>
+    </dl>
+  </header>
+  <figure class="hero"><img data-img="plaza-out" alt="La plaza con los módulos instalados"></figure>
+
+  <section class="s"><div class="num">01</div>
+    <div class="head"><h3 class="lbl">In</h3><p class="lead">La plaza es un lugar de paso: mucha gente, bancos y arbolado, y ningún sitio donde quedarse a trabajar o a tomar algo con calma.</p></div>
+    <figure class="fig"><img data-img="plaza-in" alt="La plaza vacía"></figure>
+    <div class="txt"><dl class="def">
+      <div><dt>Necesidad</dt><dd>Puestos de trabajo puntuales en la calle, con café a mano, que se instalen sin obra.</dd></div>
+      <div><dt>Usuario</dt><dd>Quien trabaja en remoto, estudia o vive cerca. Y quien pasa, que también forma parte de la escena.</dd></div>
+      <div><dt>Producto existente</dt><dd>Quioscos y cabinas que se cierran sobre sí mismos y no dialogan con la plaza.</dd></div>
+    </dl>
+    <h4 class="sub">Requisitos</h4>
+    <ul class="req"><li>Transportable en camión: 2,4 m de ancho</li><li>Sin cimentación</li><li>Planta baja accesible</li><li>Un material y un color para toda la familia</li></ul></div>
+  </section>
+
+  <section class="s"><div class="num">02</div>
+    <div class="head"><h3 class="lbl">Proceso</h3><p class="lead">Una trama de 2,4 m: estructura de tubo lacado en cobalto y cerramientos de vidrio acanalado que se tiñe de cobalto hacia el suelo. Crece sin cambiar de lenguaje.</p></div>
+    <figure class="fig"><img data-img="plaza-proceso" alt="La familia de módulos en alzado"></figure>
+    <div class="txt"><ol class="areas">
+      <li><b>Cabina</b><span>2,4 × 2,4 m. Un puesto frente a una ventana grande.</span></li>
+      <li><b>Cabina + máquina</b><span>La misma cabina con una máquina de bebidas y snacks en resina esmerilada; el producto se intuye en cobalto.</span></li>
+      <li><b>Quiosco</b><span>4,8 × 2,4 m. Barra con toldo abatible y taburetes de tubo; terraza en cubierta.</span></li>
+      <li><b>Quiosco de dos plantas</b><span>Barra abajo, coworking arriba y terraza, con escalera de caracol.</span></li>
+    </ol></div>
+  </section>
+
+  <section class="s"><div class="num">03</div>
+    <div class="head"><h3 class="lbl">Iteración</h3><p class="lead">De un contenedor cerrado a un objeto que se deja mirar.</p></div>
+    <figure class="fig"><img data-img="plaza-iteracion" alt="Cabina a la altura de los ojos, con alguien trabajando"></figure>
+    <div class="txt"><table class="ba"><thead><tr><th>Antes</th><th>Después</th></tr></thead><tbody>
+      <tr><td>Esquinas vivas de chapa</td><td>Esquinas de tubo grueso</td></tr>
+      <tr><td>Cerramiento opaco de chapa</td><td>Vidrio acanalado: se intuye la actividad sin exponer a nadie</td></tr>
+      <tr><td>Ventana genérica</td><td>Banda de vidrio claro a la altura de quien trabaja</td></tr>
+      <tr><td>Escalera recta</td><td>Caracol: menos superficie de plaza ocupada</td></tr>
+      <tr><td>Barandilla de varios tubos</td><td>Un solo tubo continuo</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section class="s"><div class="num">04</div>
+    <div class="head"><h3 class="lbl">Out</h3><p class="lead">Quien pasa te ve trabajar con calma. La plaza gana un lugar donde quedarse.</p></div>
+    <div class="txt full"><dl class="specs"><div><dt>Trama</dt><dd>2,4 m</dd></div><div><dt>Tipos</dt><dd>4</dd></div><div><dt>Puestos</dt><dd>1 – 7</dd></div><div><dt>Cimentación</dt><dd>Ninguna</dd></div></dl></div>
+  </section>
+  <nav class="next"><a href="#rampassist"><span>Siguiente · 01</span>Rampassist →</a><a href="#" data-close class="back">← Volver a la portada</a></nav>
+</article>
+
+<footer class="pg-f"><a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a><a href="https://www.linkedin.com/in/ziad-addami-3972b0280/" target="_blank" rel="noopener">LinkedIn</a></footer>
+</div>
 
 <script>
 (() => {
-/* ------------------------------------------------------------------
-   Rectángulo áureo R = [0,φ]×[0,1] (y hacia abajo).
-   El cuadrado 0 es [0,1]×[0,1]; el resto de R es otro rectángulo áureo,
-   R1 = f(R), con f(z) = a·z + φ, a = i/φ (escala 1/φ, giro 90°).
-   Cada paso de scroll aplica f⁻¹ de forma continua: f^t, t ∈ ℝ.
-   Como la figura es autosemejante, t = n se ve igual que t = 0 → bucle infinito.
-
-   Cada paso n ocupa su rectángulo R_n con una imagen recortada para que la
-   construcción (cuadrados, líneas φ y ojo de la espiral) caiga sobre el objeto
-   (ver tools/golden_crop.py). Hay un recorte horizontal (φ:1) y otro vertical (1:φ).
-------------------------------------------------------------------- */
-const PHI = (1 + Math.sqrt(5)) / 2;
-const LN_PHI = Math.log(PHI);
-// Punto fijo de f (ojo de la espiral): O = φ / (1 − i/φ)
-const den = 1 + 1 / (PHI * PHI);
-const O = { x: PHI / den, y: 1 / den };
-
-const ITEMS = [
-  // Proyectos pendientes de definir: uno por paso, con img (img/<nombre>-l.webp y -p.webp, de tools/golden_crop.py) y note.
-  { t: 'ziad\naddami', d: 'diseño industrial · cofundador de R11', mark: true, fs: 0.3 },
-  { t: 'R11', d: 'Estudio de diseño industrial que dirijo con Efrain David Rondon. Producto + espacio + experiencia.', img: 'r11',
-    note: { L: 'La web de R11 es esta misma construcción, vista desde n = 0.', P: 'La web de R11 es esta misma construcción, vista desde n = 0.' } },
-  { t: 'Diseño, dibujo\ny construyo objetos.', d: 'Estudiante en la UPC · EPSEVG. CAD paramétrico, modelado 3D, maquetas y prototipos.', small: true },
-  { t: 'hola@ziadaddami.es', d: 'Proyectos, colaboraciones y prácticas', small: true },
-];
-for (const it of ITEMS) if (it.img) {
-  it.im = {};
-  for (const o of ['l', 'p']) { const im = new Image(); im.decoding = 'async'; im.onload = () => { dirty = true; }; im.src = `img/${it.img}-${o}.webp`; it.im[o] = im; }
+/* Portada larga (bio, índice y una fila por proyecto) y una página por proyecto: #rampassist, #estudio, #plaza. */
+const srcOf = f => `img/${f}.webp`;
+const page = document.getElementById('page');
+function load(root) { for (const im of root.querySelectorAll('img[data-img]')) if (!im.src) { im.decoding = 'async'; im.src = srcOf(im.dataset.img); } }
+load(document.getElementById('home'));
+setTimeout(() => { const st = document.getElementById('stage'); if (!st.classList.contains('live')) st.classList.add('nogl'); }, 5000);   // sin WebGL o sin red: imagen fija
+let homeY = 0;
+function route(force) {
+  const id = force !== undefined ? force : location.hash.slice(1), art = id && document.getElementById(id);
+  const open = !!(art && art.classList.contains('pg') && art.tagName === 'ARTICLE');
+  if (open && page.hidden) homeY = scrollY;
+  page.hidden = !open;
+  document.body.classList.toggle('locked', open);
+  for (const a of page.querySelectorAll('article.pg')) a.hidden = a !== art;
+  if (open) { load(art); page.scrollTop = 0; document.title = art.querySelector('.ttl').textContent + ' — Ziad Addami'; }
+  else { document.title = 'Ziad Addami — Diseño industrial'; scrollTo(0, homeY); }
 }
-let dirty = true;
-const mod = n => ((n % ITEMS.length) + ITEMS.length) % ITEMS.length;
-const itemAt = n => ITEMS[mod(n)];
-
-const SUP = { '-': '⁻', 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹' };
-const sup = n => String(n).split('').map(c => SUP[c]).join('');
-const phiPow = n => n === 0 ? '1' : 'φ' + sup(-n);   // lado del cuadrado n = φ⁻ⁿ
-const smooth = (x, a, b) => { const u = Math.min(1, Math.max(0, (x - a) / (b - a))); return u * u * (3 - 2 * u); };
-
-const cv = document.getElementById('c');
-const ctx = cv.getContext('2d');
-const css = getComputedStyle(document.documentElement);
-const PAPER = css.getPropertyValue('--paper').trim();
-const INK = css.getPropertyValue('--ink').trim();
-const MUTE = css.getPropertyValue('--mute').trim();
-const RED = css.getPropertyValue('--red').trim();
-const MONO = css.getPropertyValue('--mono').trim();
-const SANS = '"Inter Tight", Helvetica, Arial, sans-serif';
-
-const cap = document.getElementById('cap');
-const capI = cap.querySelector('.i'), capT = cap.querySelector('.t'), capD = cap.querySelector('.d'), capN = cap.querySelector('.n');
-const depth = document.getElementById('depth');
-const scale = document.getElementById('scale');
-const hint = document.getElementById('hint');
-
-let W = 0, H = 0, DPR = 1, view = null;
-
-function resize() {
-  DPR = Math.min(devicePixelRatio || 1, 2);
-  W = innerWidth; H = innerHeight;
-  cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
-  const portrait = H > W;
-  const rho = portrait ? -Math.PI / 2 : 0;              // en vertical giramos el rectángulo
-  // el rectángulo áureo cubre toda la pantalla (como background-size: cover)
-  const k = portrait ? Math.max(W, H / PHI) : Math.max(W / PHI, H);
-  view = { k, rho, portrait, cr: Math.cos(rho), sr: Math.sin(rho), cx: W / 2, cy: H / 2 };
+function openPage(id) { try { location.hash = id; } catch (e) {} route(id); }
+function closePage() {        // vuelve a la portada aunque el historial no se pueda tocar (iframes, file://)
+  try { history.pushState(null, '', location.pathname + location.search); } catch (e) { try { location.hash = ''; } catch (_) {} }
+  route('');
 }
-
-// Mundo → pantalla para la capa m (m = n − t): z ↦ C + k·e^{iρ}·(O + (z−O)·φ^{−m}·e^{iπm/2} − c_R)
-function maker(m) {
-  const s = Math.exp(-m * LN_PHI), th = m * Math.PI / 2;
-  const c = Math.cos(th) * s, sn = Math.sin(th) * s;
-  const { k, cr, sr, cx, cy } = view;
-  return (x, y) => {
-    const dx = x - O.x, dy = y - O.y;
-    const wx = O.x + c * dx - sn * dy - PHI / 2;
-    const wy = O.y + sn * dx + c * dy - 0.5;
-    return [cx + k * (cr * wx - sr * wy), cy + k * (sr * wx + cr * wy)];
-  };
-}
-
-function rectPath(P) {
-  ctx.moveTo(...P(0, 0)); ctx.lineTo(...P(PHI, 0)); ctx.lineTo(...P(PHI, 1)); ctx.lineTo(...P(0, 1)); ctx.closePath();
-}
-
-function wrap(text, maxW) {
-  const out = [];
-  for (const para of text.split('\n')) {
-    let line = '';
-    for (const w of para.split(' ')) {
-      const t = line ? line + ' ' + w : w;
-      if (ctx.measureText(t).width > maxW && line) { out.push(line); line = w; } else line = t;
-    }
-    out.push(line);
-  }
-  return out;
-}
-
-// Imagen (o papel) del paso n llenando su rectángulo R_n; queda recta cuando R_n llena el marco
-function drawStep(j, frac, alpha) {
-  if (alpha <= 0.002) return false;
-  const m = j - frac, item = itemAt(Math.floor(t) + j);
-  const side = view.k * Math.exp(-m * LN_PHI);
-  const [cx, cy] = maker(m)(PHI / 2, 0.5);
-  const w = view.portrait ? side : side * PHI, h = view.portrait ? side * PHI : side;
-  ctx.save();
-  ctx.globalAlpha = alpha;
-  ctx.translate(cx, cy); ctx.rotate(m * Math.PI / 2);
-  const im = item.im && item.im[view.portrait ? 'p' : 'l'];
-  if (im && im.complete && im.naturalWidth) ctx.drawImage(im, -w / 2, -h / 2, w, h);
-  else { ctx.fillStyle = PAPER; ctx.fillRect(-w / 2, -h / 2, w, h); }
-  ctx.restore();
-  return !!im;
-}
-
-// Texto grande solo en los pasos sin imagen (marca, fundadores, contacto)
-function drawText(j, frac, al) {
-  const n = Math.floor(t) + j, item = itemAt(n);
-  if (item.img || al <= 0.01) return;
-  const m = j - frac;
-  // en móvil el cuadrado es más ancho que la pantalla: el texto se ajusta a la parte visible
-  const side = view.k * Math.exp(-m * LN_PHI) * Math.min(1, (view.portrait ? W : W / PHI) / view.k);
-  const [cx, cy] = maker(m)(0.5, 0.5);
-  ctx.save();
-  ctx.globalAlpha = al;
-  ctx.translate(cx, cy); ctx.rotate(m * Math.PI / 2);
-  ctx.translate(-side / 2, -side / 2);
-  const pad = side * 0.075;
-  ctx.fillStyle = INK; ctx.textBaseline = 'alphabetic';
-  const fs = side * (item.fs || (item.mark ? 0.46 : item.small ? 0.075 : 0.13));
-  ctx.font = `${item.mark ? 200 : 300} ${fs}px ${SANS}`;
-  if ('letterSpacing' in ctx) ctx.letterSpacing = `${-fs * (item.mark ? 0.07 : 0.045)}px`;
-  const lines = wrap(item.t, side - pad * 2);
-  const lh = fs * (item.mark ? 0.9 : 1.0);
-  let y = side * (item.mark ? 0.66 : 0.6) - (lines.length - 1) * lh;
-  for (const l of lines) { ctx.fillText(l, pad - (item.mark ? fs * 0.04 : 0), y); y += lh; }
-  if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
-  const ds = side * (item.mark ? 0.05 : 0.034);
-  if (ds >= 8) {
-    ctx.font = `300 ${ds}px ${SANS}`;
-    ctx.fillStyle = item.mark ? INK : MUTE;
-    let dy = side * (item.mark ? 0.8 : 0.72);
-    for (const l of wrap(item.d, side * 0.7)) { ctx.fillText(l, pad, dy); dy += ds * 1.35; }
-  }
-  ctx.restore();
-}
-
-function strokeSquares(frac) {
-  for (let j = -2; j < 26; j++) {
-    const m = j - frac, P = maker(m);
-    if (view.k * Math.exp(-m * LN_PHI) < 1.2) break;
-    ctx.moveTo(...P(0, 0)); ctx.lineTo(...P(1, 0)); ctx.lineTo(...P(1, 1)); ctx.lineTo(...P(0, 1)); ctx.closePath();
-  }
-}
-
-let t = 0, target = 0, lastCap = null;
-
-function draw() {
-  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  ctx.fillStyle = PAPER; ctx.fillRect(0, 0, W, H);
-  const base = Math.floor(t), frac = t - base;
-  const hair = DPR >= 2 ? 0.75 : 1;
-
-  // --- imágenes: la actual se va al entrar en R_{n+1}; la siguiente aparece dentro de R_{n+1} ---
-  const a0 = 1 - smooth(frac, 0.55, 1), a1 = smooth(frac, 0.2, 0.85);
-  const img0 = drawStep(0, frac, a0);
-  const img1 = drawStep(1, frac, a1);
-
-  // --- cuadrados: blancos sobre la imagen, tinta sobre el papel ---
-  const onImg = img0 ? a0 : 0;
-  ctx.lineWidth = hair;
-  ctx.save();
-  ctx.beginPath(); ctx.rect(0, 0, W, H); rectPath(maker(-frac)); ctx.clip('evenodd');
-  ctx.beginPath(); strokeSquares(frac); ctx.strokeStyle = INK; ctx.stroke();
-  ctx.restore();
-  ctx.save();
-  ctx.beginPath(); rectPath(maker(-frac)); ctx.clip();
-  ctx.beginPath(); strokeSquares(frac);
-  if (onImg > 0.01 || img1) {
-    ctx.shadowColor = 'rgba(0,0,0,.45)'; ctx.shadowBlur = 3;
-    ctx.strokeStyle = `rgba(255,255,255,${0.9 * Math.max(onImg, img1 ? a1 : 0)})`; ctx.stroke();
-    ctx.shadowBlur = 0;
-  }
-  ctx.globalAlpha = 1 - Math.max(onImg, img1 ? a1 : 0);
-  ctx.strokeStyle = INK; ctx.stroke();
-  ctx.restore();
-
-  // --- espiral áurea: un cuarto de circunferencia por cuadrado ---
-  ctx.strokeStyle = RED; ctx.lineWidth = hair * 1.4;
-  ctx.beginPath();
-  let first = true;
-  for (let j = -2; j < 26; j++) {
-    const m = j - frac, P = maker(m);
-    if (view.k * Math.exp(-m * LN_PHI) < 0.6) break;
-    for (let i = 0; i <= 24; i++) {            // arco centrado en (1,1), de (0,1) a (1,0)
-      const a = Math.PI + (i / 24) * Math.PI / 2;
-      const [x, y] = P(1 + Math.cos(a), 1 + Math.sin(a));
-      if (first) { ctx.moveTo(x, y); first = false; } else ctx.lineTo(x, y);
-    }
-  }
-  ctx.stroke();
-
-  // --- texto de los pasos sin imagen ---
-  drawText(0, frac, 1 - smooth(frac, 0, 0.45));
-  drawText(1, frac, smooth(frac, 0.55, 1));
-
-  // --- cotas del rectángulo actual: φ y 1 ---
-  {
-    const P = maker(-frac), al = Math.max(0, 1 - frac * 2.5);
-    if (al > 0) {
-      ctx.globalAlpha = al;
-      ctx.font = `400 11px ${MONO}`; ctx.fillStyle = MUTE; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText('φ', ...P(PHI / 2, -0.04));
-      if (!view.portrait) ctx.fillText('1', ...P(-0.04, 0.5));
-      ctx.textAlign = 'left'; ctx.globalAlpha = 1;
-    }
-  }
-
-  // --- ojo de la espiral: marca qué detalle del objeto justifica ---
-  const n = Math.round(t), cur = itemAt(n);
-  const capA = Math.max(0, 1 - Math.abs(t - n) * 2.4);
-  if (cur.eye && capA > 0.01) {
-    const [ex, ey] = maker(0)(O.x, O.y);
-    ctx.save();
-    ctx.globalAlpha = capA;
-    ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 3;
-    ctx.strokeStyle = '#fff'; ctx.fillStyle = '#fff'; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.arc(ex, ey, 9, 0, Math.PI * 2); ctx.stroke();
-    const dir = ex + 190 > W ? -1 : 1;           // la etiqueta no se sale de la pantalla
-    ctx.beginPath(); ctx.moveTo(ex + 7 * dir, ey - 7); ctx.lineTo(ex + 34 * dir, ey - 34); ctx.lineTo(ex + 44 * dir, ey - 34); ctx.stroke();
-    ctx.font = `400 11px ${MONO}`; ctx.textBaseline = 'middle'; ctx.textAlign = dir > 0 ? 'left' : 'right';
-    ctx.fillText(`ojo φ · ${cur.eye}`, ex + 50 * dir, ey - 34);
-    ctx.restore();
-  }
-
-  // --- pie de foto (DOM) y HUD ---
-  if (lastCap !== n) {
-    lastCap = n;
-    const i = mod(n);
-    capI.textContent = `${String(i + 1).padStart(2, '0')} / ${String(ITEMS.length).padStart(2, '0')} · R${sub(n)} · lado ${phiPow(n)}`;
-    capT.textContent = cur.img ? cur.t : '';
-    capD.textContent = cur.img ? cur.d : '';
-    capN.textContent = cur.note ? '↳ ' + cur.note[view.portrait ? 'P' : 'L'] : '';
-  }
-  cap.style.opacity = capA;
-  document.body.classList.toggle('on-img', !!cur.img);
-  depth.textContent = `n = ${n}`;
-  scale.textContent = `1 : φ${sup(n)} = ${Math.pow(PHI, t).toPrecision(5)}`;
-}
-
-const SUB = { '-': '₋', 0: '₀', 1: '₁', 2: '₂', 3: '₃', 4: '₄', 5: '₅', 6: '₆', 7: '₇', 8: '₈', 9: '₉' };
-const sub = n => String(n).split('').map(c => SUB[c]).join('');
-
-/* ------------------------------------------------------------------
-   Scroll virtual: rueda, teclado y gesto táctil mueven t.
-   Al soltar, se asienta en el paso más cercano.
-------------------------------------------------------------------- */
-let idle = 0;
-const push = d => { target += d; idle = performance.now(); hint.classList.add('off'); };
-addEventListener('wheel', e => {
-  e.preventDefault();
-  const px = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * H : e.deltaY;
-  push(Math.max(-0.5, Math.min(0.5, px / 900)));
-}, { passive: false });
-let ty = null;
-addEventListener('touchstart', e => { ty = e.touches[0].clientY; }, { passive: true });
-addEventListener('touchmove', e => {
-  if (ty == null) return;
-  const y = e.touches[0].clientY; push((ty - y) / (H * 0.55)); ty = y;
-}, { passive: true });
-addEventListener('touchend', () => { ty = null; }, { passive: true });
-addEventListener('keydown', e => {
-  if (['ArrowDown', 'PageDown', ' ', 'ArrowRight'].includes(e.key)) { e.preventDefault(); target = Math.round(target) + 1; idle = 0; hint.classList.add('off'); }
-  if (['ArrowUp', 'PageUp', 'ArrowLeft'].includes(e.key)) { e.preventDefault(); target = Math.round(target) - 1; idle = 0; }
-  if (e.key === 'Home') { target = 0; idle = 0; }
-});
-
-const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-function loop(now) {
-  if (idle && now - idle > 450) { target = Math.round(target); idle = 0; }
-  const diff = target - t;
-  const moving = Math.abs(diff) >= 1e-4;
-  t = moving ? t + diff * (reduce ? 0.35 : 0.085) : target;
-  if (moving || dirty) { draw(); dirty = false; }   // quieto: no se redibuja
-  requestAnimationFrame(loop);
-}
-
-addEventListener('resize', () => { resize(); lastCap = null; dirty = true; });
-if (document.fonts) document.fonts.ready.then(() => { dirty = true; });
-resize();
-requestAnimationFrame(loop);
+for (const a of document.querySelectorAll('[data-open], .next a:not(.back)')) a.addEventListener('click', e => { e.preventDefault(); openPage(a.getAttribute('href').slice(1)); });
+for (const a of page.querySelectorAll('[data-close]')) a.addEventListener('click', e => { e.preventDefault(); closePage(); });
+addEventListener('keydown', e => { if (e.key === 'Escape' && !page.hidden) closePage(); });
+addEventListener('hashchange', () => route());
+route();
 })();
 </script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+<script type="module">
+/* Objeto vivo de la portada: el escritorio de «Estudio portátil» se despliega con el scroll
+   y el conjunto gira con el ratón. Unidades: cm; ejes de diseño (x largo, y fondo, z alto) -> three (x, z, y). */
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+const stage = document.getElementById('stage'), cv = document.getElementById('obj');
+let renderer;
+try { renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true }); }
+catch (e) { stage.classList.add('nogl'); throw e; }
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.95;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#ffffff');   // la resina refracta el fondo: blanco, como la página
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.6;
+
+const V = (x, y, z) => new THREE.Vector3(x, z, y);
+const COBALT = new THREE.MeshPhysicalMaterial({ color: '#1f3fd1', roughness: 0.3, clearcoat: 1, clearcoatRoughness: 0.1 });
+const FROST = new THREE.MeshPhysicalMaterial({ color: '#f3f5fb', roughness: 0.3, transmission: 1, thickness: 3, ior: 1.49 });    // resina esmerilada
+const CORE = new THREE.MeshStandardMaterial({ color: '#1430d6', roughness: 0.6 });
+const CONE = new THREE.MeshStandardMaterial({ color: '#0a1458', roughness: 0.9, side: THREE.DoubleSide });
+const RUBBER = new THREE.MeshStandardMaterial({ color: '#2a2b30', roughness: 0.7 });                                            // núcleo que se ve difuso
+const ALU = new THREE.MeshStandardMaterial({ color: '#c3c5c8', roughness: 0.35, metalness: 0.8 });
+const INK = new THREE.MeshStandardMaterial({ color: '#16171a', roughness: 0.5 });
+const mesh = (g, m) => { const o = new THREE.Mesh(g, m); o.castShadow = o.receiveShadow = true; return o; };
+
+function filletPath(pts, r, closed) {
+  const P = pts.map(p => V(...p)), out = [], n = P.length;
+  const idx = closed ? [...Array(n).keys()] : [...Array(n).keys()].slice(1, -1);
+  if (!closed) out.push(P[0]);
+  for (const i of idx) {
+    const a = P[(i - 1 + n) % n], b = P[i], c = P[(i + 1) % n];
+    const u = b.clone().sub(a), v = c.clone().sub(b), rr = Math.min(r, u.length() / 2, v.length() / 2);
+    out.push(...new THREE.QuadraticBezierCurve3(b.clone().sub(u.normalize().multiplyScalar(rr)), b, b.clone().add(v.normalize().multiplyScalar(rr))).getPoints(16));
+  }
+  if (!closed) out.push(P[n - 1]);
+  return out;
+}
+function tube(pts, radius, r, closed = false) {
+  const path = new THREE.CatmullRomCurve3(filletPath(pts, r, closed), closed, 'catmullrom', 0), g = new THREE.Group();
+  g.add(mesh(new THREE.TubeGeometry(path, 300, radius, 24, closed), COBALT));
+  if (!closed) for (const t of [0, 1]) { const s = mesh(new THREE.SphereGeometry(radius, 24, 12), COBALT); s.position.copy(path.getPoint(t)); g.add(s); }
+  return g;
+}
+function speaker() {
+  const g = new THREE.Group();
+  const b = mesh(new RoundedBoxGeometry(12, 18, 13, 6, 2.4), FROST); b.position.set(0, 9, 0); g.add(b);
+  const cyl = (r, d, y, z, m = CORE) => { const o = mesh(new THREE.CylinderGeometry(r, r, d, 48), m); o.rotation.x = Math.PI / 2; o.position.set(0, y, z); g.add(o); return o; };
+  const ring = (r, t, y, m) => { const o = mesh(new THREE.TorusGeometry(r, t, 16, 64), m); o.scale.z = 0.4; o.position.set(0, y, 6.55); g.add(o); };
+  const ball = (r, y, z, m) => { const o = mesh(new THREE.SphereGeometry(r, 32, 16), m); o.scale.z = 0.55; o.position.set(0, y, z); g.add(o); };
+  cyl(2.2, 3, 7.2, 3); cyl(3, 5, 7.2, -2.5);                             // imán y cámara, difusos dentro de la resina
+  ring(4, 0.5, 7.2, COBALT); ring(3.4, 0.32, 7.2, RUBBER);                // aro lacado y suspensión
+  const cone = mesh(new THREE.CylinderGeometry(3.2, 1, 1.9, 48, 1, true), CONE); cone.rotation.x = Math.PI / 2; cone.position.set(0, 7.2, 5.6); g.add(cone);
+  ball(1.1, 7.2, 4.9, CONE);                                              // cubrepolvo
+  ring(1.6, 0.35, 14.6, COBALT); ball(1.1, 14.6, 6.5, RUBBER);            // tweeter de cúpula textil
+  cyl(0.9, 0.3, 2, 6.45, RUBBER);                                         // puerto réflex
+  return g;
+}
+function laptop() {
+  const g = new THREE.Group();
+  const base = mesh(new RoundedBoxGeometry(31, 1.2, 21, 3, 0.5), ALU); base.position.y = 0.6; g.add(base);
+  const hinge = new THREE.Group(); hinge.position.set(0, 1.2, -10.5); g.add(hinge);
+  const lid = mesh(new RoundedBoxGeometry(31, 21, 0.8, 3, 0.4), ALU); lid.position.y = 10.5; hinge.add(lid);
+  const scr = mesh(new THREE.PlaneGeometry(28.5, 18.5), INK); scr.position.set(0, 10.8, 0.45); hinge.add(scr);
+  g.hinge = hinge; return g;
+}
+
+// escritorio en coordenadas de diseño, centrado en el origen
+const desk = new THREE.Group(), inner = new THREE.Group(); desk.add(inner); inner.position.copy(V(-60, -30, 0));
+const legA = tube([[0, 6, 1.5], [0, 6, 70.5], [0, 58, 70.5], [0, 58, 1.5]], 1.5, 9, true);
+const legB = tube([[0, 10, 1.5], [0, 10, 70.5], [0, 54, 70.5], [0, 54, 1.5]], 1.5, 9, true);
+const pA = new THREE.Group(), pB = new THREE.Group();
+pA.position.copy(V(8, 0, 70.5)); legA.position.copy(V(0, 0, -70.5)); pA.add(legA);
+pB.position.copy(V(112, 0, 70.5)); legB.position.copy(V(0, 0, -70.5)); pB.add(legB);
+const top = mesh(new RoundedBoxGeometry(120, 4.5, 60, 3, 0.8), FROST); top.position.copy(V(60, 30, 73.5));
+const core = mesh(new THREE.BoxGeometry(78, 1, 30), CORE); core.position.copy(V(60, 32, 73.5));
+const rail = tube([[-3, 2, 73.6], [123, 2, 73.6]], 2, 1);
+inner.add(pA, pB, top, core, rail);
+for (const x of [20, 100]) { const c = mesh(new THREE.BoxGeometry(3, 1.6, 3), COBALT); c.position.copy(V(x, 3.6, 73)); inner.add(c); }
+const spk = [speaker(), speaker()], spkX = [18, 102];
+spk.forEach((s, i) => inner.add(s));
+const lap = laptop(); lap.position.copy(V(56, 38, 73.8)); inner.add(lap);
+scene.add(desk);
+
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(800, 800), new THREE.ShadowMaterial({ opacity: 0.1 }));
+floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
+const sun = new THREE.DirectionalLight('#fff6ea', 2.3); sun.position.set(-120, 260, 160); sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048); sun.shadow.radius = 8; sun.shadow.bias = -0.0004;
+Object.assign(sun.shadow.camera, { left: -150, right: 150, top: 150, bottom: -150, near: 1, far: 700 });
+scene.add(sun, new THREE.HemisphereLight('#ffffff', '#d8d4cc', 0.7));
+const cam = new THREE.PerspectiveCamera(28, 1, 1, 3000);
+
+const ease = u => u < 0 ? 0 : u > 1 ? 1 : u * u * (3 - 2 * u);
+const seg = (p, a, b) => ease((p - a) / (b - a));
+function pose(p) {                          // p: 0 plegado -> 1 montado con los altavoces en el raíl
+  const u = seg(p, 0.05, 0.5), th = (1 - u) * Math.PI / 2 * 0.985;
+  pA.rotation.z = th; pB.rotation.z = -th; pB.position.y = 70.5 - 3.2 * (1 - u);
+  const low = 70.5 - Math.max(69 * Math.cos(th), 0) - 1.5 - (1 - u) * 3.2;
+  desk.position.y = -low;
+  lap.visible = u > 0.98; lap.hinge.rotation.x = -0.26 - (1 - seg(p, 0.5, 0.64)) * 1.3;
+  spk.forEach((s, i) => {
+    const d = seg(p, 0.56 + i * 0.08, 0.74 + i * 0.08);
+    s.visible = d > 0.001;
+    s.position.copy(V(spkX[i], 1.5, 75.6 + (1 - d) * 60)); s.rotation.y = (1 - d) * (i ? -1.2 : 1.2);
+  });
+}
+
+let W = 0, H = 0, mx = 0, my = 0, rx = 0, ry = 0, p = 0, pt = 0, dirty = true;
+function size() {
+  W = cv.clientWidth; H = cv.clientHeight; renderer.setSize(W, H, false);
+  cam.aspect = W / H; const far = W / H < 1 ? 820 : 400;
+  cam.position.set(far * 0.42, far * 0.48, far * 0.78); cam.lookAt(0, W / H < 1 ? 24 : 34, 0); cam.updateProjectionMatrix(); dirty = true;
+}
+function progress() { const r = stage.getBoundingClientRect(); return Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight))); }
+addEventListener('resize', size); addEventListener('scroll', () => { pt = progress(); dirty = true; }, { passive: true });
+addEventListener('pointermove', e => { mx = e.clientX / innerWidth * 2 - 1; my = e.clientY / innerHeight * 2 - 1; dirty = true; }, { passive: true });
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+size(); pt = progress(); p = reduce ? 1 : pt;
+stage.classList.add('live');
+(function loop(t) {
+  const idle = Math.sin(t / 2600) * 0.12;                         // respira aunque no se toque
+  const ty = -0.55 + mx * 0.45 + (reduce ? 0 : idle), tx = my * 0.05;
+  p += (pt - p) * 0.12; ry += (ty - ry) * 0.06; rx += (tx - rx) * 0.06;
+  desk.rotation.y = ry; desk.rotation.x = rx;
+  pose(reduce ? 1 : p);
+  if (!document.body.classList.contains('locked')) renderer.render(scene, cam);   // con un proyecto abierto no se dibuja
+  document.documentElement.style.setProperty('--p', p.toFixed(3));
+  requestAnimationFrame(loop);
+})(0);
+</script>
+
 </body>
 </html>
