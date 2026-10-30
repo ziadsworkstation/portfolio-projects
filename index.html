@@ -49,7 +49,7 @@ footer .big{font-size:clamp(18px,1.7vw,24px);letter-spacing:-.02em;line-height:1
     </ul>
     <ul class="idx" aria-label="Proyectos">
       <li data-img="rampassist"><a href="#rampassist">Rampassist, <em>Producto</em></a></li>
-      <li data-img="estudio" class="on"><a href="#estudio">Estudio portátil, <em>Mobiliario y audio</em></a></li>
+      <li data-img="estudio"><a href="#estudio">Estudio portátil, <em>Mobiliario y audio</em></a></li>
       <li data-img="plaza"><a href="#plaza">Plaza abierta, <em>Espacio público</em></a></li>
     </ul>
     <figure><img id="shot" alt=""></figure>
@@ -59,18 +59,20 @@ footer .big{font-size:clamp(18px,1.7vw,24px);letter-spacing:-.02em;line-height:1
 <script>
 const srcOf = f => `img/${f}.webp`;
 const shot = document.getElementById('shot'), items = [...document.querySelectorAll('.idx li')];
-const ALT = { rampassist: 'Rampassist en uso, junto a la entrada de un comercio', estudio: 'Altavoz del Estudio portátil', plaza: 'Cabina de Plaza abierta en la calle' };
-items.forEach(li => { const i = new Image(); i.src = srcOf(li.dataset.img); });   // precarga
-function show(li) {
+const ALT = { retrato: 'Retrato de Ziad Addami', rampassist: 'Rampassist en uso, junto a la entrada de un comercio', estudio: 'Altavoz del Estudio portátil', plaza: 'Cabina de Plaza abierta en la calle' };
+['retrato', ...items.map(li => li.dataset.img)].forEach(k => { const i = new Image(); i.src = srcOf(k); });   // precarga
+function show(li) {                                   // sin proyecto: el retrato
+  const k = li ? li.dataset.img : 'retrato';
   items.forEach(x => x.classList.toggle('on', x === li));
-  shot.src = srcOf(li.dataset.img); shot.alt = ALT[li.dataset.img];
+  shot.src = srcOf(k); shot.alt = ALT[k];
 }
+document.querySelector('.idx').addEventListener('mouseleave', () => show(null));
 items.forEach(li => {
   li.addEventListener('mouseenter', () => show(li));
   li.querySelector('a').addEventListener('focus', () => show(li));
   li.querySelector('a').addEventListener('click', e => { e.preventDefault(); show(li); try { history.replaceState(null, '', '#' + li.dataset.img); } catch (_) {} });
 });
-show(items.find(li => '#' + li.dataset.img === location.hash) || items.find(li => li.classList.contains('on')));
+show(items.find(li => '#' + li.dataset.img === location.hash) || null);
 </script>
 </body>
 </html>

@@ -7,6 +7,7 @@ from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PORTRAITS = {   # nombre en la web -> (original en fuentes/, centro horizontal del recorte 0..1)
+    'retrato': ('retrato.jpg', 0.50),
     'rampassist': ('rampassist-in.jpg', 0.70),
     'estudio': ('estudio-detalle.jpg', 0.44),
     'plaza': ('plaza-calle.jpg', 0.49),
