@@ -1,0 +1,153 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>render estudio portátil</title>
+<style>html,body{margin:0;background:#000}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+</head><body>
+<script type="module">
+/* Render de «Estudio portátil». Unidades: cm. Ejes de diseño (x largo, y fondo, z alto)
+   -> three (x, z, y). ?view=open|folded&w=..&h=.. ; window.done = true al terminar. */
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+const q = new URLSearchParams(location.search);
+const VIEW = q.get('view') || 'open', W = +q.get('w') || 1600, H = +q.get('h') || 1000;
+const V = (x, y, z) => new THREE.Vector3(x, z, y);
+
+const CUT = q.get('cut') === '1';   // sin pared ni suelo: objeto recortado con su sombra
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: CUT });
+renderer.setSize(W, H); renderer.setPixelRatio(1);
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.92;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#f4f3f0');
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.55;
+
+// textura cruda de yeso para la pared (ruido suave a mano, sin imágenes externas)
+function plaster(seed = 7) {
+  const c = document.createElement('canvas'); c.width = c.height = 1024;
+  const g = c.getContext('2d'); g.fillStyle = '#efeeea'; g.fillRect(0, 0, 1024, 1024);
+  let s = seed; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 1400; i++) {
+    const x = rnd() * 1024, y = rnd() * 1024, r = 6 + rnd() * 90, a = 0.012 + rnd() * 0.03;
+    const gr = g.createRadialGradient(x, y, 0, x, y, r);
+    const t = rnd() < .5 ? '120,112,100' : '250,248,242';
+    gr.addColorStop(0, `rgba(${t},${a})`); gr.addColorStop(1, `rgba(${t},0)`);
+    g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+  }
+  const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace;
+  tx.wrapS = tx.wrapT = THREE.RepeatWrapping; tx.repeat.set(2, 1); return tx;
+}
+
+const COBALT = new THREE.MeshPhysicalMaterial({ color: '#1f3fd1', roughness: 0.32, clearcoat: 1, clearcoatRoughness: 0.12 });
+const COBALT_DK = new THREE.MeshPhysicalMaterial({ color: '#0f1f6e', roughness: 0.6 });
+const BIRCH = new THREE.MeshStandardMaterial({ color: '#e2cfa8', roughness: 0.85 });
+const ALU = new THREE.MeshStandardMaterial({ color: '#b9bbbe', roughness: 0.35, metalness: 0.8 });
+const INKM = new THREE.MeshStandardMaterial({ color: '#16171a', roughness: 0.5 });
+
+function mesh(geo, mat) { const m = new THREE.Mesh(geo, mat); m.castShadow = m.receiveShadow = true; return m; }
+
+// polilínea con esquinas redondeadas -> tubo
+function filletPath(pts, r, closed = false) {
+  const P = pts.map(p => V(...p)); const out = [];
+  const n = P.length, idx = closed ? [...Array(n).keys()] : [...Array(n).keys()].slice(1, -1);
+  if (!closed) out.push(P[0]);
+  for (const i of idx) {
+    const a = P[(i - 1 + n) % n], b = P[i], c = P[(i + 1) % n];
+    const u = b.clone().sub(a), v = c.clone().sub(b);
+    const rr = Math.min(r, u.length() / 2, v.length() / 2);
+    const p0 = b.clone().sub(u.normalize().multiplyScalar(rr)), p2 = b.clone().add(v.normalize().multiplyScalar(rr));
+    const bz = new THREE.QuadraticBezierCurve3(p0, b, p2);
+    out.push(...bz.getPoints(16));
+  }
+  if (!closed) out.push(P[n - 1]);
+  return out;
+}
+function tubeMesh(pts, radius, r, closed = false, mat = COBALT) {
+  const path = new THREE.CatmullRomCurve3(filletPath(pts, r, closed), closed, 'catmullrom', 0.0);
+  const g = new THREE.Group();
+  g.add(mesh(new THREE.TubeGeometry(path, 400, radius, 32, closed), mat));
+  if (!closed) for (const t of [0, 1]) {               // tapas redondeadas
+    const s = mesh(new THREE.SphereGeometry(radius, 32, 16), mat); s.position.copy(path.getPoint(t)); g.add(s);
+  }
+  return g;
+}
+
+// ---------------------------------------------------------------- piezas
+function legLoop(x, y0, y1) {   // un solo tubo cerrado por lado: patas + pie + travesaño
+  return tubeMesh([[x, y0, 1.5], [x, y0, 70.5], [x, y1, 70.5], [x, y1, 1.5]], 1.5, 9, true);
+}
+function top() {               // tablero: lacado arriba y abajo, canto de abedul
+  const mats = [BIRCH, BIRCH, COBALT, COBALT, BIRCH, BIRCH];
+  const m = mesh(new THREE.BoxGeometry(120, 1.8, 60), mats); m.position.copy(V(60, 34, 72.9)); return m;
+}
+function rail() {
+  const g = new THREE.Group();
+  g.add(tubeMesh([[-3, 2, 73.6], [123, 2, 73.6]], 2, 1));
+  for (const x of [20, 100]) { const b = mesh(new THREE.BoxGeometry(3, 1.6, 3), COBALT); b.position.copy(V(x, 3.6, 73)); g.add(b); }
+  return g;
+}
+function speaker() {            // cuerpo lacado, driver al frente, asa de tubo
+  const g = new THREE.Group();
+  const body = mesh(new RoundedBoxGeometry(12, 18, 13, 6, 2.2), COBALT); body.position.set(0, 9, 0); g.add(body);
+  const cone = mesh(new THREE.CylinderGeometry(4, 4, 0.6, 48), COBALT_DK); cone.rotation.x = Math.PI / 2; cone.position.set(0, 7.5, 6.55); g.add(cone);
+  const dust = mesh(new THREE.SphereGeometry(1.3, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), COBALT); dust.rotation.x = Math.PI / 2; dust.position.set(0, 7.5, 6.8); g.add(dust);
+  const tw = mesh(new THREE.CylinderGeometry(1.3, 1.3, 0.6, 32), COBALT_DK); tw.rotation.x = Math.PI / 2; tw.position.set(0, 14.4, 6.55); g.add(tw);
+  const h = tubeMesh([[-4, 0, 17.5], [-4, 0, 22.5], [4, 0, 22.5], [4, 0, 17.5]], 0.7, 2.6);
+  g.add(h);
+  return g;
+}
+function laptop() {             // portátil abierto: base y pantalla inclinada 105°
+  const g = new THREE.Group();
+  const base = mesh(new RoundedBoxGeometry(31, 1.2, 21, 3, 0.5), ALU); base.position.set(0, 0.6, 0); g.add(base);
+  const hinge = new THREE.Group(); hinge.position.set(0, 1.2, -10.5); hinge.rotation.x = -0.26; g.add(hinge);
+  const lid = mesh(new RoundedBoxGeometry(31, 21, 0.8, 3, 0.4), ALU); lid.position.set(0, 10.5, 0); hinge.add(lid);
+  const scr = mesh(new THREE.PlaneGeometry(28.5, 18.5), INKM); scr.position.set(0, 10.8, 0.45); hinge.add(scr);
+  return g;
+}
+function desk(folded) {
+  const g = new THREE.Group();
+  const legA = legLoop(0, 6, 58), legB = legLoop(0, 10, 54);    // ancho y estrecho (anida)
+  const pA = new THREE.Group(); pA.position.copy(V(8, 0, 70.5)); legA.position.copy(V(0, 0, -70.5)); pA.add(legA);
+  const pB = new THREE.Group(); pB.position.copy(V(112, 0, 70.5)); legB.position.copy(V(0, 0, -70.5)); pB.add(legB);
+  if (folded) { pA.rotation.z = Math.PI / 2 * 0.985; pB.rotation.z = -Math.PI / 2 * 0.985; pB.position.y -= 3.2; }
+  g.add(pA, pB, top(), rail());
+  return g;
+}
+
+// ---------------------------------------------------------------- escena
+const floor = mesh(new THREE.PlaneGeometry(2000, 2000), new THREE.MeshStandardMaterial({ color: '#ecebe7', roughness: 0.95 }));
+floor.rotation.x = -Math.PI / 2; scene.add(floor);
+const wall = mesh(new THREE.PlaneGeometry(2000, 600), new THREE.MeshStandardMaterial({ map: plaster(), roughness: 1 }));
+wall.position.set(0, 300, -40); scene.add(wall);
+
+const sun = new THREE.DirectionalLight('#fff6ea', 2.4);
+sun.position.set(-160, 260, 200); sun.castShadow = true;
+sun.shadow.mapSize.set(4096, 4096); sun.shadow.radius = 6; sun.shadow.bias = -0.0004;
+Object.assign(sun.shadow.camera, { left: -220, right: 220, top: 220, bottom: -220, near: 1, far: 800 });
+scene.add(sun); scene.add(new THREE.HemisphereLight('#ffffff', '#c9c3b8', 0.6));
+
+const cam = new THREE.PerspectiveCamera(30, W / H, 1, 3000);
+if (VIEW === 'open') {
+  const d = desk(false); d.position.set(-60, 0, -32); scene.add(d);
+  for (const x of [-48, 36]) { const s = speaker(); s.position.copy(V(x + 6, -32 + 1.5, 75.6)); scene.add(s); }
+  const l = laptop(); l.position.copy(V(-4, -32 + 38, 73.8)); scene.add(l);
+  cam.position.set(150, 175, 260); cam.lookAt(0, 52, -6);
+} else {
+  // plegado: el paquete apoyado en la pared, el raíl arriba como asa; un altavoz suelto en el suelo
+  const d = desk(true);
+  const pk = new THREE.Group(); d.position.copy(V(-60, -34, -72.9)); pk.add(d);
+  pk.rotation.x = Math.PI / 2 * 0.9;           // de canto, casi vertical
+  pk.position.set(-10, 31, -30); scene.add(pk);
+  const s = speaker(); s.position.set(78, 0, 18); s.rotation.y = -0.35; scene.add(s);
+  cam.position.set(120, 120, 300); cam.lookAt(10, 40, -10);
+}
+if (CUT) { scene.background = null; wall.visible = false; floor.material = new THREE.ShadowMaterial({ opacity: 0.1 }); }
+cam.updateProjectionMatrix();
+renderer.render(scene, cam);
+window.done = true;
+</script></body></html>
