@@ -27,27 +27,36 @@ body{background:var(--frame);color:var(--ink);font:500 12.5px/1.22 Inter,"Helvet
 a{color:inherit;text-decoration:none}
 a:hover,a:focus-visible{text-decoration:underline;text-underline-offset:2px;outline:none}
 em{font-style:italic}
-.panel{background:var(--paper);min-height:calc(100svh - 2 * var(--m));padding:10px 10px 12px;display:flex;flex-direction:column}
-.grid{display:grid;grid-template-columns:minmax(0,3.4fr) minmax(0,1.3fr) minmax(0,2.3fr) minmax(0,2.4fr);column-gap:clamp(16px,2.6vw,40px);align-items:start}
+.panel{background:var(--paper);min-height:calc(100svh - 2 * var(--m));padding:10px 10px 12px;
+  display:grid;grid-template-columns:minmax(0,1fr) var(--rw,24%);grid-template-rows:1fr auto;column-gap:clamp(16px,2.6vw,40px)}
+.grid{grid-column:1;grid-row:1;display:grid;grid-template-columns:minmax(0,3.4fr) minmax(0,1.3fr) minmax(0,2.3fr);column-gap:clamp(16px,2.6vw,40px);align-items:start;align-content:start}
 .bio p{max-width:34em}
-.bio p+p{margin-top:1.22em}
 ul{list-style:none}
-figure{aspect-ratio:4/5;cursor:default;background:#eee;overflow:hidden}
+.dis{white-space:nowrap}
+.shot{grid-column:2;grid-row:1;display:flex;flex-direction:column;gap:6px}
+figure{aspect-ratio:4/5;background:#eee;overflow:hidden}
 figure img{width:100%;height:100%;object-fit:cover;display:block}
 .dis button{font:inherit;color:inherit;letter-spacing:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:left}
 .dis button:hover,.dis button:focus-visible,.dis button[aria-pressed="true"]{text-decoration:underline;text-underline-offset:2px;outline:none}
-.shot{display:flex;flex-direction:column;gap:6px}
-.shot figure.on{cursor:pointer}
 figcaption{display:flex;justify-content:space-between;min-height:1.22em}
 figcaption span:last-child{font-variant-numeric:tabular-nums}
-footer{margin-top:auto;padding-top:48px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px}
+footer{grid-column:1 / -1;grid-row:2;padding-top:48px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px}
 #clock{font-variant-numeric:tabular-nums}
 footer .big{font-size:clamp(18px,1.7vw,24px);letter-spacing:-.02em;line-height:1}
+/* modo producto: la página se parte por la mitad, el texto a la izquierda y la foto llena la derecha */
+.panel.prod{--rw:50%;height:calc(100svh - 2 * var(--m))}
+.panel.prod .shot{grid-row:1 / -1}
+.panel.prod figure{aspect-ratio:auto;flex:1;min-height:0;position:relative;cursor:pointer}
+.panel.prod figure img{position:absolute;inset:0}
+.panel.prod footer{grid-column:1}
 @media (max-width:760px){
+  .panel,.panel.prod{grid-template-columns:1fr;grid-template-rows:auto auto 1fr}
   .grid{grid-template-columns:1fr 1fr;row-gap:24px}
   .bio{grid-column:1 / -1}
-  .links{grid-column:auto}
-  .shot{grid-column:1 / -1;max-width:420px}
+  .shot,.panel.prod .shot{grid-column:1;grid-row:2;margin-top:24px}
+  .panel.prod{height:auto}
+  .panel.prod figure{aspect-ratio:4/5;flex:none}
+  footer,.panel.prod footer{grid-row:3;grid-column:1}
 }
 </style>
 </head>
@@ -68,11 +77,11 @@ footer .big{font-size:clamp(18px,1.7vw,24px);letter-spacing:-.02em;line-height:1
       <li><a href="https://open.spotify.com/artist/4rBc80vtgivw83wgakhUNW" target="_blank" rel="noopener">Spotify</a></li>
       <li><a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a></li>
     </ul>
-    <div class="shot">
-      <figure id="fig"><img id="shot" alt="Retrato de Ziad Addami"></figure>
-      <figcaption id="cap" aria-live="polite"><span></span><span></span></figcaption>
-    </div>
   </main>
+  <div class="shot">
+    <figure id="fig"><img id="shot" alt="Retrato de Ziad Addami"></figure>
+    <figcaption id="cap" aria-live="polite"><span></span><span></span></figcaption>
+  </div>
   <footer><span class="big">© 2026 Ziad Addami</span><span>Barcelona <time id="clock"></time></span></footer>
 </div>
 <script>
@@ -82,31 +91,34 @@ const clock = document.getElementById('clock'), fmt = new Intl.DateTimeFormat('e
 const tick = () => { clock.textContent = fmt.format(new Date()); };   // hora de Barcelona
 tick(); setInterval(tick, 15000);
 
-// «Diseño de producto»: el retrato deja paso a las fotos de producto, una tras otra
+// «Diseño de producto»: la página se parte en dos y las fotos de producto llenan la mitad derecha
 const PRODUCT = [
   ['altavoz-peana', 'Altavoz sobre peana de aluminio doblado'],
   ['altavoz-familia', 'Familia de altavoces lacados en cobalto'],
   ['altavoz-detalle', 'Detalle del lacado y el tweeter'],
   ['altavoz-contexto', 'Los altavoces en un escritorio, en una habitación de paredes desconchadas'],
 ];
-const shot = document.getElementById('shot'), fig = document.getElementById('fig'), prod = document.getElementById('prod');
+const panel = document.querySelector('.panel'), shot = document.getElementById('shot'), fig = document.getElementById('fig'), prod = document.getElementById('prod');
 const [capL, capR] = document.querySelectorAll('#cap span');
-const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 PRODUCT.forEach(([f]) => { const i = new Image(); i.src = srcOf(f); });
-let n = -1, timer = 0;
+let n = -1;
 function set(i) {
-  n = i; clearInterval(timer);
+  n = i;
   const on = n >= 0;
-  prod.setAttribute('aria-pressed', on); fig.classList.toggle('on', on);
+  prod.setAttribute('aria-pressed', on); panel.classList.toggle('prod', on);
   if (!on) { shot.src = srcOf('retrato'); shot.alt = 'Retrato de Ziad Addami'; capL.textContent = capR.textContent = ''; return; }
   const [f, alt] = PRODUCT[n];
   shot.src = srcOf(f); shot.alt = alt;
   capL.textContent = 'Set de altavoces «Blew»'; capR.textContent = `${n + 1}/${PRODUCT.length}`;
-  if (!still) timer = setInterval(() => set((n + 1) % PRODUCT.length), 3500);
 }
+const step = d => set((n + d + PRODUCT.length) % PRODUCT.length);
 set(-1);
 prod.addEventListener('click', () => set(n >= 0 ? -1 : 0));
-fig.addEventListener('click', () => { if (n >= 0) set((n + 1) % PRODUCT.length); });
+fig.addEventListener('click', e => { if (n < 0) return; const r = fig.getBoundingClientRect(); step(e.clientX < r.left + r.width / 3 ? -1 : 1); });
+addEventListener('keydown', e => {
+  if (n < 0) return;
+  if (e.key === 'ArrowRight') step(1); else if (e.key === 'ArrowLeft') step(-1); else if (e.key === 'Escape') set(-1);
+});
 </script>
 </body>
 </html>
