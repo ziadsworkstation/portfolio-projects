@@ -32,8 +32,14 @@ em{font-style:italic}
 .bio p{max-width:34em}
 .bio p+p{margin-top:1.22em}
 ul{list-style:none}
-figure{aspect-ratio:3/4;background:#eee;overflow:hidden}
+figure{aspect-ratio:4/5;cursor:default;background:#eee;overflow:hidden}
 figure img{width:100%;height:100%;object-fit:cover;display:block}
+.dis button{font:inherit;color:inherit;letter-spacing:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:left}
+.dis button:hover,.dis button:focus-visible,.dis button[aria-pressed="true"]{text-decoration:underline;text-underline-offset:2px;outline:none}
+.shot{display:flex;flex-direction:column;gap:6px}
+.shot figure.on{cursor:pointer}
+figcaption{display:flex;justify-content:space-between;min-height:1.22em}
+figcaption span:last-child{font-variant-numeric:tabular-nums}
 footer{margin-top:auto;padding-top:48px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px}
 #clock{font-variant-numeric:tabular-nums}
 footer .big{font-size:clamp(18px,1.7vw,24px);letter-spacing:-.02em;line-height:1}
@@ -41,7 +47,7 @@ footer .big{font-size:clamp(18px,1.7vw,24px);letter-spacing:-.02em;line-height:1
   .grid{grid-template-columns:1fr 1fr;row-gap:24px}
   .bio{grid-column:1 / -1}
   .links{grid-column:auto}
-  figure{grid-column:1 / -1;max-width:420px}
+  .shot{grid-column:1 / -1;max-width:420px}
 }
 </style>
 </head>
@@ -52,7 +58,7 @@ footer .big{font-size:clamp(18px,1.7vw,24px);letter-spacing:-.02em;line-height:1
       <p>Ziad Addami Ech Chaouy.<br>Diseñador en Barcelona.<br>Ingeniería de Diseño Industrial y Desarrollo de Producto, UPC.</p>
     </section>
     <ul class="dis" aria-label="Disciplinas">
-      <li>Diseño de producto</li>
+      <li><button id="prod" aria-pressed="false">Diseño de producto</button></li>
       <li>Diseño gráfico</li>
       <li>Música</li>
     </ul>
@@ -62,16 +68,44 @@ footer .big{font-size:clamp(18px,1.7vw,24px);letter-spacing:-.02em;line-height:1
       <li><a href="https://open.spotify.com/artist/4rBc80vtgivw83wgakhUNW" target="_blank" rel="noopener">Spotify</a></li>
       <li><a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a></li>
     </ul>
-    <figure><img id="shot" alt="Retrato de Ziad Addami"></figure>
+    <div class="shot">
+      <figure id="fig"><img id="shot" alt="Retrato de Ziad Addami"></figure>
+      <figcaption id="cap" aria-live="polite"><span></span><span></span></figcaption>
+    </div>
   </main>
   <footer><span class="big">© 2026 Ziad Addami</span><span>Barcelona <time id="clock"></time></span></footer>
 </div>
 <script>
 const srcOf = f => `img/${f}.webp`;
-document.getElementById('shot').src = srcOf('retrato');
 const clock = document.getElementById('clock'), fmt = new Intl.DateTimeFormat('es-ES', { timeZone: 'Europe/Madrid', hour: '2-digit', minute: '2-digit' });
 const tick = () => { clock.textContent = fmt.format(new Date()); };   // hora de Barcelona
 tick(); setInterval(tick, 15000);
+
+// «Diseño de producto»: el retrato deja paso a las fotos de producto, una tras otra
+const PRODUCT = [
+  ['altavoz-peana', 'Altavoz sobre peana de aluminio doblado'],
+  ['altavoz-familia', 'Familia de altavoces lacados en cobalto'],
+  ['altavoz-detalle', 'Detalle del lacado y el tweeter'],
+  ['altavoz-contexto', 'Los altavoces en un escritorio, en una habitación de paredes desconchadas'],
+];
+const shot = document.getElementById('shot'), fig = document.getElementById('fig'), prod = document.getElementById('prod');
+const [capL, capR] = document.querySelectorAll('#cap span');
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+PRODUCT.forEach(([f]) => { const i = new Image(); i.src = srcOf(f); });
+let n = -1, timer = 0;
+function set(i) {
+  n = i; clearInterval(timer);
+  const on = n >= 0;
+  prod.setAttribute('aria-pressed', on); fig.classList.toggle('on', on);
+  if (!on) { shot.src = srcOf('retrato'); shot.alt = 'Retrato de Ziad Addami'; capL.textContent = capR.textContent = ''; return; }
+  const [f, alt] = PRODUCT[n];
+  shot.src = srcOf(f); shot.alt = alt;
+  capL.innerHTML = 'Estudio portátil, <em>altavoces</em>'; capR.textContent = `${n + 1}/${PRODUCT.length}`;
+  if (!still) timer = setInterval(() => set((n + 1) % PRODUCT.length), 3500);
+}
+set(-1);
+prod.addEventListener('click', () => set(n >= 0 ? -1 : 0));
+fig.addEventListener('click', () => { if (n >= 0) set((n + 1) % PRODUCT.length); });
 </script>
 </body>
 </html>
