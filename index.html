@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ziad Addami</title>
 <meta name="description" content="Ziad Addami Ech Chaouy. Diseño de producto, diseño gráfico y música. Barcelona.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23141414'/%3E%3Crect x='5' y='5' width='22' height='22' fill='%23fff'/%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ziadaddami.es/">
+<meta property="og:title" content="Ziad Addami">
+<meta property="og:description" content="Diseño de producto, diseño gráfico y música. Barcelona.">
+<meta property="og:image" content="https://ziadaddami.es/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#141414">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
@@ -25,6 +35,7 @@ ul{list-style:none}
 figure{aspect-ratio:3/4;background:#eee;overflow:hidden}
 figure img{width:100%;height:100%;object-fit:cover;display:block}
 footer{margin-top:auto;padding-top:48px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px}
+#clock{font-variant-numeric:tabular-nums}
 footer .big{font-size:clamp(18px,1.7vw,24px);letter-spacing:-.02em;line-height:1}
 @media (max-width:760px){
   .grid{grid-template-columns:1fr 1fr;row-gap:24px}
@@ -38,7 +49,7 @@ footer .big{font-size:clamp(18px,1.7vw,24px);letter-spacing:-.02em;line-height:1
 <div class="panel">
   <main class="grid">
     <section class="bio">
-      <p>Ziad Addami Ech Chaouy es diseñador y vive en Barcelona. Trabaja en diseño de producto, diseño gráfico y música: sistemas creativos y funcionales. Formado en Ingeniería de Diseño Industrial y Desarrollo de Producto en la UPC.</p>
+      <p>Ziad Addami Ech Chaouy.<br>Diseñador en Barcelona.<br>Ingeniería de Diseño Industrial y Desarrollo de Producto, UPC.</p>
     </section>
     <ul class="dis" aria-label="Disciplinas">
       <li>Diseño de producto</li>
@@ -52,11 +63,14 @@ footer .big{font-size:clamp(18px,1.7vw,24px);letter-spacing:-.02em;line-height:1
     </ul>
     <figure><img id="shot" alt="Retrato de Ziad Addami"></figure>
   </main>
-  <footer><span class="big">© 2026 Ziad Addami</span><span>Barcelona</span></footer>
+  <footer><span class="big">© 2026 Ziad Addami</span><span>Barcelona <time id="clock"></time></span></footer>
 </div>
 <script>
 const srcOf = f => `img/${f}.webp`;
 document.getElementById('shot').src = srcOf('retrato');
+const clock = document.getElementById('clock'), fmt = new Intl.DateTimeFormat('es-ES', { timeZone: 'Europe/Madrid', hour: '2-digit', minute: '2-digit' });
+const tick = () => { clock.textContent = fmt.format(new Date()); };   // hora de Barcelona
+tick(); setInterval(tick, 15000);
 </script>
 </body>
 </html>

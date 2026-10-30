@@ -1,4 +1,4 @@
-"""Genera img/<nombre>.webp desde fuentes/: el retrato en vertical 3:4.
+"""Genera img/<nombre>.webp desde fuentes/: el retrato en vertical 3:4 y en blanco y negro.
 
   python3 tools/web_images.py
 """
@@ -16,5 +16,6 @@ for name, (src, cx) in PORTRAITS.items():
     im = Image.open(os.path.join(ROOT, 'fuentes', src)).convert('RGB')
     w = round(im.height * 3 / 4); x = min(max(round(im.width * cx - w / 2), 0), im.width - w)
     im = im.crop((x, 0, x + w, im.height)).resize((900, 1200), Image.LANCZOS)
+    if name == 'retrato': im = im.convert('L').convert('RGB')   # blanco y negro, como el resto de la página
     im.save(os.path.join(out, name + '.webp'), 'WEBP', quality=82, method=6)
     print(name, im.size)
