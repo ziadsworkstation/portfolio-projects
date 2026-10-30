@@ -3,7 +3,7 @@
   python3 tools/web_images.py
 """
 import os
-from PIL import Image
+from PIL import Image, ImageEnhance
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PORTRAITS = {   # nombre en la web -> (original en fuentes/, centro horizontal del recorte 0..1)
@@ -16,5 +16,6 @@ for name, (src, cx) in PORTRAITS.items():
     im = Image.open(os.path.join(ROOT, 'fuentes', src)).convert('RGB')
     w = round(im.height * 3 / 4); x = min(max(round(im.width * cx - w / 2), 0), im.width - w)
     im = im.crop((x, 0, x + w, im.height)).resize((900, 1200), Image.LANCZOS)
+    if name == 'retrato': im = ImageEnhance.Color(im).enhance(0.8)   # saturación algo más baja (Ziad, 2026-10-30)
     im.save(os.path.join(out, name + '.webp'), 'WEBP', quality=82, method=6)
     print(name, im.size)
