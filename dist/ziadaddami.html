@@ -101,7 +101,7 @@ function set(i) {
   if (!on) { shot.src = srcOf('retrato'); shot.alt = 'Retrato de Ziad Addami'; capL.textContent = capR.textContent = ''; return; }
   const [f, alt] = PRODUCT[n];
   shot.src = srcOf(f); shot.alt = alt;
-  capL.innerHTML = 'Estudio portátil, <em>altavoces</em>'; capR.textContent = `${n + 1}/${PRODUCT.length}`;
+  capL.textContent = 'Set de altavoces «Blew»'; capR.textContent = `${n + 1}/${PRODUCT.length}`;
   if (!still) timer = setInterval(() => set((n + 1) % PRODUCT.length), 3500);
 }
 set(-1);
