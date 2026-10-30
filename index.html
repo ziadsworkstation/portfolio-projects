@@ -22,8 +22,6 @@ em{font-style:italic}
 .bio p{max-width:34em}
 .bio p+p{margin-top:1.22em}
 ul{list-style:none}
-.idx a{display:inline}
-.idx li.on a{text-decoration:underline;text-underline-offset:2px}
 figure{aspect-ratio:3/4;background:#eee;overflow:hidden}
 figure img{width:100%;height:100%;object-fit:cover;display:block}
 footer{margin-top:auto;padding-top:48px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px}
@@ -31,6 +29,7 @@ footer .big{font-size:clamp(18px,1.7vw,24px);letter-spacing:-.02em;line-height:1
 @media (max-width:760px){
   .grid{grid-template-columns:1fr 1fr;row-gap:24px}
   .bio{grid-column:1 / -1}
+  .links{grid-column:auto}
   figure{grid-column:1 / -1;max-width:420px}
 }
 </style>
@@ -40,39 +39,24 @@ footer .big{font-size:clamp(18px,1.7vw,24px);letter-spacing:-.02em;line-height:1
   <main class="grid">
     <section class="bio">
       <p>Ziad Addami Ech Chaouy es diseñador y vive en Barcelona. Trabaja en diseño de producto, diseño gráfico y música: sistemas creativos y funcionales. Formado en Ingeniería de Diseño Industrial y Desarrollo de Producto en la UPC.</p>
-      <p><a href="https://www.instagram.com/ziadaddami/" target="_blank" rel="noopener">Instagram</a>, <a href="https://www.linkedin.com/in/ziad-addami-3972b0280/" target="_blank" rel="noopener">LinkedIn</a>, <a href="mailto:contacto@ziadaddami.es">Contacto</a></p>
     </section>
     <ul class="dis" aria-label="Disciplinas">
       <li>Diseño de producto</li>
       <li>Diseño gráfico</li>
       <li>Música</li>
     </ul>
-    <ul class="idx" aria-label="Proyectos">
-      <li data-img="rampassist"><a href="#rampassist">Rampassist, <em>Producto</em></a></li>
-      <li data-img="estudio"><a href="#estudio">Estudio portátil, <em>Mobiliario y audio</em></a></li>
-      <li data-img="plaza"><a href="#plaza">Plaza abierta, <em>Espacio público</em></a></li>
+    <ul class="links" aria-label="Links">
+      <li><a href="https://www.instagram.com/ziadaddami/" target="_blank" rel="noopener">Instagram</a></li>
+      <li><a href="https://www.linkedin.com/in/ziad-addami-3972b0280/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:contacto@ziadaddami.es">contacto@ziadaddami.es</a></li>
     </ul>
-    <figure><img id="shot" alt=""></figure>
+    <figure><img id="shot" alt="Retrato de Ziad Addami"></figure>
   </main>
   <footer><span class="big">© 2026 Ziad Addami</span><span>Barcelona</span></footer>
 </div>
 <script>
 const srcOf = f => `img/${f}.webp`;
-const shot = document.getElementById('shot'), items = [...document.querySelectorAll('.idx li')];
-const ALT = { retrato: 'Retrato de Ziad Addami', rampassist: 'Rampassist en uso, junto a la entrada de un comercio', estudio: 'Altavoz del Estudio portátil', plaza: 'Cabina de Plaza abierta en la calle' };
-['retrato', ...items.map(li => li.dataset.img)].forEach(k => { const i = new Image(); i.src = srcOf(k); });   // precarga
-function show(li) {                                   // sin proyecto: el retrato
-  const k = li ? li.dataset.img : 'retrato';
-  items.forEach(x => x.classList.toggle('on', x === li));
-  shot.src = srcOf(k); shot.alt = ALT[k];
-}
-document.querySelector('.idx').addEventListener('mouseleave', () => show(null));
-items.forEach(li => {
-  li.addEventListener('mouseenter', () => show(li));
-  li.querySelector('a').addEventListener('focus', () => show(li));
-  li.querySelector('a').addEventListener('click', e => { e.preventDefault(); show(li); try { history.replaceState(null, '', '#' + li.dataset.img); } catch (_) {} });
-});
-show(items.find(li => '#' + li.dataset.img === location.hash) || null);
+document.getElementById('shot').src = srcOf('retrato');
 </script>
 </body>
 </html>
