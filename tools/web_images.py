@@ -1,4 +1,4 @@
-"""Genera img/<nombre>.webp desde fuentes/: misma proporción que el original, 1600 px de ancho como máximo.
+"""Genera img/<nombre>.webp desde fuentes/: un recorte vertical 3:4 por proyecto para el índice.
 
   python3 tools/web_images.py
 """
@@ -6,23 +6,17 @@ import os
 from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-IMAGES = {   # nombre en la web -> original en fuentes/
-    'rampassist-in': 'rampassist-in.jpg', 'rampassist-proceso': 'rampassist-proceso.jpg',
-    'rampassist-iteracion': 'rampassist-iteracion.jpg', 'rampassist-out': 'rampassist-out.jpg',
-    'estudio-in': 'estudio-in.jpg', 'estudio-proceso': 'estudio-plegado.png',
-    'estudio-iteracion': 'estudio-anclaje.png', 'estudio-out': 'estudio-out.jpg', 'estudio-detalle': 'estudio-detalle.jpg',
-    'plaza-in': 'plaza-plaza.jpg', 'plaza-proceso': 'plaza-familia.jpg',
-    'plaza-iteracion': 'plaza-calle.jpg', 'plaza-out': 'plaza-out.jpg',
+PORTRAITS = {   # nombre en la web -> (original en fuentes/, centro horizontal del recorte 0..1)
+    'rampassist': ('rampassist-in.jpg', 0.70),
+    'estudio': ('estudio-detalle.jpg', 0.44),
+    'plaza': ('plaza-calle.jpg', 0.49),
 }
-CUTOUTS = ['obj-rampassist', 'obj-estudio', 'obj-plaza']   # objetos recortados (PNG con alfa) para la estantería
 out = os.path.join(ROOT, 'img'); os.makedirs(out, exist_ok=True)
-for name, src in IMAGES.items():
+for f in os.listdir(out):
+    if f.endswith('.webp'): os.remove(os.path.join(out, f))
+for name, (src, cx) in PORTRAITS.items():
     im = Image.open(os.path.join(ROOT, 'fuentes', src)).convert('RGB')
-    if im.width > 1600: im = im.resize((1600, round(im.height * 1600 / im.width)), Image.LANCZOS)
-    im.save(os.path.join(out, name + '.webp'), 'WEBP', quality=80, method=6)
-    print(name, im.size)
-for name in CUTOUTS:
-    im = Image.open(os.path.join(ROOT, 'fuentes', name + '.png')).convert('RGBA')
-    if im.width > 1000: im = im.resize((1000, round(im.height * 1000 / im.width)), Image.LANCZOS)
-    im.save(os.path.join(out, name + '.webp'), 'WEBP', quality=85, method=6)
+    w = round(im.height * 3 / 4); x = min(max(round(im.width * cx - w / 2), 0), im.width - w)
+    im = im.crop((x, 0, x + w, im.height)).resize((900, 1200), Image.LANCZOS)
+    im.save(os.path.join(out, name + '.webp'), 'WEBP', quality=82, method=6)
     print(name, im.size)
